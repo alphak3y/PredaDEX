@@ -1,0 +1,171 @@
+const { expect } = require("chai");
+const { ethers, waffle } = require("hardhat");
+const assert = require("assert");
+const {loadFixture, deployContract} = waffle;
+const { ERC20_ABI, ALL_TOKENS, ALL_DEXES } = require("./constants");
+const PredaDexQuoter = require("../artifacts/contracts/PredaDexQuoter.sol/PredaDexQuoter.json");
+const PredaDexSwapper = require("../artifacts/contracts/PredaDexSwapper.sol/PredaDexSwapper.json");
+const exp = require("constants");
+
+describe("PredaDex Deep tests", function () {
+    this.timeout(200000);
+
+    async function fixture(wallet, provider) {
+        [deployer, user, ...addrs] = await ethers.getSigners();
+
+        const predaDexQuoter = await deployContract(deployer, PredaDexQuoter);
+        const predaDexSwapper = await deployContract(deployer, PredaDexSwapper);
+
+        return {predaDexQuoter, predaDexSwapper, user};
+    }
+
+    async function fundUser(user, token, PredaDexSwapper) {
+        let whaleAddress = token["whale"];
+
+        await ethers.provider.send("hardhat_impersonateAccount", [
+            whaleAddress,
+        ]);
+        const impersonatedAccount = await ethers.provider.getSigner(
+            whaleAddress
+        );
+
+        const amount = ethers.utils.parseUnits(token["amount"], token["decimals"]);
+
+        if(token["symbol"] == "ETH") {
+        // send ethers
+        await impersonatedAccount.sendTransaction({
+            to: user.address,
+            value: amount
+        });
+        } else {
+        // send ERC20 tokens
+        const tokenContract = await ethers.getContractAt(ERC20_ABI, token["address"]);
+        await tokenContract
+            .connect(impersonatedAccount)
+            .transfer(user.address, amount);
+
+        await tokenContract.connect(user).approve(PredaDexSwapper.address, amount);
+        }
+
+        await ethers.provider.send("hardhat_stopImpersonatingAccount", [
+            whaleAddress,
+        ]);
+    }
+
+    ALL_TOKENS.map((fromToken) => {
+        return;
+        ALL_TOKENS.map((toToken) => {
+            if (fromToken != toToken) {
+                ALL_DEXES.map((dex) => {
+                    it(('Test swapping ' + fromToken["symbol"] + ' => ' + toToken["symbol"] + ' on ' + dex["name"]), async function (){
+                        const {predaDexQuoter, predaDexSwapper, user} = await loadFixture(fixture);
+
+                        const swapAmount = ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"]);
+                        const destToken = await ethers.getContractAt(ERC20_ABI, toToken["address"]);
+
+                        // Estimate
+                        const res = await predaDexQuoter.connect(user).getExpectedReturnWithGas(
+                            fromToken["address"],
+                            toToken["address"],
+                            swapAmount,
+                            1,
+                            dex["flags"],
+                            0//destTokenEthPriceTimesGasPrice
+                        );
+
+                        // console.log("Quote   :", res.returnAmount.toString());
+
+                        if (res.returnAmount != 0) {
+                            await fundUser(user, fromToken, predaDexSwapper);
+
+                            const balanceBefore = await destToken.balanceOf(user.address);
+
+                            const expected = res.returnAmount.mul(97).div(100); // Allow 3% slippage
+
+                            // console.log("Expected:", expected.toString());
+
+                            await predaDexSwapper.connect(user).swap(
+                                fromToken["address"],
+                                toToken["address"],
+                                swapAmount,
+                                expected,
+                                res.distribution,
+                                dex["flags"]
+                            );
+
+                            const balanceAfter = await destToken.balanceOf(user.address);
+                            const realReturnAmount = balanceAfter.sub(balanceBefore);
+
+                            // console.log("Real ret:", realReturnAmount.toString());
+                            if (realReturnAmount < expected) {
+                                console.log("Quote   :", res.returnAmount.toString());
+                                console.log("Real ret:", realReturnAmount.toString());
+                            }
+
+                            assert(realReturnAmount.gt(expected), "Surpassed 3% slippage");
+                        }
+                        else console.log("Not quoted");
+                    });
+                });
+            }
+        });
+    });
+
+
+    ALL_TOKENS.map((fromToken) => {
+        // return;
+        ALL_TOKENS.map((toToken) => {
+            if (fromToken != toToken) {
+                it(('Test swapping ' + fromToken["symbol"] + ' => ' + toToken["symbol"] + ' on ANY'), async function (){
+                    const {predaDexQuoter, predaDexSwapper, user} = await loadFixture(fixture);
+
+                    const swapAmount = ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"]);
+                    const destToken = await ethers.getContractAt(ERC20_ABI, toToken["address"]);
+
+                    // Estimate
+                    const res = await predaDexQuoter.connect(user).getExpectedReturnWithGas(
+                        fromToken["address"],
+                        toToken["address"],
+                        swapAmount,
+                        1,
+                        0, // Using defalt flag (sell)
+                        0//destTokenEthPriceTimesGasPrice
+                    );
+
+                    // console.log("Quote   :", res.returnAmount.toString());
+
+                    if (res.returnAmount != 0) {
+                        await fundUser(user, fromToken, predaDexSwapper);
+
+                        const balanceBefore = await destToken.balanceOf(user.address);
+
+                        const expected = res.returnAmount.mul(97).div(100); // Allow 3% slippage
+
+                        // console.log("Expected:", expected.toString());
+
+                        await predaDexSwapper.connect(user).swap(
+                            fromToken["address"],
+                            toToken["address"],
+                            swapAmount,
+                            expected,
+                            res.distribution,
+                            0 // Using defalt flag (sell)
+                        );
+
+                        const balanceAfter = await destToken.balanceOf(user.address);
+                        const realReturnAmount = balanceAfter.sub(balanceBefore);
+
+                        // console.log("Real ret:", realReturnAmount.toString());
+                        if (realReturnAmount < expected) {
+                            console.log("Quote   :", res.returnAmount.toString());
+                            console.log("Real ret:", realReturnAmount.toString());
+                        }
+
+                        assert(realReturnAmount.gt(expected), "Surpassed 3% slippage");
+                    }
+                    else console.log("Not quoted");
+                });
+            }
+        });
+    });
+});

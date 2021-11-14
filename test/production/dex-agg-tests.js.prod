@@ -1,0 +1,179 @@
+const { expect } = require("chai");
+const { ethers, waffle } = require("hardhat");
+const assert = require("assert");
+const {loadFixture, deployContract} = waffle;
+const { ERC20_ABI, TOKENS, UNISWAPV3_ADDRESS } = require("../constants");
+const PredaDexQuoter = require("../../artifacts/contracts/PredaDexQuoter.sol/PredaDexQuoter.json");
+const PredaDexSwapper = require("../../artifacts/contracts/PredaDexSwapper.sol/PredaDexSwapper.json");
+const {
+  abi,
+} = require("@uniswap/v3-periphery/artifacts/contracts/lens/Quoter.sol/Quoter.json");
+
+describe("PredaDex Production tests", function () {
+  this.timeout(200000);
+
+  const tokens = [
+    TOKENS.weth, TOKENS.dai, TOKENS.uni
+  ];
+
+  async function fixture(wallet, provider) {
+    [deployer, user, ...addrs] = await ethers.getSigners();
+
+    const uniswap = await ethers.getContractAt(abi, UNISWAPV3_ADDRESS);
+    const predaDexQuoter = await deployContract(deployer, PredaDexQuoter);
+    const predaDexSwapper = await deployContract(deployer, PredaDexSwapper);
+
+    return {predaDexQuoter, predaDexSwapper, uniswap, user};
+  }
+
+  async function fundUser(user, token, PredaDexSwapper) {
+    let whaleAddress = token["whale"];
+
+    await ethers.provider.send("hardhat_impersonateAccount", [
+      whaleAddress,
+    ]);
+    const impersonatedAccount = await ethers.provider.getSigner(
+      whaleAddress
+    );
+
+    const amount = ethers.utils.parseUnits(token["amount"], token["decimals"]);
+
+    if(token["symbol"] == "ETH") {
+      // send ethers
+      await impersonatedAccount.sendTransaction({
+        to: user.address,
+        value: amount
+      });
+    } else {
+      // send ERC20 tokens
+      const tokenContract = await ethers.getContractAt(ERC20_ABI, token["address"]);
+      await tokenContract
+        .connect(impersonatedAccount)
+        .transfer(user.address, amount);
+
+      await tokenContract.connect(user).approve(PredaDexSwapper.address, amount);
+    }
+
+    await ethers.provider.send("hardhat_stopImpersonatingAccount", [
+      whaleAddress,
+    ]);
+  }
+
+  async function getUniswapV3Quote(uniswap, from, to, amount) {
+    let res500 = 0;
+    let res3000 = 0;
+    let res10000 = 0;
+    
+    try {
+      res500 = await uniswap.callStatic.quoteExactInputSingle(
+        from,
+        to,
+        500,
+        amount,
+        0
+      );
+    } catch(e) {}
+
+    try {
+      res3000 = await uniswap.callStatic.quoteExactInputSingle(
+        from,
+        to,
+        3000,
+        amount,
+        0
+      );
+    } catch(e) {}
+
+    try {
+      res10000 = await uniswap.callStatic.quoteExactInputSingle(
+        from,
+        to,
+        10000,
+        amount,
+        0
+      );
+    } catch(e) {}
+
+    if(res500 > res3000 && res500 > res10000) return res500;
+    else if(res3000 > res10000) return res3000;
+    else return res10000;
+  }
+
+  tokens.map((fromToken) => {
+    tokens.map((toToken) => {
+    
+      if(fromToken != toToken) {
+        it(('Should get the best price for the couple ' + fromToken["symbol"] + ' => ' + toToken["symbol"]), async function (){
+          const {predaDexQuoter, predaDexSwapper, uniswap, user} = await loadFixture(fixture);
+
+          const swapAmount = ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"]);
+
+          // Estimate
+          const res = await predaDexQuoter.connect(user).getExpectedReturn(
+            fromToken["address"],
+            toToken["address"],
+            swapAmount,
+            10, // parts, higher = more granular, but effects gas usage (probably exponentially)
+            1 // flags
+          );
+
+
+          for(i = 0; i < res.distribution.length; ++i) {
+            if(res.distribution[i] != 0) {
+            console.log("%s: %i parts", Dexes[i], res.distribution[i]);
+            }
+          }
+
+
+          // Compare to UniswapV3
+          const uniswapBest = await getUniswapV3Quote(uniswap, fromToken["address"], toToken["address"], swapAmount);
+          assert(res.returnAmount.gt(uniswapBest), "UniswapV3 giving a better price");
+        });
+
+        it(('Should swap ' + fromToken["amount"] + ' ' + fromToken["symbol"] + ' => ' + toToken["symbol"] + ' at the best market price'), async function (){
+          const {predaDexQuoter, predaDexSwapper, uniswap, user} = await loadFixture(fixture);
+          const swapAmount = ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"]);
+          const destToken = await ethers.getContractAt(ERC20_ABI, toToken["address"]);
+
+          const res = await predaDexQuoter.connect(user).getExpectedReturn(
+            fromToken["address"],
+            toToken["address"],
+            swapAmount,
+            10,
+            1 // TODO: default action fails
+          );
+
+          await fundUser(user, fromToken, predaDexSwapper);
+
+          const balanceBefore = await destToken.balanceOf(user.address);
+
+          await predaDexSwapper.connect(user).swap(
+            fromToken["address"],
+            toToken["address"],
+            swapAmount,
+            0,
+            res.distribution,
+            1
+          );
+
+          const balanceAfter = await destToken.balanceOf(user.address);
+          const realReturnAmount = balanceAfter.sub(balanceBefore);
+
+          console.log("Real return:", realReturnAmount);
+          //console.log("Expected:");
+
+          //const minimum = Math.min(
+          //  res.returnAmount,
+          //  realReturnAmount
+          //);
+          //const maximum = Math.max(
+          //  res.returnAmount,
+          //  realReturnAmount
+          //);
+
+          //assert((maximum - minimum) / minimum < 1, "Discrepancy in the estimated and actual price");
+        });
+      }
+    });
+  });
+});
