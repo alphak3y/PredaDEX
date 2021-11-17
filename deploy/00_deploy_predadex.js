@@ -4,17 +4,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
 
-    await deploy("PredaDexQuoter", {
+    await deploy("PredaDex", {
         from: deployer,
-        args: [],
-        log: true,
-    });
-
-    await deploy("PredaDexSwapper", {
-        from: deployer,
-        args: [],
+        args: ["0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"],
         log: true,
     });
 
 };
-module.exports.tags = ["PredaDexQuoter", "PredaDexSwapper"];
+module.exports.tags = ["PredaDex"];
