@@ -158,8 +158,8 @@ function Form() {
       {!confirmationButton && (
         <div className="form-row">
           <button className="allow-confirmation-buttons allow-button">
-            <img src={BTC} alt="btc"></img>
-            Allow PredaDEX to use your BTC
+            <img src={firstToken == null ? BTC : firstToken.logo} alt="btc"></img>
+            Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
           </button>
         </div>
       )}
