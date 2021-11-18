@@ -20,13 +20,13 @@ function Form() {
   const {erc20Abi} = require('erc-20-abi');
   const { account } = useEthers()
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
-
-
+  let erc20Interface
+  let contract
 
   
   useEffect(() => {
-    // const erc20Interface = "new utils.Interface(erc20Abi)"
-    // const contract = new Contract(firstToken.address, "erc20Interface")
+    //  erc20Interface = "new utils.Interface(erc20Abi)"
+    //  contract = new Contract(firstToken.address, "erc20Interface")
   },[firstToken]);
 
 
