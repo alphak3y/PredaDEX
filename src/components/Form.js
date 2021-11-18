@@ -5,7 +5,11 @@ import question from "../images/question.svg";
 import arrow from "../images/Arrow.svg";
 import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
+import { formatUnits } from '@ethersproject/units'
+import { Contract } from '@ethersproject/contracts'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
+
+
 
 
 function Form() {
@@ -14,10 +18,15 @@ function Form() {
   const {firstToken, secondToken} = useContext(CoinContext);
   const {erc20Abi} = require('erc-20-abi');
   const { account } = useEthers()
-  //const firstTokenBalance = 0.00
+  const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
+
+  const erc20Interface = new utils.Interface(erc20Abi)
+  const contract = new Contract(firstToken.address, erc20Interface)
+  
   const test = firstToken.address
   console.log(account)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
+  const etherBalance = useEtherBalance(account)
   
   console.log(firstTokenBalance)
 
@@ -33,6 +42,10 @@ function Form() {
     setIsOpen(true)
   }
 
+  export const ApproveToken = () => {
+    const { state, send } = useContractFunction(contract, 'approve', { _spender: predaDexAddress, _value : ethers.constants.MaxUint256 })
+  }
+
   return (
     <div>
       {/*First  window*/}
@@ -40,7 +53,7 @@ function Form() {
         <div className="form-wrapper">
           {/*Balance label above input field*/}
           <div className="form-row form-row-label">
-            <div className="label">Balance : {firstToken == null ? "0.00" : firstTokenBalance && parseInt(firstTokenBalance._hex,16)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+            <div className="label">Balance : {firstToken == null ? "0.00" : firstTokenBalance && parseFloat(firstTokenBalance._hex,16)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
           </div>
           <div className="form-row ">
             {/* Deposit dropdown */}
@@ -82,7 +95,7 @@ function Form() {
             <div className="label" style={{ paddingRight: "120px" }}>
               Balance : 0.00
             </div>
-            <div className="label ">Balance : 35.64 ETH</div>
+            <div className="label ">Balance : {etherBalance && formatUnits(etherBalance)} ETH</div>
           </div>
           <div className="form-row">
             {/* Receive dropdown */}
