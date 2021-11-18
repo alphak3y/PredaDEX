@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Vector from "../images/Vector.svg";
 import BTC from "../images/BTC.svg";
 import question from "../images/question.svg";
@@ -21,9 +21,15 @@ function Form() {
   const { account } = useEthers()
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
 
-  const erc20Interface = new utils.Interface(erc20Abi)
-  const contract = new Contract(firstToken.address, erc20Interface)
+
+
   
+  useEffect(() => {
+    // const erc20Interface = "new utils.Interface(erc20Abi)"
+    // const contract = new Contract(firstToken.address, "erc20Interface")
+  },[firstToken]);
+
+
   const test = firstToken.address
   console.log(account)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
@@ -43,9 +49,9 @@ function Form() {
     setIsOpen(true)
   }
 
-  const ApproveToken = () => {
-    const { state, send } = useContractFunction(contract, 'approve', { _spender: predaDexAddress, _value : ethers.constants.MaxUint256 })
-  }
+  // const ApproveToken = () => {
+  //   const { state, send } = useContractFunction(contract, 'approve', { _spender: predaDexAddress, _value : ethers.constants.MaxUint256 })
+  // }
 
   return (
     <div>
