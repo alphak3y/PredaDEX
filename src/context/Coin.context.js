@@ -43,7 +43,12 @@ export const CoinProvider = (props) => {
         },
     ])
 
-    const [firstToken, setFirstToken] = useState(null)
+    const [firstToken, setFirstToken] = useState({
+        logo:eth,
+        shortcut:"WETH",
+        name:"Wrapped Ether",
+        address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    })
     const [secondToken, setSecondToken] = useState(null)
 
     return(

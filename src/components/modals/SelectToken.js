@@ -66,12 +66,14 @@ function SelectToken() {
                         data-name={coin.name} 
                         data-logo={coin.logo} 
                         data-shortcut={coin.shortcut}  
+                        data-address={coin.address} 
                         key={coin.shortcut} 
                         className="btn-token ">
                         <img onClick={chooseToken}                            
                         data-name={coin.name} 
                         data-logo={coin.logo} 
-                        data-shortcut={coin.shortcut}   alt="logo" className="icons" height="16px" src={coin.logo}/> {coin.shortcut}</button>
+                        data-shortcut={coin.shortcut}   
+                        data-address={coin.address} alt="logo" className="icons" height="16px" src={coin.logo}/> {coin.shortcut}</button>
                         )
                     })}
                     

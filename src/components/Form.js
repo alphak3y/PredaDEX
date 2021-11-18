@@ -14,10 +14,12 @@ function Form() {
   const {firstToken, secondToken} = useContext(CoinContext);
   const {erc20Abi} = require('erc-20-abi');
   const { account } = useEthers()
-  const balance = 0.00
-  // const firstTokenBalance = useTokenBalance(firstToken.address, account)
+  //const firstTokenBalance = 0.00
+  const test = firstToken.address
+  console.log(account)
+  const firstTokenBalance = useTokenBalance(firstToken.address, account)
   
-  // console.log(firstTokenBalance)
+  console.log(firstTokenBalance._hex)
 
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -38,7 +40,7 @@ function Form() {
         <div className="form-wrapper">
           {/*Balance label above input field*/}
           <div className="form-row form-row-label">
-            <div className="label">Balance : {firstToken ? firstToken.shortcut: "0"}</div>
+            {/* <div className="label">Balance : {firstToken == null ? "0.00" : firstTokenBalance} {firstToken == null ? "BTC" : firstToken.shortcut}</div> */}
           </div>
           <div className="form-row ">
             {/* Deposit dropdown */}
@@ -164,7 +166,7 @@ function Form() {
       {/*Allow Button*/}
       {!confirmationButton && (
         <div className="form-row">
-          <button className="allow-confirmation-buttons allow-button" onClick="">
+          <button className="allow-confirmation-buttons allow-button">
             <img src={firstToken == null ? BTC : firstToken.logo} alt="btc"></img>
             Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
           </button>
