@@ -8,9 +8,19 @@ function SelectToken() {
     
     const chooseToken = e => {
         if(isFirstToken) {
-            setFirstToken({name:e.target.dataset.name, logo:e.target.dataset.logo, shortcut:e.target.dataset.shortcut})
+            setFirstToken({
+                            name:e.target.dataset.name, 
+                            logo:e.target.dataset.logo, 
+                            shortcut:e.target.dataset.shortcut,
+                            address: e.target.dataset.address
+                          })
         }else {
-            setSecondToken({name:e.target.dataset.name, logo:e.target.dataset.logo, shortcut:e.target.dataset.shortcut})
+            setSecondToken({
+                             name:e.target.dataset.name, 
+                             logo:e.target.dataset.logo, 
+                             shortcut:e.target.dataset.shortcut,
+                             address: e.target.dataset.address
+                            })
         }
         setClosing(true)
         setTimeout(() => {
@@ -76,40 +86,53 @@ function SelectToken() {
                     data-name={coin.name} 
                     data-logo={coin.logo} 
                     data-shortcut={coin.shortcut}  
-                    key={coin.name}  
+                    key={coin.name}
+                    data-address={coin.address}        
                     className="token-list-item">
                     <div className="token-list-whole"  
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
-                    data-shortcut={coin.shortcut}  >
+                    data-shortcut={coin.shortcut}  
+                    key={coin.name}
+                    data-address={coin.address}     >
                     <img alt="logo"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
-                    data-shortcut={coin.shortcut} className="mr-2" height="45px" src={coin.logo}/> 
+                    data-shortcut={coin.shortcut}  
+                    key={coin.name}
+                    data-address={coin.address}    className="mr-2" height="45px" src={coin.logo}/> 
                     <div className="token-list-label"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
-                    data-shortcut={coin.shortcut}>
+                    data-shortcut={coin.shortcut}  
+                    key={coin.name}
+                    data-address={coin.address}   >
                     <p className="token-label"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
-                    data-shortcut={coin.shortcut}>{coin.name}</p>
+                    data-shortcut={coin.shortcut}  
+                    key={coin.name}
+                    data-address={coin.address}   >{coin.name}</p>
                     <p className="token-label size-13"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
-                    data-shortcut={coin.shortcut}>{coin.shortcut}</p>
+                    data-shortcut={coin.shortcut}  
+                    key={coin.name}
+                    data-address={coin.address}   >{coin.shortcut}</p>
                 </div>
             </div>
             <p className="m-3"                         
             onClick={chooseToken}                         
             data-name={coin.name} 
             data-logo={coin.logo} 
-            data-shortcut={coin.shortcut}>0</p>
+            data-shortcut={coin.shortcut}
+            key={coin.name}
+            data-address={coin.address}>0</p>
         </div>
         )
     })}

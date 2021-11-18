@@ -5,12 +5,19 @@ import question from "../images/question.svg";
 import arrow from "../images/Arrow.svg";
 import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
+import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
 
 
 function Form() {
   const [confirmationButton, setConfirmationButton] = useState(false);
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
-  const {firstToken, secondToken} = useContext(CoinContext)
+  const {firstToken, secondToken} = useContext(CoinContext);
+  const {erc20Abi} = require('erc-20-abi');
+  const { account } = useEthers()
+  const balance = 0.00
+  
+  
+  
 
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -157,7 +164,7 @@ function Form() {
       {/*Allow Button*/}
       {!confirmationButton && (
         <div className="form-row">
-          <button className="allow-confirmation-buttons allow-button">
+          <button className="allow-confirmation-buttons allow-button" onClick="">
             <img src={firstToken == null ? BTC : firstToken.logo} alt="btc"></img>
             Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
           </button>
