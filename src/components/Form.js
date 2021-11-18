@@ -19,7 +19,7 @@ function Form() {
   console.log(account)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   
-  console.log(firstTokenBalance._hex)
+  console.log(firstTokenBalance)
 
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -40,7 +40,7 @@ function Form() {
         <div className="form-wrapper">
           {/*Balance label above input field*/}
           <div className="form-row form-row-label">
-            <div className="label">Balance : {firstToken == null ? "0.00" : parseInt(firstTokenBalance._hex,16)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+            <div className="label">Balance : {firstToken == null ? "0.00" : firstTokenBalance && parseInt(firstTokenBalance._hex,16)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
           </div>
           <div className="form-row ">
             {/* Deposit dropdown */}

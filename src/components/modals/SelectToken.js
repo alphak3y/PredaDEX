@@ -96,35 +96,30 @@ function SelectToken() {
                     data-name={coin.name} 
                     data-logo={coin.logo} 
                     data-shortcut={coin.shortcut}  
-                    key={coin.name}
                     data-address={coin.address}     >
                     <img alt="logo"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
                     data-shortcut={coin.shortcut}  
-                    key={coin.name}
                     data-address={coin.address}    className="mr-2" height="45px" src={coin.logo}/> 
                     <div className="token-list-label"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
                     data-shortcut={coin.shortcut}  
-                    key={coin.name}
                     data-address={coin.address}   >
                     <p className="token-label"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
                     data-shortcut={coin.shortcut}  
-                    key={coin.name}
                     data-address={coin.address}   >{coin.name}</p>
                     <p className="token-label size-13"
                     onClick={chooseToken}                         
                     data-name={coin.name} 
                     data-logo={coin.logo} 
                     data-shortcut={coin.shortcut}  
-                    key={coin.name}
                     data-address={coin.address}   >{coin.shortcut}</p>
                 </div>
             </div>
@@ -133,7 +128,6 @@ function SelectToken() {
             data-name={coin.name} 
             data-logo={coin.logo} 
             data-shortcut={coin.shortcut}
-            key={coin.name}
             data-address={coin.address}>0</p>
         </div>
         )
