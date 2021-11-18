@@ -7,6 +7,7 @@ import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
 import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
+import { utils } from 'ethers'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
 
 
