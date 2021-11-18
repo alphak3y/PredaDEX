@@ -42,7 +42,7 @@ function Form() {
     setIsOpen(true)
   }
 
-  export const ApproveToken = () => {
+  const ApproveToken = () => {
     const { state, send } = useContractFunction(contract, 'approve', { _spender: predaDexAddress, _value : ethers.constants.MaxUint256 })
   }
 
