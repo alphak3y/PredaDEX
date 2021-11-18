@@ -15,9 +15,9 @@ function Form() {
   const {erc20Abi} = require('erc-20-abi');
   const { account } = useEthers()
   const balance = 0.00
+  // const firstTokenBalance = useTokenBalance(firstToken.address, account)
   
-  
-  
+  // console.log(firstTokenBalance)
 
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -38,7 +38,7 @@ function Form() {
         <div className="form-wrapper">
           {/*Balance label above input field*/}
           <div className="form-row form-row-label">
-            <div className="label">Balance : 35.64 BTC</div>
+            <div className="label">Balance : {firstToken ? firstToken.shortcut: "0"}</div>
           </div>
           <div className="form-row ">
             {/* Deposit dropdown */}
