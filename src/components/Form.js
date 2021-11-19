@@ -50,13 +50,12 @@ function Form() {
   }
 
   
-  const { state, send } = useContractFunction(fromTokenContract, 'approve')
+  const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
   const approveToken = () => {
       console.log("fromTokenContract")
       console.log(fromTokenContract)
-      send()
+      send(predaDexContract, 1)
       console.log(state)
-     
     }
 
   return (
