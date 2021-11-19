@@ -50,9 +50,12 @@ function Form() {
     setIsOpen(true)
   }
 
-  function approveToken() {
-    const { state, send } = useContractFunction(fromTokenContract, 'approve', { _spender: predaDexContract, _value : ethers.constants.MaxUint256 })
-  }
+    const { state, send } = useContractFunction(fromTokenContract, 'approve', { _spender: predaDexContract, _value : 1 })
+
+    const approveToken = () => {
+      send()
+      console.log(state)
+    }
 
   return (
     <div>
