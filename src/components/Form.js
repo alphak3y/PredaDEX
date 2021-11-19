@@ -9,7 +9,7 @@ import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import { utils } from 'ethers'
-import { ethers } from 'ethers'
+import { ethers, Signer } from 'ethers'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
 
 
@@ -28,7 +28,7 @@ function Form() {
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
-    console.log(fromTokenContract)
+    console.log("asd")
   },[firstToken.address]);
 
 
@@ -48,10 +48,10 @@ function Form() {
     setIsOpen(true)
   }
 
-    const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve' })
-
-
-    const approveToken = () => {
+  
+  const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve' }, Signer)
+  const approveToken = () => {
+      
       send({ _spender: predaDexContract, _value : 1 })
       console.log(state)
     }
