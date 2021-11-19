@@ -10,6 +10,7 @@ import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import { utils } from 'ethers'
 import { ethers, Signer } from 'ethers'
+import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useSendTransaction } from '@usedapp/core';
 
 
@@ -52,10 +53,9 @@ function Form() {
   const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
 
   const approveToken = () => {
-    sendTransaction({ to: account, value: utils.parseEther("1") })
       console.log("fromTokenContract")
       console.log(fromTokenContract)
-      send(predaDexContract, 1)
+      send(predaDexContract, MaxUint256)
       console.log(state)
     }
 
