@@ -10,7 +10,7 @@ import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import { utils } from 'ethers'
 import { ethers, Signer } from 'ethers'
-import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
+import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useSendTransaction } from '@usedapp/core';
 
 
 
@@ -49,9 +49,10 @@ function Form() {
     setIsOpen(true)
   }
 
-  
   const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
+
   const approveToken = () => {
+    sendTransaction({ to: account, value: utils.parseEther("1") })
       console.log("fromTokenContract")
       console.log(fromTokenContract)
       send(predaDexContract, 1)
