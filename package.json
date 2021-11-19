@@ -42,6 +42,7 @@
     "solidity-coverage": "^0.7.16"
   },
   "scripts": {
+    "run-dapp": "hardhat deploy && react-scripts start",
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",
     "react-test": "react-scripts test",
