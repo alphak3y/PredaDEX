@@ -24,11 +24,12 @@ function Form() {
   let erc20Interface
   let fromTokenContract
 
-  
+  erc20Interface = new utils.Interface(erc20Abi)
+  fromTokenContract = new Contract(firstToken.address, erc20Interface)
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
-    console.log("asd")
+    console.log("")
   },[firstToken.address]);
 
 
@@ -51,7 +52,8 @@ function Form() {
   
   const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve' }, Signer)
   const approveToken = () => {
-      
+      console.log("fromTokenContract")
+      console.log(fromTokenContract)
       send({ _spender: predaDexContract, _value : 1 })
       console.log(state)
     }
