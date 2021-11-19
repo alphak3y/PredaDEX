@@ -7,7 +7,7 @@ import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
 import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
-import { erc20Abi } from '../abi/ERC20.json'
+import erc20Abi from '../abi/ERC20.json'
 import { utils } from 'ethers'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
 
@@ -25,8 +25,8 @@ function Form() {
 
   
   useEffect(() => {
-    //  erc20Interface = "new utils.Interface(erc20Abi)"
-    //  contract = new Contract(firstToken.address, "erc20Interface")
+    erc20Interface = new utils.Interface(erc20Abi)
+    contract = new Contract(firstToken.address, erc20Interface)
   },[firstToken]);
 
 

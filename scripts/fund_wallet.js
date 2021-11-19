@@ -1,7 +1,6 @@
 const { ethers } = require("hardhat");
 const parseArgs = require("minimist");
 const ERC20_ABI = [
-    // Some details about the token
     "function name() view returns (string)",
     "function symbol() view returns (string)",
     "function decimals() view returns (uint)",
