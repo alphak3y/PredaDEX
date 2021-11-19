@@ -7,6 +7,7 @@ import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
 import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
+import { erc20Abi } from '../abi/ERC20.json'
 import { utils } from 'ethers'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
 
@@ -17,7 +18,6 @@ function Form() {
   const [confirmationButton, setConfirmationButton] = useState(false);
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
   const {firstToken, secondToken} = useContext(CoinContext);
-  const {erc20Abi} = require('erc-20-abi');
   const { account } = useEthers()
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface
