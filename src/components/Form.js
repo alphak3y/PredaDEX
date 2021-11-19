@@ -9,6 +9,7 @@ import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import { utils } from 'ethers'
+import { ethers } from 'ethers'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core';
 
 
@@ -19,14 +20,14 @@ function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
   const {firstToken, secondToken} = useContext(CoinContext);
   const { account } = useEthers()
-  const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
+  const predaDexContract = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface
-  let contract
+  let fromTokenContract
 
   
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
-    contract = new Contract(firstToken.address, erc20Interface)
+    fromTokenContract = new Contract(firstToken.address, erc20Interface)
   },[firstToken]);
 
 
@@ -49,9 +50,9 @@ function Form() {
     setIsOpen(true)
   }
 
-  // const ApproveToken = () => {
-  //   const { state, send } = useContractFunction(contract, 'approve', { _spender: predaDexAddress, _value : ethers.constants.MaxUint256 })
-  // }
+  function approveToken() {
+    const { state, send } = useContractFunction(fromTokenContract, 'approve', { _spender: predaDexContract, _value : ethers.constants.MaxUint256 })
+  }
 
   return (
     <div>
@@ -78,7 +79,7 @@ function Form() {
                 <button className="max-button"> Max</button>
                 <input
                   type="text"
-                  placeholder="0.25"
+                  placeholder="0.0"
                   className="deposit-input-field"
                 />
               </div>
@@ -186,7 +187,7 @@ function Form() {
       {/*Allow Button*/}
       {!confirmationButton && (
         <div className="form-row">
-          <button className="allow-confirmation-buttons allow-button">
+          <button className="allow-confirmation-buttons allow-button" onClick={approveToken}>
             <img src={firstToken == null ? BTC : firstToken.logo} alt="btc"></img>
             Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
           </button>
