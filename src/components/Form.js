@@ -28,15 +28,13 @@ function Form() {
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
-  },[firstToken]);
+    console.log(fromTokenContract)
+  },[firstToken.address]);
 
 
   const test = firstToken.address
-  console.log(account)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const etherBalance = useEtherBalance(account)
-  
-  console.log(firstTokenBalance)
 
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -50,10 +48,11 @@ function Form() {
     setIsOpen(true)
   }
 
-    const { state, send } = useContractFunction(fromTokenContract, 'approve', { _spender: predaDexContract, _value : 1 })
+    const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve' })
+
 
     const approveToken = () => {
-      send()
+      send({ _spender: predaDexContract, _value : 1 })
       console.log(state)
     }
 
