@@ -8,6 +8,12 @@ html {
   overflow-x: hidden;
 }
 
+button:disabled,
+button[disabled]{
+  cursor: not-allowed;
+  background: #6ba9e4;
+}
+
 .App {
   text-align: center;
   background: black;

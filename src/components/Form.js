@@ -16,21 +16,18 @@ import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTo
 
 
 function Form() {
-  const [confirmationButton, setConfirmationButton] = useState(false);
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
   const {firstToken, secondToken} = useContext(CoinContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
+  const firstTokenBalance = useTokenBalance(firstToken.address, account)
+  const etherBalance = useEtherBalance(account)
 
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
-  let erc20Interface
-  let fromTokenContract
-  
-  erc20Interface = new utils.Interface(erc20Abi)
-  fromTokenContract = new Contract(firstToken.address, erc20Interface)
-
-  const predaDexInterface = new utils.Interface(predaDexAbi)
-  const predaDexContract = new Contract(predaDexAddress, predaDexInterface)
+  let erc20Interface = new utils.Interface(erc20Abi)
+  let fromTokenContract = new Contract(firstToken.address, erc20Interface)
+  let predaDexInterface = new utils.Interface(predaDexAbi)
+  let predaDexContract = new Contract(predaDexAddress, predaDexInterface)
 
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
@@ -38,9 +35,8 @@ function Form() {
   },[firstToken.address]);
   
   
-  const firstTokenBalance = useTokenBalance(firstToken.address, account)
-  const etherBalance = useEtherBalance(account)
-  const myBalance = useEtherBalance(account)
+
+
   
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -68,13 +64,14 @@ function Form() {
   
 
   const confirmDeposit = () => {
-  //  console.log(utils.parseUnits(firstTokenValue))
+  const ammount = utils.parseUnits(firstTokenValue)
     console.log(predaDexContract)
-    sendDeposit(firstToken.address, secondToken.address, utils.parseUnits(firstTokenValue))
+    sendDeposit(firstToken.address, secondToken.address, ammount)
   }
 
   return (
   <div>
+    
     {/*First  window*/}
     <div className="form-wrapper-outside">
       <div className="form-wrapper">
@@ -202,7 +199,7 @@ function Form() {
     Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
   </button>
   :
-  <button className="allow-confirmation-buttons confirmation-button" onClick={confirmDeposit}>
+  <button disabled={!secondToken} type="submit" className="allow-confirmation-buttons confirmation-button" onClick={confirmDeposit}>
     CONFIRM
   </button>}
 </div>
