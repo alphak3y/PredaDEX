@@ -14,8 +14,6 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useSendTransaction, useTokenAllowance } from '@usedapp/core';
 
 
-
-
 function Form() {
   const [confirmationButton, setConfirmationButton] = useState(false);
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
