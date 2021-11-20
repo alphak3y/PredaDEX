@@ -11,7 +11,7 @@ import erc20Abi from '../abi/ERC20.json'
 import { utils } from 'ethers'
 import { ethers, Signer } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useSendTransaction, useTokenAllowance } from '@usedapp/core';
+import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance } from '@usedapp/core';
 
 
 function Form() {
@@ -19,20 +19,21 @@ function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
   const {firstToken, secondToken} = useContext(CoinContext);
   const { account } = useEthers()
+  const [firstTokenValue, setFirstTokenValue] = useState(0)
+
   const predaDexContract = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface
   let fromTokenContract
   
   erc20Interface = new utils.Interface(erc20Abi)
   fromTokenContract = new Contract(firstToken.address, erc20Interface)
+
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
-    console.log("")
   },[firstToken.address]);
   
   
-  const test = firstToken.address
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const etherBalance = useEtherBalance(account)
   
@@ -53,11 +54,15 @@ function Form() {
   const approveToken = () => {
     send(predaDexContract, MaxUint256)
   }
-  console.log("token alllowance")
+
   let allowance = useTokenAllowance(firstToken.address,account,predaDexContract) 
   
   let isApproved = allowance && allowance._hex != "0x00"
-  console.log(isApproved)
+
+  const sendDeposit = () => {
+    console.log("asd")
+  }
+
   return (
   <div>
     {/*First  window*/}
@@ -82,7 +87,8 @@ function Form() {
             <div className="input-space">
               <button className="max-button"> Max</button>
               <input
-              type="text"
+              value={firstTokenValue}
+              onChange={e => setFirstTokenValue(e.target.value)}
               placeholder="0.0"
               className="deposit-input-field"
               />
@@ -186,7 +192,7 @@ function Form() {
     Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
   </button>
   :
-  <button className="allow-confirmation-buttons confirmation-button">
+  <button className="allow-confirmation-buttons confirmation-button" onClick={sendDeposit}>
     CONFIRM
   </button>}
 </div>
