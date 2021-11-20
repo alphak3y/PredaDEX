@@ -8,6 +8,7 @@ import { CoinContext } from "../context/Coin.context";
 import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
+import predaDexAbi from '../abi/PredaDex.json'
 import { utils } from 'ethers'
 import { ethers, Signer } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -21,12 +22,15 @@ function Form() {
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
 
-  const predaDexContract = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
+  const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface
   let fromTokenContract
   
   erc20Interface = new utils.Interface(erc20Abi)
   fromTokenContract = new Contract(firstToken.address, erc20Interface)
+
+  const predaDexInterface = new utils.Interface(predaDexAbi)
+  const predaDexContract = new Contract(predaDexAddress, predaDexInterface)
 
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
@@ -36,6 +40,7 @@ function Form() {
   
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const etherBalance = useEtherBalance(account)
+  const myBalance = useEtherBalance(account)
   
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -49,18 +54,23 @@ function Form() {
     setIsOpen(true)
   }
   
-  const { state, send } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
   
   const approveToken = () => {
-    send(predaDexContract, MaxUint256)
+    sendApprove(predaDexAddress, MaxUint256)
   }
 
-  let allowance = useTokenAllowance(firstToken.address,account,predaDexContract) 
+  let allowance = useTokenAllowance(firstToken.address,account,predaDexAddress) 
   
   let isApproved = allowance && allowance._hex != "0x00"
 
-  const sendDeposit = () => {
-    console.log("asd")
+  const { state: stateDeposit, send: sendDeposit } = useContractFunction(predaDexContract, 'deposit', { transactionName: 'Approve'}, Signer)
+  const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
+  
+
+  const confirmDeposit = () => {
+  //  console.log(utils.parseUnits(firstTokenValue))
+    console.log(predaDexContract)
+    sendDeposit(firstToken.address, secondToken.address, utils.parseUnits(firstTokenValue))
   }
 
   return (
@@ -192,7 +202,7 @@ function Form() {
     Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
   </button>
   :
-  <button className="allow-confirmation-buttons confirmation-button" onClick={sendDeposit}>
+  <button className="allow-confirmation-buttons confirmation-button" onClick={confirmDeposit}>
     CONFIRM
   </button>}
 </div>
