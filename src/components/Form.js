@@ -91,7 +91,7 @@ function Form() {
      const depositTxn = await signedContract.deposit(
         firstToken.address,
         secondToken.address,
-        utils.parseUnits(firstTokenValue.toString(),18),
+        amount,
         {
           gasPrice: signer.getGasPrice(),
           gasLimit: 400000,

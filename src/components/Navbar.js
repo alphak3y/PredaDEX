@@ -24,7 +24,7 @@ function Navigation() {
     
     const activate = async () => {
         await activateBrowserWallet()
-        await connectContract();s
+        await connectContract();
     }
 
     const disconnect = async () => {

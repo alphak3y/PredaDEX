@@ -13,9 +13,9 @@ export const CoinProvider = (props) => {
     const [coins, setCoins] = useState([
         {
             logo:eth,
-            shortcut:"WETH",
-            name:"Wrapped Ether",
-            address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+            shortcut:"LINK",
+            name:"LINK",
+            address: "0x514910771af9ca656af840dff83e8264ecf986ca"
         },
         {   
             logo:usdc,
@@ -45,9 +45,9 @@ export const CoinProvider = (props) => {
 
     const [firstToken, setFirstToken] = useState({
         logo:eth,
-        shortcut:"WETH",
-        name:"Wrapped Ether",
-        address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+        shortcut:"LINK",
+        name:"LINK",
+        address: "0x514910771af9ca656af840dff83e8264ecf986ca"
     })
     const [secondToken, setSecondToken] = useState(null)
 
