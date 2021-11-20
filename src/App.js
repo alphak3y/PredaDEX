@@ -12,7 +12,7 @@ const config = {
     [ChainId.Mainnet]: `https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F`,
   },
   multicallAddresses: {
-    31337: "0xFD471836031dc5108809D173A067e8486B9047A3"
+   // 31337: ""
   }
 }
 

@@ -81,23 +81,26 @@ function Form() {
     contractAddress,
   } = useContext(PredaDexContext);
 
-  console.log("signedContract")
-  console.log(signedContract)
+  // console.log("signedContract")
+  // console.log(signedContract)
+  // console.log(account)
 
   const confirmDeposit = async () => {
 
     const amount = ethers.utils.parseUnits(firstTokenValue.toString(), 18);
+
+    console.log(firstToken.address, secondToken.address)
     
      const depositTxn = await signedContract.deposit(
         firstToken.address,
         secondToken.address,
-        amount,
+        utils.parseUnits("10.0",18),
         {
           gasPrice: signer.getGasPrice(),
           gasLimit: 400000,
           value: utils.parseEther("0.01")
         })
-      .catch((e)=>window.alert(e.message))     
+      .catch((e)=>window.alert(e.message))
   };
 
   return (

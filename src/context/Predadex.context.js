@@ -24,8 +24,11 @@ export const PredaDexProvider = (props) => {
       provider = new ethers.providers.Web3Provider(window.ethereum, "any")
     }
 
-    await provider.send("eth_requestAccounts", [0]);
+    const value = await provider.send("eth_requestAccounts", [0]);
+    console.log(value)
+
     let signer = provider.getSigner();
+    console.log(signer.getAddress());    
 
     const contract = new ethers.Contract(contractAddress, predaDexAbi, provider);
 
@@ -41,7 +44,8 @@ export const PredaDexProvider = (props) => {
 
     setSigner(signer)
 
-    console.log('success', signer, signedContract, userAddress, provider)
+    //console.log('success', signer, signedContract, userAddress, provider)
+    console.log(signer);
 
   };
 
