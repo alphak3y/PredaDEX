@@ -64,9 +64,9 @@ function Form() {
   
 
   const confirmDeposit = () => {
-  const ammount = utils.parseUnits(firstTokenValue)
+  const ammount = utils.parseUnits(firstTokenValue.toString())
     console.log(predaDexContract)
-    sendDeposit(firstToken.address, secondToken.address, ammount)
+    sendDeposit({ value: ethers.utils.parseEther("0.1") },firstToken.address, secondToken.address, ammount)
   }
 
   return (
