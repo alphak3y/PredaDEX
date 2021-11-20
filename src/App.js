@@ -4,18 +4,31 @@ import WholeApp from './WholeApp'
 import { ModalProvider } from "./context/Modal.context";
 import { CoinProvider } from "./context/Coin.context";
 import { ChainId, DAppProvider, useEtherBalance, useEthers } from '@usedapp/core'
+import { PredaDexProvider } from './context/Predadex.context';
+
+const config = {
+  readOnlyChainId: ChainId.Mainnet,
+  readOnlyUrls: {
+    [ChainId.Mainnet]: `https://eth-mainnet.alchemyapi.io/v2/XLbyCEcaLhQ3x_ZaKBmZqNp8UGgNGX2F`,
+  },
+  multicallAddresses: {
+    31337: "0xFD471836031dc5108809D173A067e8486B9047A3"
+  }
+}
 
 function App() {
 
   return (
     <div className="App">
 
-      <DAppProvider >
+      <DAppProvider config={config}>
+      <PredaDexProvider>
       <ModalProvider>
         <CoinProvider>
         <WholeApp />
         </CoinProvider>
       </ModalProvider>
+      </PredaDexProvider>
       </DAppProvider>
     </div>
 

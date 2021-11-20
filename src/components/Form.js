@@ -3,16 +3,18 @@ import Vector from "../images/Vector.svg";
 import BTC from "../images/BTC.svg";
 import question from "../images/question.svg";
 import arrow from "../images/Arrow.svg";
+import { PredaDexContext } from "../context/Predadex.context";
 import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
 import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import predaDexAbi from '../abi/PredaDex.json'
-import { utils } from 'ethers'
-import { ethers, Signer } from 'ethers'
+import { ethers, Signer, utils, BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
+
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance } from '@usedapp/core';
+import { first } from "rxjs";
 
 
 function Form() {
@@ -35,9 +37,6 @@ function Form() {
   },[firstToken.address]);
   
   
-
-
-  
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
     setIsFirstToken(true)
@@ -55,19 +54,46 @@ function Form() {
     sendApprove(predaDexAddress, MaxUint256)
   }
 
-  let allowance = useTokenAllowance(firstToken.address,account,predaDexAddress) 
+  let allowance = useTokenAllowance(firstToken.address,account,predaDexAddress)
+
+  let config = useConfig()
+  console.log(config)
   
   let isApproved = allowance && allowance._hex != "0x00"
 
-  const { state: stateDeposit, send: sendDeposit } = useContractFunction(predaDexContract, 'deposit', { transactionName: 'Approve'}, Signer)
+  //const { state: stateDeposit, send: sendDeposit } = useContractFunction(predaDexContract, 'deposit', { transactionName: 'Approve'}, Signer)
   const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
   
 
-  const confirmDeposit = () => {
-  const ammount = utils.parseUnits(firstTokenValue.toString())
-    console.log(predaDexContract)
-    sendDeposit({ value: ethers.utils.parseEther("0.1") },firstToken.address, secondToken.address, ammount)
-  }
+  // const confirmDeposit = () => {
+  //   const ammount = utils.parseUnits(firstTokenValue.toString())
+  //   console.log(predaDexContract)
+  //   sendDeposit({ value: ethers.utils.parseEther("0.1") },firstToken.address, secondToken.address, ammount)
+  // }
+
+  const confirmDeposit = async () => {
+    const {
+      signedContract,
+      signer,
+      stateUserAddress,
+      provider,
+      contractAddress,
+    } = useContext(PredaDexContext);
+    const amount = ethers.utils.parseUnits(firstTokenValue, 18);
+    
+     const mintTx = await signedContract.deposit(
+      {
+        fromToken: firstToken.address,
+        destToken: secondToken.address,
+        amount: firstTokenValue,
+        maxGasPrice: 100000
+      },{
+        gasPrice: signer.getGasPrice(),
+        gasLimit: 400000,
+        value: 1
+      })
+      .catch((e)=>window.alert(e.message))     
+  };
 
   return (
   <div>
