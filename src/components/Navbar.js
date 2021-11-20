@@ -1,20 +1,30 @@
 import '../App.css';
-import {useState} from 'react'
+import {useState, useContext} from 'react'
 import {Container, Navbar, Nav} from 'react-bootstrap'
 import shark from '../images/shark.svg'
 import fox from '../images/fox.svg'
 import { formatEther } from '@ethersproject/units'
 import { ChainId, DAppProvider, useEtherBalance, useEthers } from '@usedapp/core'
 import { formatUnits } from '@ethersproject/units'
+import {PredaDexContext} from '../context/Predadex.context'
 
 function Navigation() {
     const [isCopied, setIsCopied] = useState(false)
     const [showBalance, setShowBalance] = useState(false)
     const { activateBrowserWallet, account, deactivate } = useEthers()
     const etherBalance = useEtherBalance(account)
+    const {
+        connectContract,
+        signedContract,
+        signer,
+        stateUserAddress,
+        provider,
+        contractAddress,
+      } = useContext(PredaDexContext);
     
     const activate = async () => {
         await activateBrowserWallet()
+        await connectContract();s
     }
 
     const disconnect = async () => {

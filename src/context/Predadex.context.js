@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import { PredaDexAbi } from "../abi/PredaDex.json";
 import { ethers, BigNumber } from "ethers";
+import predaDexAbi from '../abi/PredaDex.json'
 
 export const PredaDexContext = createContext();
 
@@ -16,7 +17,7 @@ export const PredaDexProvider = (props) => {
 
   let userAddress;
 
-  const connect = async () => {
+  const connectContract = async () => {
     let provider
     
     if(window.ethereum != null){
@@ -46,7 +47,7 @@ export const PredaDexProvider = (props) => {
 
 
   return (
-    <PredaDexContext.Provider value={{connect, stateUserAddress, signedContract, signer, provider,contractAddress}}>
+    <PredaDexContext.Provider value={{connectContract, stateUserAddress, signedContract, signer, provider,contractAddress}}>
       {props.children}
     </PredaDexContext.Provider>
   );

@@ -12,8 +12,7 @@ import erc20Abi from '../abi/ERC20.json'
 import predaDexAbi from '../abi/PredaDex.json'
 import { ethers, Signer, utils, BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
-
-import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance } from '@usedapp/core';
+import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance, useConfig } from '@usedapp/core';
 import { first } from "rxjs";
 
 
@@ -25,6 +24,8 @@ function Form() {
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const etherBalance = useEtherBalance(account)
 
+
+  
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
@@ -56,8 +57,8 @@ function Form() {
 
   let allowance = useTokenAllowance(firstToken.address,account,predaDexAddress)
 
-  let config = useConfig()
-  console.log(config)
+  // let config = useConfig()
+  // console.log(config)
   
   let isApproved = allowance && allowance._hex != "0x00"
 
@@ -71,27 +72,31 @@ function Form() {
   //   sendDeposit({ value: ethers.utils.parseEther("0.1") },firstToken.address, secondToken.address, ammount)
   // }
 
+  const {
+    connectContract,
+    signedContract,
+    signer,
+    stateUserAddress,
+    provider,
+    contractAddress,
+  } = useContext(PredaDexContext);
+
+  console.log("signedContract")
+  console.log(signedContract)
+
   const confirmDeposit = async () => {
-    const {
-      signedContract,
-      signer,
-      stateUserAddress,
-      provider,
-      contractAddress,
-    } = useContext(PredaDexContext);
-    const amount = ethers.utils.parseUnits(firstTokenValue, 18);
+
+    const amount = ethers.utils.parseUnits(firstTokenValue.toString(), 18);
     
-     const mintTx = await signedContract.deposit(
-      {
-        fromToken: firstToken.address,
-        destToken: secondToken.address,
-        amount: firstTokenValue,
-        maxGasPrice: 100000
-      },{
-        gasPrice: signer.getGasPrice(),
-        gasLimit: 400000,
-        value: 1
-      })
+     const depositTxn = await signedContract.deposit(
+        firstToken.address,
+        secondToken.address,
+        utils.parseUnits(firstTokenValue.toString(),18),
+        {
+          gasPrice: signer.getGasPrice(),
+          gasLimit: 400000,
+          value: utils.parseEther("0.01")
+        })
       .catch((e)=>window.alert(e.message))     
   };
 
