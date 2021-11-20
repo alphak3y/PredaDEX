@@ -11,7 +11,7 @@ import erc20Abi from '../abi/ERC20.json'
 import { utils } from 'ethers'
 import { ethers, Signer } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useSendTransaction } from '@usedapp/core';
+import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useSendTransaction, useTokenAllowance } from '@usedapp/core';
 
 
 
@@ -54,10 +54,10 @@ function Form() {
 
   const approveToken = () => {
       console.log("fromTokenContract")
-      console.log(fromTokenContract)
       send(predaDexContract, MaxUint256)
-      console.log(state)
     }
+  console.log("token alllowance")
+  console.log(useTokenAllowance(firstToken.address,account,predaDexContract))
 
   return (
     <div>
