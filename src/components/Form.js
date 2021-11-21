@@ -102,7 +102,7 @@ function Form() {
 
   const confirmDeposit = async () => {
 
-    console.log(firstToken.address, secondToken.address)
+   // console.log(firstToken.address, secondToken.address)
     
      const depositTxn = await signedContract.deposit(
         firstToken.address,

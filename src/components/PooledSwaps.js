@@ -1,9 +1,11 @@
 import { useState } from "react";
 import ProgressBar from "./ProgressBar";
+import CheckAssets from "./CheckAssets";
 
 
 function PooledSwaps(props) {
     const [filter, setFilter] = useState("Open")
+    CheckAssets();
     return (
         <>
         <div className="options-pooled-swaps mb-2">
