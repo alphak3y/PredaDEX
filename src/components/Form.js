@@ -87,18 +87,16 @@ function Form() {
 
   const confirmDeposit = async () => {
 
-    const amount = ethers.utils.parseUnits(firstTokenValue.toString(), 18);
-
     console.log(firstToken.address, secondToken.address)
     
      const depositTxn = await signedContract.deposit(
         firstToken.address,
         secondToken.address,
-        utils.parseUnits("10.0",18),
+        utils.parseUnits(firstTokenValue.toString(),firstToken.decimals),
         {
           gasPrice: signer.getGasPrice(),
           gasLimit: 400000,
-          value: utils.parseEther("0.01")
+          value: utils.parseEther("1")
         })
       .catch((e)=>window.alert(e.message))
   };
