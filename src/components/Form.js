@@ -24,7 +24,14 @@ function Form() {
   const [userGweiAmount, setUserGweiAmount] = useState(0)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const etherBalance = useEtherBalance(account)
-
+  const {
+    connectContract,
+    signedContract,
+    signer,
+    stateUserAddress,
+    provider,
+    contractAddress,
+  } = useContext(PredaDexContext);
 
   
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
@@ -32,6 +39,18 @@ function Form() {
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
   let predaDexContract = new Contract(predaDexAddress, predaDexInterface)
+
+
+  useEffect( async() => {
+    async function connectingContract() {
+      await connectContract()
+    }
+    if(account){
+    connectingContract()
+  }
+  },[account]);
+  
+
 
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
@@ -63,6 +82,8 @@ function Form() {
   
   let isApproved = allowance && allowance._hex != "0x00"
 
+
+
   //const { state: stateDeposit, send: sendDeposit } = useContractFunction(predaDexContract, 'deposit', { transactionName: 'Approve'}, Signer)
   const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
   
@@ -73,14 +94,7 @@ function Form() {
   //   sendDeposit({ value: ethers.utils.parseEther("0.1") },firstToken.address, secondToken.address, ammount)
   // }
 
-  const {
-    connectContract,
-    signedContract,
-    signer,
-    stateUserAddress,
-    provider,
-    contractAddress,
-  } = useContext(PredaDexContext);
+
 
   // console.log("signedContract")
   // console.log(signedContract)
