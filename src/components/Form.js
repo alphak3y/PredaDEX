@@ -21,6 +21,7 @@ function Form() {
   const {firstToken, secondToken} = useContext(CoinContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
+  const [userGweiAmount, setUserGweiAmount] = useState(0)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const etherBalance = useEtherBalance(account)
 
@@ -96,7 +97,7 @@ function Form() {
         {
           gasPrice: signer.getGasPrice(),
           gasLimit: 400000,
-          value: utils.parseEther("1")
+          value: utils.parseUnits(userGweiAmount.toString(), 9)
         })
       .catch((e)=>window.alert(e.message))
   };
@@ -176,7 +177,7 @@ function Form() {
         </div>
         :
         (<div className="form-col form-col-sm click clickable" onClick={openModalForSecondToken} style={{marginRight:"20px"}}>
-          <div className="label label-dropdown">Deposit</div>
+          <div className="label label-dropdown">Receive</div>
           <div className="deposit-row">
             <img src={secondToken == null ? BTC : secondToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
             <p>{secondToken.shortcut}</p>
@@ -208,7 +209,9 @@ function Form() {
       <div className="input-space" style={{ paddingTop: "0px" }}>
         <input
         type="text"
-        placeholder="15"
+        placeholder="0"
+        onChange={e => setUserGweiAmount(e.target.value)}
+        value={userGweiAmount}
         className="receive-input-field"
         />
       </div>
