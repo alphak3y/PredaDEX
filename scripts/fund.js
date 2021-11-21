@@ -1,8 +1,9 @@
 const { ethers } = require("hardhat");
 
-const tokenAddress = "0x514910771af9ca656af840dff83e8264ecf986ca" //LINK
-const whaleAddress = "0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503" //LINK team wallet
-const userAddress  = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" //My wallet
+const linkAddress = "0x514910771af9ca656af840dff83e8264ecf986ca" //LINK
+const linkWhale = "0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503" //LINK team wallet
+const ethWhale = "0x6555e1CC97d3cbA6eAddebBCD7Ca51d75771e0B8"
+const userAddress  = "" //My wallet
 const amount       = "1000";
 
 // const tokenAddress = "0x514910771af9ca656af840dff83e8264ecf986ca" //USDC
@@ -25,22 +26,34 @@ const ERC20_ABI = [
 
 async function main() {
 
-  await ethers.provider.send("hardhat_impersonateAccount", [
-      whaleAddress,
-  ]);
-  const impersonatedAccount = await ethers.provider.getSigner(
-      whaleAddress
-  );
-  const tokenContract = await ethers.getContractAt(ERC20_ABI, tokenAddress);
+    await ethers.provider.send("hardhat_impersonateAccount", [
+        linkWhale,
+    ]);
+    const linkAccount = await ethers.provider.getSigner(
+        linkWhale
+    );
+    const linkContract = await ethers.getContractAt(ERC20_ABI, linkAddress);
 
-  await tokenContract
-      .connect(impersonatedAccount)
+    await linkContract
+      .connect(linkAccount)
       .transfer(userAddress, ethers.utils.parseUnits(amount));
+
+    await ethers.provider.send("hardhat_impersonateAccount", [
+        ethWhale,
+    ]);
+    const ethAccount = await ethers.provider.getSigner(
+        ethWhale
+    );
+
+    await ethAccount.sendTransaction({
+        to: userAddress,
+        value: ethers.utils.parseUnits("1000", 18.0)
+    });
 }
 
 main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
 });

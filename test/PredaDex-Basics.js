@@ -136,18 +136,33 @@ describe('PredaDex Basic Tests', async function () {
   it('should group a swap, distribute then perform a swap', async () => {
     await fundUser(fromToken);
 
+    const fromTokenContract = await ethers.getContractAt(
+      ERC20_ABI,
+      fromToken.address
+    );
+
+    const balanceBefore = await fromTokenContract.balanceOf(user.address);
+
     await predaDex.connect(user).deposit(
       fromToken.address,
       toToken.address,
-      ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"])
+      ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"]),
+      // set msg.value to 100 gwei
+      {value: 100_000_000_000}
     );
 
-    await fundUser(fromToken);
+    const balancePost = await fromTokenContract.balanceOf(user.address);
 
-    await predaDex.connect(user).deposit(
-      fromToken.address,
-      toToken.address,
-      ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"])
-    );
+
+    console.log("balancePre:", balanceBefore.toString());
+    console.log("balancePost:", balancePost.toString());
+
+    // await fundUser(fromToken);
+
+    // await predaDex.connect(user).deposit(
+    //   fromToken.address,
+    //   toToken.address,
+    //   ethers.utils.parseUnits(fromToken["amount"], fromToken["decimals"])
+    // );
   })
 })

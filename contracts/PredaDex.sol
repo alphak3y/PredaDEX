@@ -155,6 +155,7 @@ contract PredaDex is IPredaDex, PredaDexConsts {
     ) external override payable {
         // This cant be used delegatly
         require(address(this) == deployed, "Cannot be delegate");
+        require(IERC20(fromToken).allowance(msg.sender, address(this)) >= amount, "Not enough allowance");
         uint64 userGas = IERC20(fromToken).isETH()
             ? uint64(msg.value - amount)
             : uint64(msg.value);
