@@ -49,7 +49,8 @@ function PooledSwaps(props) {
                 //   both transactions
             }else {
                 let tempBothTransaction = {from: value[1][0], to:value[1][1]}
-                both.push(tempBothTransaction)
+                openTransaction.push(tempBothTransaction)
+                completedTransaction.push(tempBothTransaction)
             }
         }
         setOpenedTrans(openTransaction)
