@@ -13,20 +13,20 @@ function PooledSwaps(props) {
     const [completedTrans, setCompletedTrans] = useState([])
     const [bothTrans, setBothTrans] = useState([])
     const [realData, setRealData] = useState(
-    {
-        "0x1" : [
-        250000000, 
-        0 //open
-        ],
-        "0x2": [
-        0,
-        100000000 // completed
-        ],
-        "0x3": [
-        100000000000,
-        200000000// both
-        ]
-    }
+        [
+            [
+              250000000, 
+              0
+            ],
+            [
+              0,
+              100000000
+            ],
+            [
+              100000000000,
+              200000000
+            ]
+          ]
     )
     
     
@@ -40,15 +40,15 @@ function PooledSwaps(props) {
         for (let value of Object.entries(realData)) {
             // Opened transactions
             if(value[1][0] > 0 && value[1][1]  === 0 ) {
-                let tempOpenTransaction = {address:value, from: value[1][0], to:value[1][1]}
+                let tempOpenTransaction = {from: value[1][0], to:value[1][1]}
                 openTransaction.push(tempOpenTransaction)
                 //   completed transactions
             }else if(value[1][0] === 0 && value[1][1] > 0) {
-                let tempCompletedTransaction = {address:value, from: value[1][0], to:value[1][1]}
+                let tempCompletedTransaction = {from: value[1][0], to:value[1][1]}
                 completedTransaction.push(tempCompletedTransaction)
                 //   both transactions
             }else {
-                let tempBothTransaction = {address:value, from: value[1][0], to:value[1][1]}
+                let tempBothTransaction = {from: value[1][0], to:value[1][1]}
                 both.push(tempBothTransaction)
             }
         }
