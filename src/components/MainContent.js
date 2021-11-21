@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import {  useState } from 'react';
 import Form from './Form'
 import PooledSwaps from './PooledSwaps';
+
+
 
 function MainContent() {
     const [isFormVisible, setIsFormVisible] = useState(true)
     
+
+
     return (
     <div className="container">
         <div className="row">

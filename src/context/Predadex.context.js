@@ -13,6 +13,7 @@ export const PredaDexProvider = (props) => {
   const [signedContract, setSignedContract] = useState()
   const [signer, setSigner] = useState()
   const [provider, setProvider] = useState()
+  const [userAssets, setUserAssets] = useState()
   
 
   let userAddress;
@@ -25,10 +26,8 @@ export const PredaDexProvider = (props) => {
     }
 
     const value = await provider.send("eth_requestAccounts", [0]);
-    console.log(value)
 
     let signer = provider.getSigner();
-    console.log(signer.getAddress());    
 
     const contract = new ethers.Contract(contractAddress, predaDexAbi, provider);
 
@@ -45,13 +44,13 @@ export const PredaDexProvider = (props) => {
     setSigner(signer)
 
     //console.log('success', signer, signedContract, userAddress, provider)
-    console.log(signer);
+
 
   };
 
 
   return (
-    <PredaDexContext.Provider value={{connectContract, stateUserAddress, signedContract, signer, provider,contractAddress}}>
+    <PredaDexContext.Provider value={{connectContract, stateUserAddress, signedContract, signer, provider,contractAddress, userAssets, setUserAssets}}>
       {props.children}
     </PredaDexContext.Provider>
   );
