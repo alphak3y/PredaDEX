@@ -1,0 +1,3 @@
+[submodule "PredaDex"]
+	path = PredaDex
+	url = https://github.com/PoolSharks-Protocol/PredaDex
