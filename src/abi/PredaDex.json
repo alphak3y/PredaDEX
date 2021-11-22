@@ -38,14 +38,14 @@
     "name": "checkAssets",
     "outputs": [
       {
-        "internalType": "bytes32[]",
+        "internalType": "bytes32[64]",
         "name": "groups",
-        "type": "bytes32[]"
+        "type": "bytes32[64]"
       },
       {
-        "internalType": "uint256[][2]",
+        "internalType": "uint256[64][2]",
         "name": "amounts",
-        "type": "uint256[][2]"
+        "type": "uint256[64][2]"
       }
     ],
     "stateMutability": "view",

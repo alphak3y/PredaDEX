@@ -6,6 +6,7 @@ import { PredaDexContext } from "../context/Predadex.context";
 
 
 function PooledSwaps(props) {
+    CheckAssets();
     
     const {userAssets, setUserAssets} = useContext(PredaDexContext);
     const [filter, setFilter] = useState("Open")
@@ -56,13 +57,11 @@ function PooledSwaps(props) {
         setOpenedTrans(openTransaction)
         setCompletedTrans(completedTransaction)
         setBothTrans(both)
-        console.log(openTransaction)
+       // console.log(openTransaction)
     },[]);
     
     
-    //   let checkAllUserAssets = signedContract.checkAssets(
-    //                                       stateUserAddress
-    //                                   ).catch((e)=>window.alert(e.message));
+      
     // setUserAssets(checkAllUserAssets)
     
     return (

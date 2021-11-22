@@ -43,8 +43,6 @@ export const PredaDexProvider = (props) => {
 
     setSigner(signer)
 
-    //console.log('success', signer, signedContract, userAddress, provider)
-
 
   };
 

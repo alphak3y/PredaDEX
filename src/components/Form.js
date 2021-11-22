@@ -103,6 +103,8 @@ function Form() {
   const confirmDeposit = async () => {
 
    // console.log(firstToken.address, secondToken.address)
+
+
     
      const depositTxn = await signedContract.deposit(
         firstToken.address,
@@ -114,6 +116,11 @@ function Form() {
           value: utils.parseUnits(userGweiAmount.toString(), 9)
         })
       .catch((e)=>window.alert(e.message))
+
+      console.log(signedContract)    
+      let {groups, amounts} = signedContract.checkAsset(stateUserAddress);
+      console.log("groups,amounts");
+      console.log(groups,amounts);
   };
 
   return (
@@ -124,7 +131,7 @@ function Form() {
       <div className="form-wrapper">
         {/*Balance label above input field*/}
         <div className="form-row form-row-label">
-          <div className="label">Balance : {firstToken == null ? "0.00" : firstTokenBalance && parseFloat(firstTokenBalance._hex,16)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+          <div className="label">Balance:{firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, 18)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
         </div>
         <div className="form-row ">
           {/* Deposit dropdown */}
