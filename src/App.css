@@ -142,6 +142,19 @@ th {
   font-weight: 100;
   font-size: 12px;
 }
+.shiny {
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, #3D80FF 0%, #46FEA3 100%);
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.shiny-inner:nth-child(odd) {
+  background: #0f1325;
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 1px 5px;
+}
 
 .left {
   text-align: left;
@@ -367,6 +380,19 @@ tr > th {
 .cancel:hover {
   color: white;
   background: #f05858;
+}
+
+.withdraw {
+  background: none;
+  border: 1px solid #00BC57;
+  color: #00BC57;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+.withdraw:hover {
+  color: white;
+  background: #00BC57;
 }
 
 .modal-info-wrapper {

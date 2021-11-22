@@ -22,6 +22,7 @@ function Form() {
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
+  const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
   const etherBalance = useEtherBalance(account)
   const {
     connectContract,
@@ -75,29 +76,12 @@ function Form() {
   }
 
   let allowance = useTokenAllowance(firstToken.address,account,predaDexAddress)
-
-  // let config = useConfig()
-  // console.log(config)
   
   let isApproved = allowance && allowance._hex != "0x00"
 
-
-
-  //const { state: stateDeposit, send: sendDeposit } = useContractFunction(predaDexContract, 'deposit', { transactionName: 'Approve'}, Signer)
   const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
   
 
-  // const confirmDeposit = () => {
-  //   const ammount = utils.parseUnits(firstTokenValue.toString())
-  //   console.log(predaDexContract)
-  //   sendDeposit({ value: ethers.utils.parseEther("0.1") },firstToken.address, secondToken.address, ammount)
-  // }
-
-
-
-  // console.log("signedContract")
-  // console.log(signedContract)
-  // console.log(account)
 
   const confirmDeposit = async () => {
 
@@ -129,7 +113,7 @@ function Form() {
       <div className="form-wrapper">
         {/*Balance label above input field*/}
         <div className="form-row form-row-label">
-          <div className="label">Balance:{firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, firstToken.decimals)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+          <div className="label">Balance: {firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, firstToken.decimals)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
         </div>
         <div className="form-row ">
           {/* Deposit dropdown */}
@@ -170,9 +154,9 @@ function Form() {
         {/* Balance labels above input fields*/}
         <div className="form-row form-row-label">
           <div className="label" style={{ paddingRight: "120px" }}>
-            Balance : 0.00
+            Balance: 0.00
           </div>
-          <div className="label ">Balance : {etherBalance && formatUnits(etherBalance)} ETH</div>
+          <div className="label ">{secondToken ? "Balance:": "Balance: 0"} {secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)} {secondToken && secondToken.shortcut}</div>
         </div>
         <div className="form-row">
           {/* Receive dropdown */}
