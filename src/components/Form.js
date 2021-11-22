@@ -103,8 +103,9 @@ function Form() {
 
     console.log(signedContract)
     console.log(stateUserAddress);   
-    let {groups, amounts} = signedContract.checkAssets(stateUserAddress);
+    let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
     console.log("groups,amounts");
+    console.log(groups[1]);
     console.log(groups,amounts);
 
      const depositTxn = await signedContract.deposit(
