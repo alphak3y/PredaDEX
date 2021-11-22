@@ -13,11 +13,6 @@ const CheckAssets = async () => {
         setUserAssets
       } = useContext(PredaDexContext);
 
-      // console.log(signedContract)    
-    //   let checkAllUserAssets = signedContract.checkAssets(
-    //                                       stateUserAddress
-    //                                   ).catch((e)=>window.alert(e.message));
-
       setUserAssets( {
         "0x1" : [
           250000000, 
@@ -28,7 +23,7 @@ const CheckAssets = async () => {
           100000000
         ],
         "0x3": [
-          100000000000,
+          0,
           200000000
         ]
       });

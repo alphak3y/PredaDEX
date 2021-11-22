@@ -13,7 +13,6 @@ import predaDexAbi from '../abi/PredaDex.json'
 import { ethers, Signer, utils, BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance, useConfig } from '@usedapp/core';
-import { first } from "rxjs";
 
 
 function Form() {
@@ -102,8 +101,13 @@ function Form() {
 
   const confirmDeposit = async () => {
 
-   // console.log(firstToken.address, secondToken.address)
-    
+    console.log(signedContract)
+    console.log(stateUserAddress);   
+    let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
+    console.log("groups,amounts");
+    console.log(groups[1]);
+    console.log(groups,amounts);
+
      const depositTxn = await signedContract.deposit(
         firstToken.address,
         secondToken.address,
@@ -114,6 +118,7 @@ function Form() {
           value: utils.parseUnits(userGweiAmount.toString(), 9)
         })
       .catch((e)=>window.alert(e.message))
+
   };
 
   return (
@@ -124,7 +129,7 @@ function Form() {
       <div className="form-wrapper">
         {/*Balance label above input field*/}
         <div className="form-row form-row-label">
-          <div className="label">Balance : {firstToken == null ? "0.00" : firstTokenBalance && parseFloat(firstTokenBalance._hex,16)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+          <div className="label">Balance:{firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, 18)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
         </div>
         <div className="form-row ">
           {/* Deposit dropdown */}
