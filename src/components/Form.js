@@ -13,7 +13,6 @@ import predaDexAbi from '../abi/PredaDex.json'
 import { ethers, Signer, utils, BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance, useConfig } from '@usedapp/core';
-import { first } from "rxjs";
 
 
 function Form() {
@@ -102,10 +101,12 @@ function Form() {
 
   const confirmDeposit = async () => {
 
-   // console.log(firstToken.address, secondToken.address)
+    console.log(signedContract)
+    console.log(stateUserAddress);   
+    let {groups, amounts} = signedContract.checkAssets(stateUserAddress);
+    console.log("groups,amounts");
+    console.log(groups,amounts);
 
-
-    
      const depositTxn = await signedContract.deposit(
         firstToken.address,
         secondToken.address,
@@ -117,10 +118,6 @@ function Form() {
         })
       .catch((e)=>window.alert(e.message))
 
-      console.log(signedContract)    
-      let {groups, amounts} = signedContract.checkAsset(stateUserAddress);
-      console.log("groups,amounts");
-      console.log(groups,amounts);
   };
 
   return (
