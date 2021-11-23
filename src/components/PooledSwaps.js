@@ -1,17 +1,21 @@
 import { useState, useContext, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
-// import CheckAssets from "./CheckAssets";
 import { PredaDexContext } from "../context/Predadex.context";
-import {  utils } from 'ethers'
+import { ethers, utils } from 'ethers'
 import { formatUnits } from '@ethersproject/units'
+import { coins } from "../context/Coin.context"
+import erc20Abi from '../abi/ERC20.json'
 
 function PooledSwaps(props) {
-    const {signedContract, userAssets, setUserAssets, stateUserAddress} = useContext(PredaDexContext);
+    const {signedContract,
+           userAssets,
+           setUserAssets, 
+           stateUserAddress, 
+           provider
+          } = useContext(PredaDexContext);
     const [filter, setFilter] = useState("Open")
     const [openedTrans, setOpenedTrans] = useState([])
     const [completedTrans, setCompletedTrans] = useState([])
-
-
 
     const confirmWithdraw = async () => {
 
@@ -27,8 +31,6 @@ function PooledSwaps(props) {
    
      };
     
-    
-    
     // filter transactions on opened, completed and both and store in state
     useEffect(() => {
         let openTransaction = []
@@ -37,24 +39,55 @@ function PooledSwaps(props) {
         let combinedAmounts = []
         
         const run = async () => {
+
             let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
             let fromTokens = amounts[0]
+            let destTokens = amounts[1]
             let zeroHex = "0x0000000000000000000000000000000000000000000000000000000000000000";
+
             for (let i = 0; i < fromTokens.length && groups[i] != zeroHex; i++) {
-                combinedAmounts.push([parseFloat(formatUnits(amounts[0][i]._hex, 18)), parseFloat(formatUnits(amounts[1][i]._hex, 18)), groups[i]]) 
+
+                let groupId = groups[i];
+                let {fromToken, destToken} = await signedContract.getTokens(groupId);
+                let fromAmount = parseFloat(formatUnits(amounts[0][i]._hex, 18));
+                let destAmount = parseFloat(formatUnits(amounts[1][i]._hex, 18));
+                let fromContract = new ethers.Contract(fromToken, erc20Abi, provider);
+                let destContract = new ethers.Contract(destToken, erc20Abi, provider);
+                let fromSymbol = await fromContract.symbol();
+                let destSymbol = await destContract.symbol();
+
+                let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groups[0]);
+                let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
+                let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
+                console.log(currentGas);
+                console.log(requiredGas);
+                
+                combinedAmounts.push([
+                                      fromToken,   //0 - fromToken address
+                                      fromSymbol,  //1 - fromToken shortcut
+                                      fromAmount,  //2 - fromToken amount
+                                      destToken,   //3 - destToken address
+                                      destSymbol,  //4 - destToken shortcut
+                                      destAmount,  //5 - destToken amount
+                                      groupId,     //6 - groupId for getGroup() & getTokens()
+                                      totalGas,    //7 - totalGas (current)
+                                      gasRequired  //8 - gasRequired (max)
+                                    ]) 
             }
+            console.log(combinedAmounts);
+
             for (let value of Object.entries(combinedAmounts)) {
                 // Opened transactions
-                if(value[1][0] > 0 && value[1][1]  === 0 ) {
-                    let tempOpenTransaction = {from: value[1][0], to:value[1][1]}
+                if(value[1][2] > 0 && value[1][5]  === 0 ) {
+                    let tempOpenTransaction = {from: value[1][2], to:value[1][5]}
                     openTransaction.push(tempOpenTransaction)
                     //   completed transactions
-                }else if(value[1][0] === 0 && value[1][1] > 0) {
-                    let tempCompletedTransaction = {from: value[1][0], to:value[1][1]}
+                }else if(value[1][2] === 0 && value[1][5] > 0) {
+                    let tempCompletedTransaction = {from: value[1][2], to:value[1][5]}
                     completedTransaction.push(tempCompletedTransaction)
                     //   both transactions
                 }else {
-                    let tempBothTransaction = {from: value[1][0], to:value[1][1]}
+                    let tempBothTransaction = {from: value[1][2], to:value[1][5]}
                     openTransaction.push(tempBothTransaction)
                     completedTransaction.push(tempBothTransaction)
                 }

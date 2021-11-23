@@ -167,6 +167,30 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "group",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTokens",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "fromToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "destToken",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes",
         "name": "performData",
         "type": "bytes"
