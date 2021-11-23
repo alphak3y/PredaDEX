@@ -369,6 +369,13 @@ tr > th {
   font-size: 14px;
 }
 
+.logo-coin {
+  height: 16px;
+    width: 16px;
+    margin-right: 10px;
+  margin-top: -2px;
+}
+
 .cancel {
   background: none;
   border: 1px solid #f05858;

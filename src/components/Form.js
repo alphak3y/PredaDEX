@@ -85,12 +85,12 @@ function Form() {
 
   const confirmDeposit = async () => {
 
-    console.log(signedContract)
-    console.log(stateUserAddress);   
+    // console.log(signedContract)
+    // console.log(stateUserAddress);   
     let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
-    console.log("groups,amounts");
-    console.log(groups[1]);
-    console.log(groups,amounts);
+    // console.log("groups,amounts");
+    // console.log(groups[1]);
+    // console.log(groups,amounts);
 
      const depositTxn = await signedContract.deposit(
         firstToken.address,
@@ -102,7 +102,6 @@ function Form() {
           value: utils.parseUnits(userGweiAmount.toString(), 9)
         })
       .catch((e)=>window.alert(e.message))
-
   };
 
   return (
