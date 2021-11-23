@@ -6,6 +6,7 @@ import { formatUnits } from '@ethersproject/units'
 import {CoinContext} from '../context/Coin.context'
 import erc20Abi from '../abi/ERC20.json'
 import CylinderBig from './Cylinder'
+import { TransactionsContext } from "@usedapp/core/dist/esm/src/providers/transactions/context";
 
 const Order  = {
     fromToken:   0, //0 - fromToken address
@@ -16,7 +17,8 @@ const Order  = {
     destAmount:  5, //5 - destToken amount
     groupId:     6, //6 - groupId for getGroup() & getTokens()
     currentGas:  7, //7 - totalGas (current)
-    requiredGas: 8  //8 - gasRequired (max)
+    requiredGas: 8, //8 - gasRequired (max)
+    percentGas:  9  //9 - gasProgress (percentage)
 }
 
 function PooledSwaps(props) {
@@ -39,7 +41,6 @@ function PooledSwaps(props) {
         .catch((e)=>window.alert(e.message))
         
     };
-    if(!signedContract == undefined){
     
     // filter transactions on opened, completed and both and store in state
     useEffect(() => {
@@ -54,6 +55,8 @@ function PooledSwaps(props) {
             let fromTokens = amounts[0]
             let destTokens = amounts[1]
             let zeroHex = "0x0000000000000000000000000000000000000000000000000000000000000000";
+            
+
             for (let i = 0; i < fromTokens.length && groups[i] != zeroHex; i++) {
                 
                 let groupId = groups[i];
@@ -67,8 +70,11 @@ function PooledSwaps(props) {
                 let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groups[0]);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
-                // console.log(currentGas);
-                // console.log(requiredGas);
+                let percentGas = 100 * (currentGas/requiredGas);
+
+                if(currentGas/requiredGas > 100){
+                    percentGas = 100;
+                }
                 
                 combinedAmounts.push([
                 fromToken,   //0 - fromToken address
@@ -79,9 +85,11 @@ function PooledSwaps(props) {
                 destAmount,  //5 - destToken amount
                 groupId,     //6 - groupId for getGroup() & getTokens()
                 currentGas,  //7 - totalGas (current)
-                requiredGas  //8 - gasRequired (max)
+                requiredGas, //8 - gasRequired (max)
+                percentGas   //9 - percentGas
                 ]) 
             }
+            console.log(combinedAmounts);
             //let tempOpenTransaction = {fromAmount: value[1][Order.fromAmount], destAmount:value[1][Order.destAmount]}
             for (let value of Object.entries(combinedAmounts)) {
                 // Opened transactions
@@ -95,7 +103,8 @@ function PooledSwaps(props) {
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
-                    }
+                                                percentGas: value[1][Order.percentGas]
+                                              }
                     openTransaction.push(tempOpenTransaction)
                     // Completed transactions
                 }else if(value[1][Order.fromAmount] === 0 && value[1][Order.destAmount] > 0) {
@@ -108,7 +117,8 @@ function PooledSwaps(props) {
                                                      groupId:    value[1][Order.groupId],
                                                      currentGas: value[1][Order.currentGas], 
                                                      requiredGas:value[1][Order.requiredGas],
-                    }
+                                                     percentGas: value[1][Order.percentGas]
+                                                   }
                     completedTransaction.push(tempCompletedTransaction)
                     // Both transactions
                 }else {
@@ -121,6 +131,7 @@ function PooledSwaps(props) {
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
+                                                percentGas: value[1][Order.percentGas]
                     }
                     openTransaction.push(tempBothTransaction)
                     completedTransaction.push(tempBothTransaction)
@@ -129,12 +140,12 @@ function PooledSwaps(props) {
             setOpenedTrans(openTransaction)
             setCompletedTrans(completedTransaction)
         }
-        run()
+        if(signedContract != undefined) run();
         
         
         
     },[]);
-}
+
     function findLogo(shortcut) {
         let coinLogo
         coins.map(coin => {
@@ -142,7 +153,6 @@ function PooledSwaps(props) {
                 coinLogo = coin.logo
             }
         } )
-        console.log(coinLogo)
         return coinLogo
       }
 
@@ -221,7 +231,7 @@ function PooledSwaps(props) {
                                 <td > <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
                                 <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{transaction.destAmount} {transaction.destSymbol}  </td>
-                                <td> <ProgressBar width={100}/> </td>
+                                <td> <ProgressBar width={transaction.percentGas}/> </td>
                                 <td><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.40796 3.44998L9.41496 6.99998H11.429V-2.47955e-05H4.42896V2.01398L7.97896 2.02098L-4.48227e-05 9.99996L1.42896 11.429L9.40796 3.44998Z" fill="#27F09E"/>
                                 </svg>
@@ -239,7 +249,7 @@ function PooledSwaps(props) {
                             <td>
                             <img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>
                             <span className="shiny"><span className="shiny-inner">{transaction.destAmount} {transaction.destSymbol}</span></span></td>
-                            <td> <ProgressBar width={100}/> </td>
+                            <td> <ProgressBar width={transaction.percentGas}/> </td>
                             <td>arrow</td>
                             <td>Cancel</td>
                         </tr>
