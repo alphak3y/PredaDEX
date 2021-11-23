@@ -94,6 +94,7 @@ function PooledSwaps(props) {
             for (let value of Object.entries(combinedAmounts)) {
                 // Opened transactions
                 if(value[1][Order.fromAmount] > 0 && value[1][Order.destAmount]  === 0 ) {
+                    signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
                                                 fromAmount: value[1][Order.fromAmount],
@@ -108,6 +109,7 @@ function PooledSwaps(props) {
                     openTransaction.push(tempOpenTransaction)
                     // Completed transactions
                 }else if(value[1][Order.fromAmount] === 0 && value[1][Order.destAmount] > 0) {
+                    
                     let tempCompletedTransaction = { fromToken:  value[1][Order.fromToken],
                                                      fromSymbol: value[1][Order.fromSymbol], 
                                                      fromAmount: value[1][Order.fromAmount],
