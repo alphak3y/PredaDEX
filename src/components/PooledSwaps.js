@@ -5,6 +5,7 @@ import { ethers, utils } from 'ethers'
 import { formatUnits } from '@ethersproject/units'
 import {CoinContext} from '../context/Coin.context'
 import erc20Abi from '../abi/ERC20.json'
+import CylinderBig from './Cylinder'
 
 const Order  = {
     fromToken:   0, //0 - fromToken address
@@ -22,8 +23,8 @@ function PooledSwaps(props) {
     const {signedContract,stateUserAddress, provider} = useContext(PredaDexContext);
     const {coins} = useContext(CoinContext)
     const [filter, setFilter] = useState("Open")
-    const [openedTrans, setOpenedTrans] = useState([])
-    const [completedTrans, setCompletedTrans] = useState([])
+    const [openedTrans, setOpenedTrans] = useState(null)
+    const [completedTrans, setCompletedTrans] = useState(null)
     
     const confirmWithdraw = async () => {
         
@@ -38,6 +39,7 @@ function PooledSwaps(props) {
         .catch((e)=>window.alert(e.message))
         
     };
+    if(!signedContract == undefined){
     
     // filter transactions on opened, completed and both and store in state
     useEffect(() => {
@@ -132,7 +134,7 @@ function PooledSwaps(props) {
         
         
     },[]);
-
+}
     function findLogo(shortcut) {
         let coinLogo
         coins.map(coin => {
@@ -160,7 +162,11 @@ function PooledSwaps(props) {
     </div>
     <div className="table-wrapper-outside">
         <div className="table-wrapper">
-            {openedTrans.length === 0 && completedTrans.length === 0?
+            {openedTrans === null || completedTrans === null ?
+            <div style={{marginTop:"200px"}}>
+                    <CylinderBig />
+            </div>:
+            openedTrans.length === 0 && completedTrans.length === 0?
                 <div>
                     <svg className="mb-5 mt-5" width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" clipRule="evenodd" d="M63.2158 148.364L80 152.104L83.186 146.868L84 142H96L96.2275 152.852V158.088L84 162L68.9215 152.104L63.2158 148.364Z" fill="#CDBDB2"/>

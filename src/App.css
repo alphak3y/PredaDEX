@@ -66,6 +66,7 @@ button[disabled]{
   justify-content: center;
 }
 
+
 .cylinder {
   position: absolute;
 }
@@ -128,7 +129,7 @@ table {
   background: #232844;
   border-radius: 27px 0 0 27px;
   padding: 20px 10px;
-  height: 650px;
+  height: 550px;
   overflow-y: scroll;
   position: relative;
   z-index: 1;
