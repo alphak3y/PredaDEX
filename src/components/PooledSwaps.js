@@ -6,6 +6,18 @@ import { formatUnits } from '@ethersproject/units'
 import { coins } from "../context/Coin.context"
 import erc20Abi from '../abi/ERC20.json'
 
+const Order  = {
+    fromToken:   0, //0 - fromToken address
+    fromSymbol:  1, //1 - fromToken shortcut
+    fromAmount:  2, //2 - fromToken amount
+    destToken:   3, //3 - destToken address
+    destSymbol:  4, //4 - destToken shortcut
+    destAmount:  5, //5 - destToken amount
+    groupId:     6, //6 - groupId for getGroup() & getTokens()
+    currentGas:  7, //7 - totalGas (current)
+    requiredGas: 8  //8 - gasRequired (max)
+}
+
 function PooledSwaps(props) {
     const {signedContract,
            userAssets,
@@ -77,16 +89,16 @@ function PooledSwaps(props) {
 
             for (let value of Object.entries(combinedAmounts)) {
                 // Opened transactions
-                if(value[1][2] > 0 && value[1][5]  === 0 ) {
-                    let tempOpenTransaction = {from: value[1][2], to:value[1][5]}
+                if(value[1][Order.fromAmount] > 0 && value[1][Order.destAmount]  === 0 ) {
+                    let tempOpenTransaction = {from: value[1][Order.fromAmount], to:value[1][Order.destAmount]}
                     openTransaction.push(tempOpenTransaction)
-                    //   completed transactions
-                }else if(value[1][2] === 0 && value[1][5] > 0) {
-                    let tempCompletedTransaction = {from: value[1][2], to:value[1][5]}
+                // Completed transactions
+                }else if(value[1][Order.fromAmount] === 0 && value[1][Order.destAmount] > 0) {
+                    let tempCompletedTransaction = {from: value[1][Order.fromAmount], to:value[1][Order.destAmount]}
                     completedTransaction.push(tempCompletedTransaction)
-                    //   both transactions
+                // Both transactions
                 }else {
-                    let tempBothTransaction = {from: value[1][2], to:value[1][5]}
+                    let tempBothTransaction = {from: value[1][Order.fromAmount], to:value[1][Order.destAmount]}
                     openTransaction.push(tempBothTransaction)
                     completedTransaction.push(tempBothTransaction)
                 }
