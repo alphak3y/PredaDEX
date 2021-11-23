@@ -70,8 +70,7 @@ function PooledSwaps(props) {
                 let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groups[0]);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
-                let percentGas = 100 * (currentGas/requiredGas);
-
+                let percentGas =  (currentGas/requiredGas) * 100;
                 if(currentGas/requiredGas > 100){
                     percentGas = 100;
                 }
@@ -89,12 +88,11 @@ function PooledSwaps(props) {
                 percentGas   //9 - percentGas
                 ]) 
             }
-            console.log(combinedAmounts);
             //let tempOpenTransaction = {fromAmount: value[1][Order.fromAmount], destAmount:value[1][Order.destAmount]}
             for (let value of Object.entries(combinedAmounts)) {
                 // Opened transactions
                 if(value[1][Order.fromAmount] > 0 && value[1][Order.destAmount]  === 0 ) {
-                    signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
+                   console.log( await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0))
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
                                                 fromAmount: value[1][Order.fromAmount],
@@ -158,7 +156,6 @@ function PooledSwaps(props) {
         return coinLogo
       }
 
-    findLogo("DAI")
     
     return (
     <>
