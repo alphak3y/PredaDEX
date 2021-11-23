@@ -55,7 +55,6 @@ function PooledSwaps(props) {
                 let destContract = new ethers.Contract(destToken, erc20Abi, provider);
                 let fromSymbol = await fromContract.symbol();
                 let destSymbol = await destContract.symbol();
-
                 let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groups[0]);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
@@ -70,8 +69,8 @@ function PooledSwaps(props) {
                                       destSymbol,  //4 - destToken shortcut
                                       destAmount,  //5 - destToken amount
                                       groupId,     //6 - groupId for getGroup() & getTokens()
-                                      totalGas,    //7 - totalGas (current)
-                                      gasRequired  //8 - gasRequired (max)
+                                      currentGas,  //7 - totalGas (current)
+                                      requiredGas  //8 - gasRequired (max)
                                     ]) 
             }
             console.log(combinedAmounts);

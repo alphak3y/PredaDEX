@@ -62,9 +62,9 @@
     "name": "checkGroup",
     "outputs": [
       {
-        "internalType": "uint192",
+        "internalType": "uint128",
         "name": "totalAmount",
-        "type": "uint192"
+        "type": "uint128"
       },
       {
         "internalType": "uint64",
@@ -117,9 +117,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint192",
+        "internalType": "uint128",
         "name": "amount",
-        "type": "uint192"
+        "type": "uint128"
       }
     ],
     "name": "deposit",
