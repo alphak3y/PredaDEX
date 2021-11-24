@@ -51,7 +51,7 @@ export const CoinProvider = (props) => {
         logo:eth,
         shortcut:"LINK",
         name:"LINK",
-        address: "0x514910771af9ca656af840dff83e8264ecf986ca",
+        address: "0xa36085F69e2889c224210F603D836748e7dC0088",
         decimals: 18
     })
     const [secondToken, setSecondToken] = useState(null)
