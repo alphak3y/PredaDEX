@@ -50,22 +50,20 @@ function Form() {
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
   },[firstToken.address]);
 
+
+  
    const setFirstInput = e => {
-    let invalidChars = [
-      "-",
-      "+",
-      "e",
-    ];
-    if (invalidChars.includes(e.key)) {
-      e.preventDefault();
-    }else{
      let inputVal = e.target.value
-     let changedVal = inputVal.replace('e', '1')
+     let changedVal = inputVal.replace(',', '.')
      console.log(changedVal)
-      setFirstTokenValue(changedVal)
-    }
+     setFirstTokenValue(changedVal)
+    
    }
 
+   const setMaxBalanceToInput = () => {
+     let number =formatUnits(firstTokenBalance, firstToken.decimals)
+    setFirstTokenValue(number)
+   }
 
 
   // Calculating first token to second token amount
@@ -105,14 +103,7 @@ function Form() {
 
 
   const confirmDeposit = async () => {
-
-    // console.log(signedContract)
-    // console.log(stateUserAddress);   
     let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
-    // console.log("groups,amounts");
-    // console.log(groups[1]);
-    // console.log(groups,amounts);
-
      const depositTxn = await signedContract.deposit(
         firstToken.address,
         secondToken.address,
@@ -148,7 +139,7 @@ function Form() {
           {/*Input field*/}
           <div className="form-col form-col-lg border-outline">
             <div className="input-space">
-              <button className="max-button"> Max</button>
+              <button className="max-button" onClick={setMaxBalanceToInput}> Max</button>
               <input
               value={firstTokenValue}
               onChange={setFirstInput}
