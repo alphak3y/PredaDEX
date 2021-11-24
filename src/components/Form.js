@@ -59,7 +59,7 @@ function Form() {
   },[firstToken.address]);
 
   useEffect(() => {
-    let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0)
+    let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, firstTokenValue, 1, 0, 0)
     secondTokenValue = formatUnits(returnAmount,18)
   },[firstTokenValue]);
   
