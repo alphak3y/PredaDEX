@@ -144,7 +144,7 @@ function Form() {
               value={firstTokenValue}
               onChange={setFirstInput}
               placeholder="0.0"
-              type="number"
+         
               className="deposit-input-field"
               />
             </div>
