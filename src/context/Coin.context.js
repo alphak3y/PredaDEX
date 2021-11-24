@@ -18,6 +18,20 @@ export const CoinProvider = (props) => {
             address: "0x514910771af9ca656af840dff83e8264ecf986ca",
             decimals: 18
         },
+        {
+            logo:eth,
+            shortcut:"WETH",
+            name:"WETH",
+            address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            decimals: 18
+        },
+        {
+            logo:eth,
+            shortcut:"WBTC",
+            name:"WBTC",
+            address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            decimals: 18
+        },
         {   
             logo:usdc,
             shortcut:"USDC",
@@ -39,12 +53,6 @@ export const CoinProvider = (props) => {
             address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
             decimals: 18
         }
-        // { 
-        //     logo:avax,
-        //     shortcut:"AVAX",
-        //     name:"Avalanche",
-        //     address: ""
-        // },
     ])
 
     const [firstToken, setFirstToken] = useState({
