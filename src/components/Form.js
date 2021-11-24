@@ -33,6 +33,9 @@ function Form() {
     contractAddress,
   } = useContext(PredaDexContext);
 
+  let balance = etherBalance && formatEther(etherBalance)
+
+
   
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface = new utils.Interface(erc20Abi)
@@ -69,7 +72,6 @@ function Form() {
     setIsFirstToken(false)
     setIsOpen(true)
   }
-  
   
   const approveToken = () => {
     sendApprove(predaDexAddress, MaxUint256)
@@ -155,7 +157,7 @@ function Form() {
           <div className="label" style={{ paddingRight: "120px" }}>
             {secondToken ? "Balance:": "Balance: 0.0"} {secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)} {secondToken && secondToken.shortcut}
           </div>
-          <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && formatEther(etherBalance)} ETH</div>
+          <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && parseInt(balance).toFixed(3)} ETH</div>
         </div>
         <div className="form-row">
           {/* Receive dropdown */}
@@ -231,12 +233,12 @@ function Form() {
 </div>
 </div>
 <div className="form-row">
-  { !isApproved ? <button className="allow-confirmation-buttons allow-button" onClick={approveToken}>
+  { !isApproved ? <button className=" float-above allow-confirmation-buttons allow-button" onClick={approveToken}>
     <img src={firstToken == null ? BTC : firstToken.logo} alt="btc"></img>
     Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
   </button>
   :
-  <button disabled={!secondToken} type="submit" className="allow-confirmation-buttons confirmation-button" onClick={confirmDeposit}>
+  <button disabled={!secondToken} type="submit" className="float-above allow-confirmation-buttons confirmation-button" onClick={confirmDeposit}>
     CONFIRM
   </button>}
 </div>

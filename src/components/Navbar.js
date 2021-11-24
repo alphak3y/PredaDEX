@@ -21,6 +21,7 @@ function Navigation() {
         provider,
         contractAddress,
       } = useContext(PredaDexContext);
+      let balance = etherBalance && formatUnits(etherBalance)
     
     const activate = async () => {
         await activateBrowserWallet()
@@ -65,7 +66,7 @@ function Navigation() {
                         
                     }
                     
-                   {(showBalance && etherBalance) && formatUnits(etherBalance)}
+                   {(showBalance && etherBalance) && `${parseInt(balance).toFixed(5)} ETH` }
                 </div>
                 <div className="nav-account">
                     {`${account.substring(0,5)}...${account.substr(account.length - 3)}`}

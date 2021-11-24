@@ -92,6 +92,7 @@ button[disabled]{
   position: absolute;
   bottom: 0px;
   width: 700px;
+  z-index: 0;
 }
 
 @keyframes jump {
@@ -1040,4 +1041,10 @@ top: 100px;
             transform: translateY(-1000px);
     opacity: 0;
   }
+}
+
+
+.float-above {
+  position: relative;
+  z-index: 1;
 }
