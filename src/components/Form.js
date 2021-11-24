@@ -53,12 +53,15 @@ function Form() {
   }
   },[account]);
   
-
-
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
   },[firstToken.address]);
+
+  useEffect(() => {
+    let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0)
+    secondTokenValue = formatUnits(returnAmount,18)
+  },[firstTokenValue]);
   
   
   const openModalForFirstToken = () => {
