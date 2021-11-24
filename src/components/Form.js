@@ -22,21 +22,19 @@ function Form() {
   const [userGweiAmount, setUserGweiAmount] = useState(0)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
-  const [secondTokenValue, setSecondTokenValue] = useState(null)
+  const [secondTokenValue, setSecondTokenValue] = useState(0)
   const etherBalance = useEtherBalance(account)
   const {
     connectContract,
     signedContract,
     signer,
-    stateUserAddress,
-    provider,
-    contractAddress,
-  } = useContext(PredaDexContext);
+    stateUserAddress} = useContext(PredaDexContext);
 
-  let balance = etherBalance && formatEther(etherBalance)
+  let balance = etherBalance && formatEther(etherBalance)  
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
+  let predaDexInterface = new utils.Interface(predaDexAbi)
 
   useEffect( async() => {
     async function connectingContract() {
@@ -52,20 +50,35 @@ function Form() {
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
   },[firstToken.address]);
 
+   const setFirstInput = e => {
+    let invalidChars = [
+      "-",
+      "+",
+      "e",
+    ];
+    if (invalidChars.includes(e.key)) {
+      e.preventDefault();
+    }else{
+     let inputVal = e.target.value
+     let changedVal = inputVal.replace('e', '1')
+     console.log(changedVal)
+      setFirstTokenValue(changedVal)
+    }
+   }
+
+
 
   // Calculating first token to second token amount
   useEffect(() => {
     const calculate = async () => {
       if(account && secondToken != null && firstToken.address!= null && firstTokenValue != ""){
         let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, utils.parseUnits(firstTokenValue,18), 1, 0, 0)
-        console.log(formatUnits(returnAmount._hex,secondToken.decimals))
-        console.log(secondToken.shortcut)
-        console.log(secondToken.decimals)
-    // setSecondTokenValue(formatUnits(formatUnits(returnAmount._hex,secondToken.decimals)))
-  }
+        let value = parseFloat(formatUnits(returnAmount._hex,secondToken.decimals)).toPrecision(5)
+        setSecondTokenValue(value)
+      }
     }
     calculate()
-  },[firstTokenValue, firstToken.address]);
+  },[firstTokenValue, firstToken && firstToken.address, secondToken && secondToken.address]);
   
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -138,8 +151,9 @@ function Form() {
               <button className="max-button"> Max</button>
               <input
               value={firstTokenValue}
-              onChange={e => setFirstTokenValue(e.target.value)}
+              onChange={setFirstInput}
               placeholder="0.0"
+              type="number"
               className="deposit-input-field"
               />
             </div>
@@ -204,6 +218,8 @@ function Form() {
         <input
         type="text"
         placeholder="0.0"
+        disabled
+        value={secondTokenValue}
         className="receive-input-field"
         />
       </div>
