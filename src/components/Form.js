@@ -63,11 +63,12 @@ function Form() {
   // Calculating first token to second token amount
   useEffect(() => {
     const calculate = async () => {
-      console.log("asdasd")
       if(account && secondToken != null && firstToken.address!= null && firstTokenValue != ""){
-        let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, firstTokenValue, 1, 0, 0)
-        console.log(formatUnits(returnAmount._hex))
-    setSecondTokenValue(formatUnits(returnAmount._hex,18))
+        let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, utils.parseUnits(firstTokenValue,18), 1, 0, 0)
+        console.log(formatUnits(returnAmount._hex,secondToken.decimals))
+        console.log(secondToken.shortcut)
+        console.log(secondToken.decimals)
+    // setSecondTokenValue(formatUnits(formatUnits(returnAmount._hex,secondToken.decimals)))
   }
     }
     calculate()
