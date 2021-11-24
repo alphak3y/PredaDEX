@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import { PredaDexContext } from "../context/Predadex.context";
 import { ethers, utils } from 'ethers'
-import { formatUnits } from '@ethersproject/units'
+import { formatEther, formatUnits } from '@ethersproject/units'
 import {CoinContext} from '../context/Coin.context'
 import erc20Abi from '../abi/ERC20.json'
 import CylinderBig from './Cylinder'
@@ -22,32 +22,33 @@ const Order  = {
 }
 
 function PooledSwaps(props) {
-    const {signedContract,stateUserAddress, provider} = useContext(PredaDexContext);
+    const {signedContract,stateUserAddress, provider, signer} = useContext(PredaDexContext);
     const {coins} = useContext(CoinContext)
     const [filter, setFilter] = useState("Open")
     const [openedTrans, setOpenedTrans] = useState(null)
     const [completedTrans, setCompletedTrans] = useState(null)
 
-    const confirmCancel = async () => {
-        
+    const confirmCancel = async (e) => {
+        console.log(e.target.dataset.address)
+        console.log(e.target.dataset.groupid)
+        console.log(utils.parseUnits(e.target.dataset.fromamount, 18))
         const withdrawTxn = await signedContract.withdraw(
-        tokenAddress,
-        groupId,
-        utils.parseUnits(withdrawAmount,tokenAddress.decimals),
+        e.target.dataset.fromaddress,
+        e.target.dataset.groupid,
+        utils.parseUnits( e.target.dataset.fromamount, 18),
         {
             gasPrice: signer.getGasPrice(),
             gasLimit: 400000
         })
         .catch((e)=>window.alert(e.message))
-        
+        withdrawTxn
     };
     
-    const confirmWithdraw = async () => {
-        
+    const confirmWithdraw = async (e) => {
         const withdrawTxn = await signedContract.withdraw(
-        tokenAddress,
-        groupId,
-        utils.parseUnits(withdrawAmount,tokenAddress.decimals),
+            e.target.dataset.destaddress,
+            e.target.dataset.groupid,
+            utils.parseUnits( e.target.dataset.destamount, 18),
         {
             gasPrice: signer.getGasPrice(),
             gasLimit: 400000
@@ -104,12 +105,10 @@ function PooledSwaps(props) {
                 
                 
             }
-            console.log(combinedAmounts);
             //let tempOpenTransaction = {fromAmount: value[1][Order.fromAmount], destAmount:value[1][Order.destAmount]}
             for (let value of Object.entries(combinedAmounts)) {
                 if(value[1][Order.fromAmount] != "0" && value[1][Order.destAmount] == "0" ) {
                     let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
-                    console.log(formatUnits(returnAmount.toString(),6));
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
                                                 fromAmount: formatUnits(value[1][Order.fromAmount],18),
@@ -139,7 +138,6 @@ function PooledSwaps(props) {
                     completedTransaction.push(tempCompletedTransaction)
                 // Both transactions
                 }else {
-                    console.log("test");
                     let tempBothTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
                                                 fromAmount: formatUnits(value[1][Order.fromAmount],18),
@@ -244,7 +242,7 @@ function PooledSwaps(props) {
                     </thead>
                     <tbody>
                         {filter === "Open" ? openedTrans.map(transaction => {
-                            return<tr >
+                            return<tr key={transaction.fromAmount + transaction.fromToken}>
                                 <td > <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
                                 <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{transaction.destAmount} {transaction.destSymbol}  </td>
@@ -254,11 +252,20 @@ function PooledSwaps(props) {
                                 </svg>
                             </td>
                             {/* TODO: pass in args for cancel function call */}
-                            <td><button  className="btns cancel p-1" onClick={confirmCancel}>Cancel</button></td>
+                            <td>
+                                <button 
+                                data-fromaddress={transaction.fromToken} 
+                                data-groupid={transaction.groupId} 
+                                data-fromamount={transaction.fromAmount} 
+                                className="btns cancel p-1" 
+                                onClick={confirmCancel}>
+                                    Cancel
+                                </button>
+                                </td>
                         </tr>
                     }):
                     completedTrans.map(transaction => {
-                        return<tr >
+                        return<tr key={transaction.fromAmount + transaction.fromToken}>
                            
                             <td> 
                                 <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
@@ -269,7 +276,12 @@ function PooledSwaps(props) {
                             <span className="shiny"><span className="shiny-inner">{transaction.destAmount} {transaction.destSymbol}</span></span></td>
                             <td> <ProgressBar width={transaction.percentGas}/> </td>
                             <td>arrow</td>
-                            <td>Cancel</td>
+                            <td><button                                 
+                                data-destaddress={transaction.destToken} 
+                                data-groupid={transaction.groupId} 
+                                data-destamount={transaction.destAmount} 
+                                onClick={confirmWithdraw} 
+                                className="btns withdraw p-1">Withdraw</button></td>
                         </tr>
                     })
                 }
