@@ -29,10 +29,8 @@ function PooledSwaps(props) {
     const [completedTrans, setCompletedTrans] = useState(null)
 
     const confirmCancel = async (e) => {
-        console.log(e.target.dataset.address)
-        console.log(e.target.dataset.groupid)
         console.log(utils.parseUnits(e.target.dataset.fromamount, 18))
-        const withdrawTxn = await signedContract.withdraw(
+        const cancelTxn = await signedContract.withdraw(
         e.target.dataset.fromaddress,
         e.target.dataset.groupid,
         utils.parseUnits( e.target.dataset.fromamount, 18),
@@ -41,7 +39,7 @@ function PooledSwaps(props) {
             gasLimit: 400000
         })
         .catch((e)=>window.alert(e.message))
-        withdrawTxn
+        cancelTxn
     };
     
     const confirmWithdraw = async (e) => {
@@ -54,7 +52,7 @@ function PooledSwaps(props) {
             gasLimit: 400000
         })
         .catch((e)=>window.alert(e.message))
-        
+        withdrawTxn
     };
     
     // filter transactions on opened, completed and both and store in state

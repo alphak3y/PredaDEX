@@ -23,6 +23,7 @@ function Form() {
   const [userGweiAmount, setUserGweiAmount] = useState(0)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
+  const [secondTokenValue, setSecondTokenValue] = useState(null)
   const etherBalance = useEtherBalance(account)
   const {
     connectContract,
@@ -58,11 +59,19 @@ function Form() {
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
   },[firstToken.address]);
 
+
+  // Calculating first token to second token amount
   useEffect(() => {
-    let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, firstTokenValue, 1, 0, 0)
-    secondTokenValue = formatUnits(returnAmount,18)
-  },[firstTokenValue]);
-  
+    const calculate = async () => {
+      console.log("asdasd")
+      if(account && secondToken != null && firstToken.address!= null && firstTokenValue != ""){
+        let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, firstTokenValue, 1, 0, 0)
+        console.log(formatUnits(returnAmount._hex))
+    setSecondTokenValue(formatUnits(returnAmount._hex,18))
+  }
+    }
+    calculate()
+  },[firstTokenValue, firstToken.address]);
   
   const openModalForFirstToken = () => {
     setWhichModalToOpen("SelectToken")
@@ -158,7 +167,7 @@ function Form() {
         {/* Balance labels above input fields*/}
         <div className="form-row form-row-label">
           <div className="label" style={{ paddingRight: "120px" }}>
-            {secondToken ? "Balance:": "Balance: 0.0"} {secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)} {secondToken && secondToken.shortcut}
+            {secondToken && firstTokenValue ? secondTokenBalance && secondTokenValue :"Balance:"} {secondToken && secondToken.shortcut}
           </div>
           <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && parseInt(balance).toFixed(3)} ETH</div>
         </div>
