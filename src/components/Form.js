@@ -34,7 +34,7 @@ function Form() {
   } = useContext(PredaDexContext);
 
   
-  const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
+  const predaDexAddress = "0xFF327c23092A0897FCE4CE101aa9e51aa99B16e5"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
