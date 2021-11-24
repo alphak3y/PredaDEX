@@ -27,6 +27,20 @@ function PooledSwaps(props) {
     const [filter, setFilter] = useState("Open")
     const [openedTrans, setOpenedTrans] = useState(null)
     const [completedTrans, setCompletedTrans] = useState(null)
+
+    const confirmCancel = async () => {
+        
+        const withdrawTxn = await signedContract.withdraw(
+        tokenAddress,
+        groupId,
+        utils.parseUnits(withdrawAmount,tokenAddress.decimals),
+        {
+            gasPrice: signer.getGasPrice(),
+            gasLimit: 400000
+        })
+        .catch((e)=>window.alert(e.message))
+        
+    };
     
     const confirmWithdraw = async () => {
         
@@ -61,8 +75,8 @@ function PooledSwaps(props) {
                 
                 let groupId = groups[i];
                 let {fromToken, destToken} = await signedContract.getTokens(groupId);
-                let fromAmount = parseFloat(formatUnits(amounts[0][i]._hex, 18));
-                let destAmount = parseFloat(formatUnits(amounts[1][i]._hex, 18));
+                let fromAmount = formatUnits(amounts[i][0]._hex, 0);
+                let destAmount = formatUnits(amounts[i][1]._hex, 0);
                 let fromContract = new ethers.Contract(fromToken, erc20Abi, provider);
                 let destContract = new ethers.Contract(destToken, erc20Abi, provider);
                 let fromSymbol = await fromContract.symbol();
@@ -87,18 +101,22 @@ function PooledSwaps(props) {
                 requiredGas, //8 - gasRequired (max)
                 percentGas   //9 - percentGas
                 ]) 
+                
+                
             }
+            console.log(combinedAmounts);
             //let tempOpenTransaction = {fromAmount: value[1][Order.fromAmount], destAmount:value[1][Order.destAmount]}
             for (let value of Object.entries(combinedAmounts)) {
-                // Opened transactions
-                if(value[1][Order.fromAmount] > 0 && value[1][Order.destAmount]  === 0 ) {
-                   console.log( await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0))
+                if(value[1][Order.fromAmount] != "0" && value[1][Order.destAmount] == "0" ) {
+                    let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
+                    console.log(formatUnits(returnAmount.toString(),6));
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: value[1][Order.fromAmount],
+                                                fromAmount: formatUnits(value[1][Order.fromAmount],18),
                                                 destToken:  value[1][Order.destToken],
-                                                destSymbol: value[1][Order.destSymbol], 
-                                                destAmount: value[1][Order.destAmount],
+                                                destSymbol: value[1][Order.destSymbol],
+                                                //decimals needs to be dynamic (i.e. use an API)
+                                                destAmount: formatUnits(returnAmount, 6),
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
@@ -106,25 +124,25 @@ function PooledSwaps(props) {
                                               }
                     openTransaction.push(tempOpenTransaction)
                     // Completed transactions
-                }else if(value[1][Order.fromAmount] === 0 && value[1][Order.destAmount] > 0) {
-                    
+                }else if(value[1][Order.fromAmount] == "0" && value[1][Order.destAmount] != "0") {
                     let tempCompletedTransaction = { fromToken:  value[1][Order.fromToken],
                                                      fromSymbol: value[1][Order.fromSymbol], 
-                                                     fromAmount: value[1][Order.fromAmount],
+                                                     fromAmount: formatUnits(value[1][Order.fromAmount],18),
                                                      destToken:  value[1][Order.destToken],
                                                      destSymbol: value[1][Order.destSymbol], 
-                                                     destAmount: value[1][Order.destAmount],
+                                                     destAmount: formatUnits(value[1][Order.destAmount],18),
                                                      groupId:    value[1][Order.groupId],
                                                      currentGas: value[1][Order.currentGas], 
                                                      requiredGas:value[1][Order.requiredGas],
                                                      percentGas: value[1][Order.percentGas]
                                                    }
                     completedTransaction.push(tempCompletedTransaction)
-                    // Both transactions
+                // Both transactions
                 }else {
+                    console.log("test");
                     let tempBothTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: value[1][Order.fromAmount],
+                                                fromAmount: formatUnits(value[1][Order.fromAmount],18),
                                                 destToken:  value[1][Order.destToken],
                                                 destSymbol: value[1][Order.destSymbol], 
                                                 destAmount: value[1][Order.destAmount],
@@ -235,7 +253,8 @@ function PooledSwaps(props) {
                                     <path d="M9.40796 3.44998L9.41496 6.99998H11.429V-2.47955e-05H4.42896V2.01398L7.97896 2.02098L-4.48227e-05 9.99996L1.42896 11.429L9.40796 3.44998Z" fill="#27F09E"/>
                                 </svg>
                             </td>
-                            <td><button  className="btns cancel p-1">Cancel</button></td>
+                            {/* TODO: pass in args for cancel function call */}
+                            <td><button  className="btns cancel p-1" onClick={confirmCancel}>Cancel</button></td>
                         </tr>
                     }):
                     completedTrans.map(transaction => {
