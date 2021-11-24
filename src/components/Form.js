@@ -166,7 +166,7 @@ function Form() {
         {/* Balance labels above input fields*/}
         <div className="form-row form-row-label">
           <div className="label" style={{ paddingRight: "75px" }}>
-            Balance: {firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, firstToken.decimals)} {firstToken == null ? "BTC" : firstToken.shortcut}
+            Balance: {secondToken == null ? "0.00" : secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)} {secondToken == null ? "" : secondToken.shortcut}
           </div>
           <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && parseInt(balance).toFixed(3)} ETH</div>
         </div>
