@@ -1048,3 +1048,10 @@ top: 100px;
   position: relative;
   z-index: 1;
 }
+
+
+.deposit-input-field::-webkit-outer-spin-button,
+.deposit-input-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
