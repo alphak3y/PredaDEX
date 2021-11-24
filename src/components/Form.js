@@ -14,7 +14,6 @@ import { ethers, Signer, utils, BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance, useConfig } from '@usedapp/core';
 
-
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
   const {firstToken, secondToken} = useContext(CoinContext);
@@ -31,14 +30,11 @@ function Form() {
     signer,
     stateUserAddress} = useContext(PredaDexContext);
 
-  let balance = etherBalance && formatEther(etherBalance)
-
-  
+  let balance = etherBalance && formatEther(etherBalance)  
   const predaDexAddress = "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
-
 
   useEffect( async() => {
     async function connectingContract() {
@@ -178,8 +174,8 @@ function Form() {
       <div className="form-wrapper">
         {/* Balance labels above input fields*/}
         <div className="form-row form-row-label">
-          <div className="label" style={{ paddingRight: "120px" }}>
-            {secondToken && firstTokenValue ? secondTokenBalance && secondTokenValue :"Balance:"} {secondToken && secondToken.shortcut}
+          <div className="label" style={{ paddingRight: "75px" }}>
+            Balance: {firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, firstToken.decimals)} {firstToken == null ? "BTC" : firstToken.shortcut}
           </div>
           <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && parseInt(balance).toFixed(3)} ETH</div>
         </div>
