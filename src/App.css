@@ -1051,5 +1051,6 @@ top: 100px;
 .deposit-input-field::-webkit-outer-spin-button,
 .deposit-input-field::-webkit-inner-spin-button {
   -webkit-appearance: none;
+  -moz-appearance:textfield;
   margin: 0;
 }
