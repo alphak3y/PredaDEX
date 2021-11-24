@@ -6,7 +6,7 @@ import arrow from "../images/Arrow.svg";
 import { PredaDexContext } from "../context/Predadex.context";
 import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
-import { formatUnits } from '@ethersproject/units'
+import { formatUnits,formatEther } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import predaDexAbi from '../abi/PredaDex.json'
@@ -153,9 +153,9 @@ function Form() {
         {/* Balance labels above input fields*/}
         <div className="form-row form-row-label">
           <div className="label" style={{ paddingRight: "120px" }}>
-            Balance: 0.00
+            {secondToken ? "Balance:": "Balance: 0.0"} {secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)} {secondToken && secondToken.shortcut}
           </div>
-          <div className="label ">{secondToken ? "Balance:": "Balance: 0"} {secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)} {secondToken && secondToken.shortcut}</div>
+          <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && formatEther(etherBalance)} ETH</div>
         </div>
         <div className="form-row">
           {/* Receive dropdown */}
