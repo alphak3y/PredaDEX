@@ -1,10 +1,11 @@
 
 import React, {useState, createContext} from 'react'
-import eth from '../images/eth.png'
 import usdc from '../images/usdc.png'
 import dai from '../images/dai.png'
 import usdt from '../images/usdt.png'
-import avax from '../images/avax.png'
+import weth from '../images/weth.png'
+import link from '../images/link.png'
+import wbtc from '../images/wbtc.png'
 
 export const CoinContext = createContext()
 
@@ -12,21 +13,21 @@ export const CoinContext = createContext()
 export const CoinProvider = (props) => {
     const [coins, setCoins] = useState([
         {
-            logo:eth,
+            logo:link,
             shortcut:"LINK",
             name:"LINK",
             address: "0x514910771af9ca656af840dff83e8264ecf986ca",
             decimals: 18
         },
         {
-            logo:eth,
+            logo:weth,
             shortcut:"WETH",
             name:"WETH",
             address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             decimals: 18
         },
         {
-            logo:eth,
+            logo:wbtc,
             shortcut:"WBTC",
             name:"WBTC",
             address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
@@ -56,7 +57,7 @@ export const CoinProvider = (props) => {
     ])
 
     const [firstToken, setFirstToken] = useState({
-        logo:eth,
+        logo:link,
         shortcut:"LINK",
         name:"LINK",
         address: "0x514910771af9ca656af840dff83e8264ecf986ca",
