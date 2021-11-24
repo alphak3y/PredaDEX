@@ -15,21 +15,21 @@ export const CoinProvider = (props) => {
             logo:eth,
             shortcut:"LINK",
             name:"LINK",
-            address: "0x514910771af9ca656af840dff83e8264ecf986ca",
+            address: "0xa36085F69e2889c224210F603D836748e7dC0088",
             decimals: 18
         },
         {   
             logo:usdc,
             shortcut:"USDC",
             name:"USD Coin",
-            address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            address: "0x7079f3762805cff9c979a5bdc6f5648bcfee76c8",
             decimals: 18
         },
         {
             logo:dai,
             shortcut:"DAI",
             name:"DAI Stablecoin",
-            address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+            address: "0xC4375B7De8af5a38a93548eb8453a498222C4fF2",
             decimals: 18
         },
         {
