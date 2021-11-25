@@ -15,12 +15,12 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Install contract dependencies
+      - name: Install react-app dependencies
         run: yarn install
         working-directory: .
 
-      - name: Build webapp
-        run: yarn build
+      - name: Build react-app
+        run: yarn react-build
         working-directory: .
         env:
           CI: ""
