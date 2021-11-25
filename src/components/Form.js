@@ -16,7 +16,7 @@ import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTo
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
-  const {firstToken, secondToken} = useContext(CoinContext);
+  const {firstToken, secondToken, usdcToken} = useContext(CoinContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
@@ -29,6 +29,9 @@ function Form() {
     signedContract,
     signer,
     stateUserAddress} = useContext(PredaDexContext);
+  const [firstTokenToUSDC, setFirstTokenToUSDC] = useState(0)
+  const [secondTokenToUSDC, setSecondTokenToUSDC] = useState(0)
+  const [gweiToUSDC, setGweiToUSDC] = useState(0)
     
     let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
   let balance = etherBalance && formatEther(etherBalance)  
@@ -56,7 +59,6 @@ function Form() {
    const setFirstInput = e => {
      let inputVal = e.target.value
      let changedVal = inputVal.replace(',', '.')
-     console.log(changedVal)
      setFirstTokenValue(changedVal)
     
    }
@@ -66,12 +68,25 @@ function Form() {
     setFirstTokenValue(number)
    }
 
+     // Calculating first token to USDC
+  useEffect(() => {
+    const calculate = async () => {
+      if(account && firstToken.address!= null && firstTokenValue != ""){
+        let { returnAmount } = await signedContract.quoteAndDistribute(firstToken.address, usdcToken.address, utils.parseUnits(firstTokenValue,firstToken.decimals), 1, 0, 0)
+        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toPrecision(7)
+        console.log(value)
+        setFirstTokenToUSDC(value)
+      }
+    }
+    calculate()
+  },[firstTokenValue, firstToken && firstToken.address]);
+
 
   // Calculating first token to second token amount
   useEffect(() => {
     const calculate = async () => {
       if(account && secondToken != null && firstToken.address!= null && firstTokenValue != ""){
-        let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, utils.parseUnits(firstTokenValue,18), 1, 0, 0)
+        let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(firstToken.address, secondToken.address, utils.parseUnits(firstTokenValue,firstToken.decimals), 1, 0, 0)
         let value = parseFloat(formatUnits(returnAmount._hex,secondToken.decimals)).toPrecision(5)
         setSecondTokenValue(value)
       }
@@ -151,7 +166,7 @@ function Form() {
             </div>
             {/* Label inside input field*/}
             <div>
-              <p className="label label-inside-value">≈ $16000.43</p>
+              <p className="label label-inside-value">≈ {firstTokenToUSDC} USDC</p>
             </div>
           </div>
         </div>

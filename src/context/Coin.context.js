@@ -51,8 +51,16 @@ export const CoinProvider = (props) => {
     })
     const [secondToken, setSecondToken] = useState(null)
 
+    const [usdcToken, setUsdcToken] = useState({
+        logo:usdc,
+        shortcut:"USDC",
+        name:"USD Coin",
+        address: "0xe22da380ee6b445bb8273c81944adeb6e8450422",
+        decimals: 6
+    })
+
     return(
-        <CoinContext.Provider value={{coins, setCoins, firstToken, setFirstToken, secondToken, setSecondToken}}>
+        <CoinContext.Provider value={{coins, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, usdcToken, setUsdcToken}}>
             {props.children}
         </CoinContext.Provider>
     )
