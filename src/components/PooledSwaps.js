@@ -84,7 +84,7 @@ function PooledSwaps(props) {
                 let destSymbol = await destContract.symbol();
                 let fromDecimals = await fromContract.decimals();
                 let destDecimals = await destContract.decimals();
-                let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupsId);
+                let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupId);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
                 let percentGas =  (currentGas/requiredGas) * 100;
