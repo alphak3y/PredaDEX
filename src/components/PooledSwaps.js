@@ -87,7 +87,7 @@ function PooledSwaps(props) {
                 let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupId);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
-                let percentGas =  (currentGas/requiredGas) * 100;
+                let percentGas =  parseInt((currentGas/requiredGas) * 100).toFixed(1);
                 if( currentGas >= requiredGas){
                     percentGas = 100;
                 }
