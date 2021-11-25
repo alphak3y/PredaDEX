@@ -21,6 +21,7 @@ function Form() {
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
+  console.log(firstTokenBalance)
   const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
   const [secondTokenValue, setSecondTokenValue] = useState(0)
   const etherBalance = useEtherBalance(account)
@@ -55,14 +56,15 @@ function Form() {
    const setFirstInput = e => {
      let inputVal = e.target.value
      let changedVal = inputVal.replace(',', '.')
-     console.log(changedVal)
+     //console.log(changedVal)
+     console.log(firstTokenBalance)
      setFirstTokenValue(changedVal)
     
    }
 
    const setMaxBalanceToInput = () => {
-     let number =formatUnits(firstTokenBalance, firstToken.decimals)
-    setFirstTokenValue(number)
+     let number = formatUnits(firstTokenBalance, firstToken.decimals)
+     setFirstTokenValue(number)
    }
 
 
@@ -124,7 +126,7 @@ function Form() {
       <div className="form-wrapper">
         {/*Balance label above input field*/}
         <div className="form-row form-row-label">
-          <div className="label">Balance: {firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, firstToken.decimals)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+          <div className="label">Balance: {firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, firstToken.decimals)} {firstToken == null ? "" : firstToken.shortcut}</div>
         </div>
         <div className="form-row ">
           {/* Deposit dropdown */}

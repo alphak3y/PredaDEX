@@ -9,16 +9,18 @@ import CylinderBig from './Cylinder'
 import { TransactionsContext } from "@usedapp/core/dist/esm/src/providers/transactions/context";
 
 const Order  = {
-    fromToken:   0, //0 - fromToken address
-    fromSymbol:  1, //1 - fromToken shortcut
-    fromAmount:  2, //2 - fromToken amount
-    destToken:   3, //3 - destToken address
-    destSymbol:  4, //4 - destToken shortcut
-    destAmount:  5, //5 - destToken amount
-    groupId:     6, //6 - groupId for getGroup() & getTokens()
-    currentGas:  7, //7 - totalGas (current)
-    requiredGas: 8, //8 - gasRequired (max)
-    percentGas:  9  //9 - gasProgress (percentage)
+    fromToken:    0, //0 - fromToken address
+    fromSymbol:   1, //1 - fromToken shortcut
+    fromAmount:   2, //2 - fromToken amount
+    destToken:    3, //3 - destToken address
+    destSymbol:   4, //4 - destToken shortcut
+    destAmount:   5, //5 - destToken amount
+    groupId:      6, //6 - groupId for getGroup() & getTokens()
+    currentGas:   7, //7 - totalGas (current)
+    requiredGas:  8, //8 - gasRequired (max)
+    percentGas:   9,  //9 - gasProgress (percentage)
+    fromDecimals: 10,
+    destDecimals: 11
 }
 
 function PooledSwaps(props) {
@@ -80,6 +82,8 @@ function PooledSwaps(props) {
                 let destContract = new ethers.Contract(destToken, erc20Abi, provider);
                 let fromSymbol = await fromContract.symbol();
                 let destSymbol = await destContract.symbol();
+                let fromDecimals = await fromContract.decimals();
+                let destDecimals = await destContract.decimals();
                 let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groups[0]);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
@@ -89,16 +93,18 @@ function PooledSwaps(props) {
                 }
                 
                 combinedAmounts.push([
-                fromToken,   //0 - fromToken address
-                fromSymbol,  //1 - fromToken shortcut
-                fromAmount,  //2 - fromToken amount
-                destToken,   //3 - destToken address
-                destSymbol,  //4 - destToken shortcut
-                destAmount,  //5 - destToken amount
-                groupId,     //6 - groupId for getGroup() & getTokens()
-                currentGas,  //7 - totalGas (current)
-                requiredGas, //8 - gasRequired (max)
-                percentGas   //9 - percentGas
+                fromToken,    //0 - fromToken address
+                fromSymbol,   //1 - fromToken shortcut
+                fromAmount,   //2 - fromToken amount
+                destToken,    //3 - destToken address
+                destSymbol,   //4 - destToken shortcut
+                destAmount,   //5 - destToken amount
+                groupId,      //6 - groupId for getGroup() & getTokens()
+                currentGas,   //7 - totalGas (current)
+                requiredGas,  //8 - gasRequired (max)
+                percentGas,   //9 - percentGas
+                fromDecimals, //10
+                destDecimals  //11
                 ]) 
                 
                 
@@ -109,11 +115,11 @@ function PooledSwaps(props) {
                     let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: formatUnits(value[1][Order.fromAmount],18),
+                                                fromAmount: formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals]),
                                                 destToken:  value[1][Order.destToken],
                                                 destSymbol: value[1][Order.destSymbol],
                                                 //decimals needs to be dynamic (i.e. use an API)
-                                                destAmount: formatUnits(returnAmount, 6),
+                                                destAmount: formatUnits(returnAmount, value[1][Order.destDecimals]),
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
@@ -124,10 +130,10 @@ function PooledSwaps(props) {
                 }else if(value[1][Order.fromAmount] == "0" && value[1][Order.destAmount] != "0") {
                     let tempCompletedTransaction = { fromToken:  value[1][Order.fromToken],
                                                      fromSymbol: value[1][Order.fromSymbol], 
-                                                     fromAmount: formatUnits(value[1][Order.fromAmount],18),
+                                                     fromAmount: formatUnits(value[1][Order.fromAmount],fromContract.decimals()),
                                                      destToken:  value[1][Order.destToken],
                                                      destSymbol: value[1][Order.destSymbol], 
-                                                     destAmount: formatUnits(value[1][Order.destAmount],18),
+                                                     destAmount: formatUnits(value[1][Order.destAmount],destContract.decimals()),
                                                      groupId:    value[1][Order.groupId],
                                                      currentGas: value[1][Order.currentGas], 
                                                      requiredGas:value[1][Order.requiredGas],
