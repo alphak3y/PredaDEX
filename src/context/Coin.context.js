@@ -16,21 +16,14 @@ export const CoinProvider = (props) => {
             logo:link,
             shortcut:"LINK",
             name:"LINK",
-            address: "0x514910771af9ca656af840dff83e8264ecf986ca",
+            address: "0xa36085F69e2889c224210F603D836748e7dC0088",
             decimals: 18
         },
         {
             logo:weth,
             shortcut:"WETH",
             name:"WETH",
-            address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            decimals: 18
-        },
-        {
-            logo:wbtc,
-            shortcut:"WBTC",
-            name:"WBTC",
-            address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            address: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
             decimals: 18
         },
         {   
@@ -44,15 +37,8 @@ export const CoinProvider = (props) => {
             logo:dai,
             shortcut:"DAI",
             name:"DAI Stablecoin",
-            address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+            address: "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
             decimals: 18
-        },
-        {
-            logo:usdt,
-            shortcut:"USDT",
-            name:"Tether",
-            address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
-            decimals: 6
         }
     ])
 
@@ -60,7 +46,7 @@ export const CoinProvider = (props) => {
         logo:link,
         shortcut:"LINK",
         name:"LINK",
-        address: "0x514910771af9ca656af840dff83e8264ecf986ca",
+        address: "0xa36085F69e2889c224210F603D836748e7dC0088",
         decimals: 18
     })
     const [secondToken, setSecondToken] = useState(null)
