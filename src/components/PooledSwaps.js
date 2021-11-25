@@ -79,15 +79,20 @@ function PooledSwaps(props) {
                 let fromContract = new ethers.Contract(fromToken, erc20Abi, provider);
                 let destContract = new ethers.Contract(destToken, erc20Abi, provider);
                 let fromSymbol = await fromContract.symbol();
-                let destSymbol = null;
+                let destSymbol = await destContract.symbol();
                 let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupId);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 console.log(gasRequired)
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
                 let percentGas =  (currentGas/requiredGas) * 100;
+
                 if( currentGas >= requiredGas){
                     percentGas = 100;
                 }
+
+                // if(fromSymbol == undefined){
+            
+                // }
                 
                 combinedAmounts.push([
                 fromToken,   //0 - fromToken address
