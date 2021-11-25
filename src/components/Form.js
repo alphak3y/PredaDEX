@@ -32,9 +32,9 @@ function Form() {
   const [firstTokenToDAI, setFirstTokenToDAI] = useState(0)
   const [secondTokenToDAI, setSecondTokenToDAI] = useState(0)
   const [gweiToDAI, setGweiToDAI] = useState(0)
-
+  const [remainingGwei, setRemainingGwei] = useState(0)
     
-    let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
+  let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
   let balance = etherBalance && formatEther(etherBalance)  
   const predaDexAddress = "0x903d6Fee0564A56e0979808CEFa5F4De5FA89365"
   let erc20Interface = new utils.Interface(erc20Abi)
@@ -82,20 +82,33 @@ function Form() {
   },[firstTokenValue, firstToken && firstToken.address]);
 
 
-
-
-    // Calculating second token to DAI
-    useEffect(() => {
-      const calculate = async () => {
-      if(account && firstToken != null && firstToken.address!= null &&secondToken != null && secondToken.address != null && firstTokenValue != "" && secondTokenBalance){
-        let val = parseInt(secondTokenValue)
-        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, daiToken.address, utils.parseUnits(val.toString(),secondToken.decimals), 1, 0, 0)
-        let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
-        setSecondTokenToDAI(value)
-      }
+  // Calculate remaining gas for swap group
+  useEffect(() => {
+    const calculate = async () => {
+    if(account && firstToken != null && firstToken.address!= null &&secondToken != null && secondToken.address != null && secondTokenBalance){
+      let groupId = await signedContract.getGroup(firstToken.address, secondToken.address);
+      console.log(groupId);
+      let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupId);
+      console.log(totalGas, gasRequired);
+      let value = parseInt(utils.formatUnits(gasRequired,"gwei")) - parseInt(utils.formatUnits(totalGas,"gwei"));
+      setRemainingGwei(value);
     }
+  }
     calculate()
   },[secondTokenBalance, secondToken && secondToken.address, firstToken.address,firstTokenValue]);
+
+  // Calculating second token to DAI
+  useEffect(() => {
+    const calculate = async () => {
+    if(account && firstToken != null && firstToken.address!= null &&secondToken != null && secondToken.address != null && firstTokenValue != "" && secondTokenBalance){
+      let val = parseInt(secondTokenValue)
+      let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, daiToken.address, utils.parseUnits(val.toString(),secondToken.decimals), 1, 0, 0)
+      let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
+      setSecondTokenToDAI(value)
+    }
+  }
+  calculate()
+},[secondTokenBalance, secondToken && secondToken.address, firstToken.address,firstTokenValue]);
 
     // Calculating GWEI to DAI
     useEffect(() => {
@@ -105,7 +118,6 @@ function Form() {
           const ethAmount = formatUnits(ethAmountObj._hex, wethToken.decimals)
           let { returnAmount } = await signedContract.quoteAndDistribute(wethToken.address, daiToken.address, utils.parseUnits(ethAmount,wethToken.decimals), 1, 0, 0)
           let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
-          console.log(value)
         setGweiToDAI(value)
       }
     }
@@ -215,7 +227,7 @@ function Form() {
           <div className="label" style={{ paddingRight: "115px" }}>
             Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
           </div>
-          <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && parseInt(balance).toFixed(3)} ETH</div>
+          <div className="label ">Next Swap: {remainingGwei != 0 && remainingGwei} {secondToken == null ? "" : " Gwei"} </div>
         </div>
         <div className="form-row">
           {/* Receive dropdown */}
