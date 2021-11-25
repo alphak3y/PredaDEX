@@ -616,6 +616,14 @@ tr > th {
   z-index: 1;
 }
 
+.temp-btn {
+  background: none;
+  color: #00BC57;
+  border:1px solid #00BC57;
+  margin: 5px;
+  border-radius: 5px;
+}
+
 .form-row {
   display: flex;
   flex-flow: row wrap;
@@ -635,7 +643,7 @@ tr > th {
 }
 .form-col {
   height: 52px;
-  border-radius: 15px;
+  border-radius: 8px;
   background: #0f1325;
 }
 .form-col-sm {

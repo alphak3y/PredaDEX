@@ -6,7 +6,7 @@ import arrow from "../images/Arrow.svg";
 import { PredaDexContext } from "../context/Predadex.context";
 import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
-import { formatUnits,formatEther } from '@ethersproject/units'
+import { formatUnits,formatEther, parseEther } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import predaDexAbi from '../abi/PredaDex.json'
@@ -29,7 +29,8 @@ function Form() {
     signedContract,
     signer,
     stateUserAddress} = useContext(PredaDexContext);
-
+    
+    let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
   let balance = etherBalance && formatEther(etherBalance)  
   const predaDexAddress = "0x903d6Fee0564A56e0979808CEFa5F4De5FA89365"
   let erc20Interface = new utils.Interface(erc20Abi)
@@ -124,7 +125,7 @@ function Form() {
       <div className="form-wrapper">
         {/*Balance label above input field*/}
         <div className="form-row form-row-label">
-          <div className="label">Balance: {firstToken == null ? "0.00" : firstTokenBalance && formatUnits(firstTokenBalance, firstToken.decimals)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+          <div className="label">Balance: {firstToken == null ? "0.00" : firstTokenBalance && parseFloat(formatUnits(firstTokenBalance, firstToken.decimals)).toPrecision(6)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
         </div>
         <div className="form-row ">
           {/* Deposit dropdown */}
@@ -165,8 +166,8 @@ function Form() {
       <div className="form-wrapper">
         {/* Balance labels above input fields*/}
         <div className="form-row form-row-label">
-          <div className="label" style={{ paddingRight: "75px" }}>
-            Balance: {secondToken == null ? "0.00" : secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)} {secondToken == null ? "" : secondToken.shortcut}
+          <div className="label" style={{ paddingRight: "115px" }}>
+            Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
           </div>
           <div className="label ">{etherBalance ? "Balance:": "Balance: 0.0"} {etherBalance && parseInt(balance).toFixed(3)} ETH</div>
         </div>

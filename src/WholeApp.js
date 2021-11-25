@@ -47,13 +47,13 @@ function App() {
   return (
     <div className="App">
       <Navigation />
-      <button onClick={openone}>WithdrawOrder</button>
-      <button onClick={opentwo}>WaitingForConfirmation</button>
-      <button onClick={openthree}>ConfirmOrder </button>
-      <button onClick={openfour}>SelectToken</button>
-      <button onClick={opefive}>CancelOrder</button>
-      <button onClick={openseven}>Reject</button>
-      <button onClick={openeight}>TransactionSubmittedAddCoinToMetaMask</button>
+      <button className="temp-btn" onClick={openone}>WithdrawOrder</button>
+      <button className="temp-btn" onClick={opentwo}>WaitingForConfirmation</button>
+      <button className="temp-btn" onClick={openthree}>ConfirmOrder </button>
+      <button className="temp-btn" onClick={openfour}>SelectToken</button>
+      <button className="temp-btn" onClick={opefive}>CancelOrder</button>
+      <button className="temp-btn" onClick={openseven}>Reject</button>
+      <button className="temp-btn" onClick={openeight}>TransactionSubmittedAddCoinToMetaMask</button>
       <MainContent />
       <BottomLines />
       {isOpen && <Modal />}
