@@ -16,7 +16,7 @@ import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTo
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
-  const {firstToken, secondToken, usdcToken} = useContext(CoinContext);
+  const {firstToken, secondToken, daiToken} = useContext(CoinContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
@@ -29,9 +29,9 @@ function Form() {
     signedContract,
     signer,
     stateUserAddress} = useContext(PredaDexContext);
-  const [firstTokenToUSDC, setFirstTokenToUSDC] = useState(0)
-  const [secondTokenToUSDC, setSecondTokenToUSDC] = useState(0)
-  const [gweiToUSDC, setGweiToUSDC] = useState(0)
+  const [firstTokenToDAI, setFirstTokenToDAI] = useState(0)
+  const [secondTokenToDAI, setSecondTokenToDAI] = useState(0)
+  const [gweiToDAI, setGweiToDAI] = useState(0)
 
     
     let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
@@ -69,13 +69,13 @@ function Form() {
     setFirstTokenValue(number)
    }
 
-     // Calculating first token to USDC
+     // Calculating first token to DAI
   useEffect(() => {
     const calculate = async () => {
       if(account && firstToken.address!= null && firstTokenValue != ""){
-        let { returnAmount } = await signedContract.quoteAndDistribute(firstToken.address, usdcToken.address, utils.parseUnits(firstTokenValue,firstToken.decimals), 1, 0, 0)
-        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toFixed(2)
-        setFirstTokenToUSDC(value)
+        let { returnAmount } = await signedContract.quoteAndDistribute(firstToken.address, daiToken.address, utils.parseUnits(firstTokenValue,firstToken.decimals), 1, 0, 0)
+        let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
+        setFirstTokenToDAI(value)
       }
     }
     calculate()
@@ -84,27 +84,27 @@ function Form() {
 
 
 
-    // Calculating second token to USDC
+    // Calculating second token to DAI
     useEffect(() => {
       const calculate = async () => {
       if(account && firstToken != null && firstToken.address!= null &&secondToken != null && secondToken.address != null && firstTokenValue != "" && secondTokenBalance){
         let val = parseInt(secondTokenValue)
-        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, usdcToken.address, utils.parseUnits(val.toString(),secondToken.decimals), 1, 0, 0)
-        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toFixed(2)
-        setSecondTokenToUSDC(value)
+        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, daiToken.address, utils.parseUnits(val.toString(),secondToken.decimals), 1, 0, 0)
+        let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
+        setSecondTokenToDAI(value)
       }
     }
     calculate()
   },[secondTokenBalance, secondToken && secondToken.address, firstToken.address,firstTokenValue]);
 
-    // Calculating GWEI to USDC
+    // Calculating GWEI to DAI
     useEffect(() => {
       const gweiToEth = userGweiAmount * 0.000000001
       const calculate = async () => {
       if(account ){
-        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, usdcToken.address, utils.parseUnits(gweiToEth.toString(),secondToken.decimals), 1, 0, 0)
-        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toFixed(2)
-        setGweiToUSDC(value)
+        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, daiToken.address, utils.parseUnits(gweiToEth.toString(),secondToken.decimals), 1, 0, 0)
+        let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
+        setGweiToDAI(value)
       }
     }
     calculate()
@@ -195,7 +195,7 @@ function Form() {
             </div>
             {/* Label inside input field*/}
             <div>
-              <p className="label label-inside-value">≈ {firstTokenToUSDC} USD</p>
+              <p className="label label-inside-value">≈ {firstTokenToDAI} USD</p>
             </div>
           </div>
         </div>
@@ -261,7 +261,7 @@ function Form() {
       </div>
       {/*Label inside input field*/}
       <div>
-        <p className="label label-inside-value">≈ {secondTokenToUSDC} USDC</p>
+        <p className="label label-inside-value">≈ {secondTokenToDAI} USD</p>
       </div>
     </div>
     {/*Second input field in second window*/}
@@ -283,7 +283,7 @@ function Form() {
         className="label label-inside-value"
         style={{ marginTop: "-5px" }}
         >
-        ≈ $59.2817
+        ≈ 
       </p>
     </div>
   </div>

@@ -51,16 +51,16 @@ export const CoinProvider = (props) => {
     })
     const [secondToken, setSecondToken] = useState(null)
 
-    const [usdcToken, setUsdcToken] = useState({
-        logo:usdc,
-        shortcut:"USDC",
-        name:"USD Coin",
-        address: "0xe22da380ee6b445bb8273c81944adeb6e8450422",
-        decimals: 6
+    const [daiToken, setDaiToken] = useState({
+        logo:dai,
+        shortcut:"DAI",
+        name:"DAI Stablecoin",
+        address: "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
+        decimals: 18
     })
 
     return(
-        <CoinContext.Provider value={{coins, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, usdcToken, setUsdcToken}}>
+        <CoinContext.Provider value={{coins, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, daiToken, setDaiToken}}>
             {props.children}
         </CoinContext.Provider>
     )
