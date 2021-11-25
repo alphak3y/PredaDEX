@@ -99,11 +99,13 @@ function Form() {
 
     // Calculating GWEI to DAI
     useEffect(() => {
-      const ethAmount = utils.parseUnits(userGweiAmount.toString(), "gwei")
       const calculate = async () => {
-      if(account ){
-        let { returnAmount } = await signedContract.quoteAndDistribute(wethToken.address, daiToken.address, ethAmount, 1, 0, 0)
-        let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
+        if(account && userGweiAmount != "" ){
+          const ethAmountObj = utils.parseUnits(userGweiAmount.toString(), "gwei")
+          const ethAmount = formatUnits(ethAmountObj._hex, wethToken.decimals)
+          let { returnAmount } = await signedContract.quoteAndDistribute(wethToken.address, daiToken.address, utils.parseUnits(ethAmount,wethToken.decimals), 1, 0, 0)
+          let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
+          console.log(value)
         setGweiToDAI(value)
       }
     }
@@ -283,7 +285,7 @@ function Form() {
         className="label label-inside-value"
         style={{ marginTop: "-5px" }}
         >
-        ≈ 
+        ≈ {gweiToDAI} USD
       </p>
     </div>
   </div>
