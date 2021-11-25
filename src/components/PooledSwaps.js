@@ -115,11 +115,10 @@ function PooledSwaps(props) {
                     let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals]),
+                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])),
                                                 destToken:  value[1][Order.destToken],
                                                 destSymbol: value[1][Order.destSymbol],
-                                                //decimals needs to be dynamic (i.e. use an API)
-                                                destAmount: formatUnits(returnAmount, value[1][Order.destDecimals]),
+                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])),
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
@@ -240,7 +239,6 @@ function PooledSwaps(props) {
                             <th>Deposit</th>
                             <th>Receive</th>
                             <th>Status</th>
-                            <th>Txn hash</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -251,10 +249,6 @@ function PooledSwaps(props) {
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
                                 <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{transaction.destAmount} {transaction.destSymbol}  </td>
                                 <td> <ProgressBar width={transaction.percentGas}/> </td>
-                                <td><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.40796 3.44998L9.41496 6.99998H11.429V-2.47955e-05H4.42896V2.01398L7.97896 2.02098L-4.48227e-05 9.99996L1.42896 11.429L9.40796 3.44998Z" fill="#27F09E"/>
-                                </svg>
-                            </td>
                             {/* TODO: pass in args for cancel function call */}
                             <td>
                                 <button 
@@ -279,7 +273,6 @@ function PooledSwaps(props) {
                             <img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>
                             <span className="shiny"><span className="shiny-inner">{transaction.destAmount} {transaction.destSymbol}</span></span></td>
                             <td> <ProgressBar width={transaction.percentGas}/> </td>
-                            <td>arrow</td>
                             <td><button                                 
                                 data-destaddress={transaction.destToken} 
                                 data-groupid={transaction.groupId} 
