@@ -73,7 +73,7 @@ function Form() {
     const calculate = async () => {
       if(account && firstToken.address!= null && firstTokenValue != ""){
         let { returnAmount } = await signedContract.quoteAndDistribute(firstToken.address, usdcToken.address, utils.parseUnits(firstTokenValue,firstToken.decimals), 1, 0, 0)
-        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toPrecision(7)
+        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toFixed(2)
         console.log(value)
         setFirstTokenToUSDC(value)
       }
