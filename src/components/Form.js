@@ -31,7 +31,7 @@ function Form() {
     stateUserAddress} = useContext(PredaDexContext);
 
   let balance = etherBalance && formatEther(etherBalance)  
-  const predaDexAddress = "0x2a3E81513129cB5d06350C560Be74Fab4231AE5E"
+  const predaDexAddress = "0x903d6Fee0564A56e0979808CEFa5F4De5FA89365"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
