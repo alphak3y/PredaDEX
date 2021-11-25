@@ -16,7 +16,7 @@ import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTo
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
-  const {firstToken, secondToken, daiToken} = useContext(CoinContext);
+  const {firstToken, secondToken, daiToken, wethToken} = useContext(CoinContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
@@ -99,10 +99,10 @@ function Form() {
 
     // Calculating GWEI to DAI
     useEffect(() => {
-      const gweiToEth = userGweiAmount * 0.000000001
+      const ethAmount = utils.parseUnits(userGweiAmount.toString(), "gwei")
       const calculate = async () => {
       if(account ){
-        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, daiToken.address, utils.parseUnits(gweiToEth.toString(),secondToken.decimals), 1, 0, 0)
+        let { returnAmount } = await signedContract.quoteAndDistribute(wethToken.address, daiToken.address, ethAmount, 1, 0, 0)
         let value = parseFloat(formatUnits(returnAmount._hex, daiToken.decimals)).toFixed(2)
         setGweiToDAI(value)
       }

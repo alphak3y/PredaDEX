@@ -59,8 +59,16 @@ export const CoinProvider = (props) => {
         decimals: 18
     })
 
+    const [wethToken, setWethToken] = useState({
+        logo:weth,
+        shortcut:"WETH",
+        name:"WETH",
+        address: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+        decimals: 18
+    })
+
     return(
-        <CoinContext.Provider value={{coins, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, daiToken, setDaiToken}}>
+        <CoinContext.Provider value={{coins, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, daiToken, setDaiToken, wethToken, setWethToken}}>
             {props.children}
         </CoinContext.Provider>
     )
