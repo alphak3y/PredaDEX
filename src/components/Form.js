@@ -175,15 +175,14 @@ function Form() {
           {secondToken == null ? <div
             onClick={openModalForSecondToken}
             className="form-col form-col-sm clickable"
-            style={{ marginRight: "16px" }}
+            style={{ marginRight: "14px" }}
             >
             <div
             className="label label-dropdown"
-            style={{ marginLeft: "-20px" }}
             >
             Receive
           </div>
-          <div className="deposit-row" style={{ marginLeft: "7px" }}>
+          <div className="deposit-row" >
             <img src={question} alt="btc" className="question"></img>
             <button className="select-a-token-button">
               <p>Select a token </p>
@@ -229,7 +228,7 @@ function Form() {
         placeholder="0"
         onChange={e => setUserGweiAmount(e.target.value)}
         value={userGweiAmount}
-        className="receive-input-field"
+        className="receive-input-field width"
         />
       </div>
       {/*Label inside input field*/}

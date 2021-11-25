@@ -623,7 +623,7 @@ tr > th {
   margin-left: 27px;
   margin-right: 27px;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 }
 .arrow {
   margin-top: -20px;
@@ -631,7 +631,7 @@ tr > th {
 }
 .form-row-label {
   justify-content: end;
-  padding-right: 10px;
+  padding-right: 15px;
 }
 .form-col {
   height: 52px;
@@ -671,8 +671,11 @@ tr > th {
 
 .label-dropdown {
   margin-top: 3px;
-  margin-left: -15px;
+  margin-left: -18px;
 }
+
+
+
 .deposit-row {
   height: 100%;
   display: inline-flex;
@@ -725,7 +728,7 @@ tr > th {
   border: none;
   color: #fff;
   outline: none;
-  width: 80%;
+  width: 100%;
 }
 
 .question {
