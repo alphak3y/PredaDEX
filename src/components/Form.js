@@ -166,7 +166,7 @@ function Form() {
             </div>
             {/* Label inside input field*/}
             <div>
-              <p className="label label-inside-value">≈ {firstTokenToUSDC} USDC</p>
+              <p className="label label-inside-value">≈ {firstTokenToUSDC} USD</p>
             </div>
           </div>
         </div>
