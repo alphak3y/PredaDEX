@@ -6,7 +6,7 @@ import arrow from "../images/Arrow.svg";
 import { PredaDexContext } from "../context/Predadex.context";
 import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
-import { formatUnits,formatEther, parseEther } from '@ethersproject/units'
+import { formatUnits,formatEther, parseEther, parseUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
 import predaDexAbi from '../abi/PredaDex.json'
@@ -32,6 +32,7 @@ function Form() {
   const [firstTokenToUSDC, setFirstTokenToUSDC] = useState(0)
   const [secondTokenToUSDC, setSecondTokenToUSDC] = useState(0)
   const [gweiToUSDC, setGweiToUSDC] = useState(0)
+
     
     let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
   let balance = etherBalance && formatEther(etherBalance)  
@@ -74,12 +75,40 @@ function Form() {
       if(account && firstToken.address!= null && firstTokenValue != ""){
         let { returnAmount } = await signedContract.quoteAndDistribute(firstToken.address, usdcToken.address, utils.parseUnits(firstTokenValue,firstToken.decimals), 1, 0, 0)
         let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toFixed(2)
-        console.log(value)
         setFirstTokenToUSDC(value)
       }
     }
     calculate()
   },[firstTokenValue, firstToken && firstToken.address]);
+
+
+
+
+    // Calculating second token to USDC
+    useEffect(() => {
+      const calculate = async () => {
+      if(account && firstToken != null && firstToken.address!= null &&secondToken != null && secondToken.address != null && firstTokenValue != "" && secondTokenBalance){
+        let val = parseInt(secondTokenValue)
+        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, usdcToken.address, utils.parseUnits(val.toString(),secondToken.decimals), 1, 0, 0)
+        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toFixed(2)
+        setSecondTokenToUSDC(value)
+      }
+    }
+    calculate()
+  },[secondTokenBalance, secondToken && secondToken.address, firstToken.address,firstTokenValue]);
+
+    // Calculating GWEI to USDC
+    useEffect(() => {
+      const gweiToEth = userGweiAmount * 0.000000001
+      const calculate = async () => {
+      if(account ){
+        let { returnAmount } = await signedContract.quoteAndDistribute(secondToken.address, usdcToken.address, utils.parseUnits(gweiToEth.toString(),secondToken.decimals), 1, 0, 0)
+        let value = parseFloat(formatUnits(returnAmount._hex, usdcToken.decimals)).toFixed(2)
+        setGweiToUSDC(value)
+      }
+    }
+    calculate()
+  },[userGweiAmount]);
 
 
   // Calculating first token to second token amount
@@ -232,7 +261,7 @@ function Form() {
       </div>
       {/*Label inside input field*/}
       <div>
-        <p className="label label-inside-value">≈ $0</p>
+        <p className="label label-inside-value">≈ {secondTokenToUSDC} USDC</p>
       </div>
     </div>
     {/*Second input field in second window*/}
