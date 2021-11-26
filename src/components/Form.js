@@ -36,7 +36,7 @@ function Form() {
     
   let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
   let balance = etherBalance && formatEther(etherBalance)  
-  const predaDexAddress = "0x98CbDE23451546A0BcCe363eD474DCd7c63A8AC7"
+  const predaDexAddress = "0x56534641C7ba282C6d31DCbF49886bbD3eEAcE6E"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)

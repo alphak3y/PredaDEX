@@ -6,7 +6,7 @@ import predaDexAbi from '../abi/PredaDex.json'
 export const PredaDexContext = createContext();
 
 export const PredaDexProvider = (props) => {
-  const contractAddress = "0x98CbDE23451546A0BcCe363eD474DCd7c63A8AC7";
+  const contractAddress = "0x56534641C7ba282C6d31DCbF49886bbD3eEAcE6E";
   const ALCHEMY = "https://eth-kovan.alchemyapi.io/v2/2oNUyqV6GKtxyE05cDrbkphiAjkNiQZl";
 
   const [stateUserAddress, setstateUserAddress] = useState('')
