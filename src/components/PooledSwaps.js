@@ -115,10 +115,10 @@ function PooledSwaps(props) {
                     let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])),
+                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals]).toPrecision(6)),
                                                 destToken:  value[1][Order.destToken],
                                                 destSymbol: value[1][Order.destSymbol],
-                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])),
+                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals]).toPrecision(6)),
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
@@ -129,14 +129,14 @@ function PooledSwaps(props) {
                 }else if(value[1][Order.fromAmount] == "0" && value[1][Order.destAmount] != "0") {
                     let tempCompletedTransaction = { fromToken:  value[1][Order.fromToken],
                                                      fromSymbol: value[1][Order.fromSymbol], 
-                                                     fromAmount: formatUnits(value[1][Order.fromAmount],value[1][Order.fromDecimals]),
+                                                     fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount],value[1][Order.fromDecimals])).toPrecision(6),
                                                      destToken:  value[1][Order.destToken],
                                                      destSymbol: value[1][Order.destSymbol], 
-                                                     destAmount: formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals]),
+                                                     destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(6),
                                                      groupId:    value[1][Order.groupId],
                                                      currentGas: value[1][Order.currentGas], 
                                                      requiredGas:value[1][Order.requiredGas],
-                                                     percentGas: value[1][Order.percentGas]
+                                                     percentGas: 100.0
                                                    }
                     completedTransaction.push(tempCompletedTransaction)
                 // Both transactions
