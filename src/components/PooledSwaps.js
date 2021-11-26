@@ -134,7 +134,7 @@ function PooledSwaps(props) {
                                                      fromAmount: 0.0,
                                                      destToken:  value[1][Order.destToken],
                                                      destSymbol: value[1][Order.destSymbol], 
-                                                     destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(6),
+                                                     destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(4),
                                                      groupId:    value[1][Order.groupId],
                                                      currentGas: value[1][Order.currentGas], 
                                                      requiredGas:value[1][Order.requiredGas],
