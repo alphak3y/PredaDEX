@@ -20,6 +20,11 @@
         "internalType": "address[]",
         "name": "newExchanges",
         "type": "address[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "names",
+        "type": "string[]"
       }
     ],
     "name": "addExchanges",
@@ -38,14 +43,19 @@
     "name": "checkAssets",
     "outputs": [
       {
-        "internalType": "bytes32[64]",
+        "internalType": "bytes32[]",
         "name": "groups",
-        "type": "bytes32[64]"
+        "type": "bytes32[]"
       },
       {
-        "internalType": "uint256[64][2]",
-        "name": "amounts",
-        "type": "uint256[64][2]"
+        "internalType": "uint256[]",
+        "name": "pre",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "post",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -128,6 +138,35 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "fromToken",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IERC20",
+        "name": "destToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "estimateGasRequirements",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "gasRequired",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "getExchanges",
     "outputs": [
@@ -135,6 +174,11 @@
         "internalType": "address[]",
         "name": "",
         "type": "address[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "",
+        "type": "string[]"
       }
     ],
     "stateMutability": "view",

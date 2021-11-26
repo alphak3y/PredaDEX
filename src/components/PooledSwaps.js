@@ -66,7 +66,7 @@ function PooledSwaps(props) {
         let combinedAmounts = []
         
         const run = async () => {
-            
+            console.log("checkAssets")
             let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
             console.log("amounts")
             console.log(amounts)
