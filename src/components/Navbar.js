@@ -38,7 +38,7 @@ function Navigation() {
         setIsClosing("closing-animation")
         setTimeout(() => {
             setShowBalance(!showBalance)
-            setIsClosing("false")
+            setIsClosing("")
         }, 400);
     }
 
