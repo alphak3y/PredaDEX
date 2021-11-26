@@ -178,7 +178,7 @@ function Form() {
   <div>
     
     {/*First  window*/}
-    <div className="form-wrapper-outside">
+    <div className="form-wrapper-outside ">
       <div className="form-wrapper">
         {/*Balance label above input field*/}
         <div className="form-row form-row-label">
@@ -186,16 +186,16 @@ function Form() {
         </div>
         <div className="form-row ">
           {/* Deposit dropdown */}
-          <div className="form-col form-col-sm clickable" onClick={openModalForFirstToken}>
+          <div className="form-col form-col-sm clickable " onClick={openModalForFirstToken}>
             <div className="label label-dropdown">Deposit</div>
-            <div className="deposit-row">
+            <div className="deposit-row ">
               <img src={firstToken == null ? BTC : firstToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
               <p>{firstToken == null ? "BTC":firstToken.shortcut}</p>
               <img src={Vector} alt="vector"></img>
             </div>
           </div>
           {/*Input field*/}
-          <div className="form-col form-col-lg border-outline">
+          <div className="form-col form-col-lg border-outline ">
             <div className="input-space">
               <button className="max-button" onClick={setMaxBalanceToInput}> Max</button>
               <input
@@ -203,7 +203,7 @@ function Form() {
               onChange={setFirstInput}
               placeholder="0.0"
          
-              className="deposit-input-field"
+              className="deposit-input-field "
               />
             </div>
             {/* Label inside input field*/}
@@ -289,7 +289,7 @@ function Form() {
         placeholder="0"
         onChange={e => setUserGweiAmount(e.target.value)}
         value={userGweiAmount}
-        className="receive-input-field"
+        className="receive-input-field "
         />
       </div>
       {/*Label inside input field*/}
