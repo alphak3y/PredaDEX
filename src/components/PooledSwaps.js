@@ -56,6 +56,7 @@ function PooledSwaps(props) {
         .catch((e)=>window.alert(e.message))
         withdrawTxn
     };
+
     
     // filter transactions on opened, completed and both and store in state
     useEffect(() => {
@@ -67,6 +68,7 @@ function PooledSwaps(props) {
         const run = async () => {
             
             let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
+            console.log(amounts)
             let fromTokens = amounts[0]
             let destTokens = amounts[1]
             let zeroHex = "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -247,7 +249,7 @@ function PooledSwaps(props) {
                             return<tr key={transaction.fromAmount + transaction.fromToken}>
                                 <td > <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
-                                <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{transaction.destAmount} {transaction.destSymbol}  </td>
+                                <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{((transaction.destAmount).toFixed(3))} {transaction.destSymbol}  </td>
                                 <td> <ProgressBar width={transaction.percentGas}/> </td>
                             {/* TODO: pass in args for cancel function call */}
                             <td>

@@ -29,7 +29,7 @@ function Navigation() {
     }
 
     const disconnect = async () => {
-        console.log(deactivate())
+        deactivate()
     }
     
     const copyAddress = () => {
@@ -39,9 +39,7 @@ function Navigation() {
             setIsCopied(false)
         }, 1500);
     }
-    
     return (
-    
     <Navbar className="transparent navigation" expand="lg">
         <Container fluid>
             <Navbar.Brand href="#">
@@ -66,7 +64,7 @@ function Navigation() {
                         
                     }
                     
-                   {(showBalance && etherBalance) && `${parseInt(balance).toFixed(5)} ETH` }
+                   {(showBalance && etherBalance) && `${parseFloat(balance).toFixed(5)} ETH` }
                 </div>
                 <div className="nav-account">
                     {`${account.substring(0,5)}...${account.substr(account.length - 3)}`}

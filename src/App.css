@@ -161,6 +161,9 @@ th {
 .left {
   text-align: left;
 }
+td {
+  width: 25%;
+}
 
 tr:nth-child(odd) {
   background: #0f1325;
@@ -216,7 +219,7 @@ tr > th {
 
 .progress-max-num {
   position: absolute;
-  right: -29px;
+  right: -36px;
   top: -3px;
 }
 
@@ -605,6 +608,7 @@ tr > th {
   width: 614px;
   padding: 1px;
   margin-bottom: 30px;
+  
 }
 
 .form-wrapper {
