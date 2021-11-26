@@ -131,7 +131,7 @@ function PooledSwaps(props) {
                 }else if(value[1][Order.fromAmount] == "0" && value[1][Order.destAmount] != "0") {
                     let tempCompletedTransaction = { fromToken:  value[1][Order.fromToken],
                                                      fromSymbol: value[1][Order.fromSymbol], 
-                                                     fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount],value[1][Order.fromDecimals])).toPrecision(6),
+                                                     fromAmount: 0.0,
                                                      destToken:  value[1][Order.destToken],
                                                      destSymbol: value[1][Order.destSymbol], 
                                                      destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(6),
@@ -269,7 +269,7 @@ function PooledSwaps(props) {
                            
                             <td> 
                                 <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
-                                {transaction.fromAmount} {transaction.fromSymbol}
+                                {transaction.fromSymbol}
                             </td>
                             <td>
                             <img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>
