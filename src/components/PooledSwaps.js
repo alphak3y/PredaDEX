@@ -165,7 +165,7 @@ function PooledSwaps(props) {
         
         
         
-    },[]);
+    },[filter]);
 
     function findLogo(shortcut) {
         let coinLogo
