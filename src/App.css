@@ -1062,3 +1062,15 @@ top: 100px;
   -moz-appearance:textfield;
   margin: 0;
 }
+
+
+
+
+.form-col-sm {
+  position: relative;
+}
+.label-position {
+  position: absolute;
+  right: 10px;
+  top: -30px;
+}

@@ -223,13 +223,11 @@ function Form() {
     <div className="form-wrapper-outside">
       <div className="form-wrapper">
         {/* Balance labels above input fields*/}
-        <div className="form-row form-row-label">
-          <div className="label" style={{ paddingRight: "115px" }}>
-            Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
-          </div>
-          <div className="label ">Next Swap: {remainingGwei != 0 && remainingGwei} {secondToken == null ? "" : " Gwei"} </div>
+        <div className="form-row form-row-label ">
+
+          
         </div>
-        <div className="form-row">
+        <div className="form-row mt-4">
           {/* Receive dropdown */}
           {secondToken == null ? <div
             onClick={openModalForSecondToken}
@@ -265,6 +263,9 @@ function Form() {
       style={{ marginRight: "16px" }}
       >
       <div className="input-space">
+      <div className="label label-position">
+            Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
+          </div>
         <input
         type="text"
         placeholder="0.0"
@@ -283,6 +284,7 @@ function Form() {
       {/*Label inside input field*/}
       <p className="label label-inside-text">Gwei</p>
       <div className="input-space" style={{ paddingTop: "0px" }}>
+      <div className="label label-position">Next Swap: {remainingGwei != 0 && remainingGwei} {secondToken == null ? "" : " Gwei"} </div>
         <input
         type="text"
         placeholder="0"
