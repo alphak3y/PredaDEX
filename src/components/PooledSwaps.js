@@ -66,12 +66,9 @@ function PooledSwaps(props) {
         let combinedAmounts = []
         
         const run = async () => {
-            console.log("checkAssets")
-            let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
-            console.log("amounts")
-            console.log(amounts)
-            let fromTokens = amounts[0]
-            let destTokens = amounts[1]
+            let {groups, pre, post} = await signedContract.checkAssets(stateUserAddress);
+            let fromTokens = pre
+            let destTokens = post
             let zeroHex = "0x0000000000000000000000000000000000000000000000000000000000000000";
             
 
@@ -79,8 +76,8 @@ function PooledSwaps(props) {
                 
                 let groupId = groups[i];
                 let {fromToken, destToken} = await signedContract.getTokens(groupId);
-                let fromAmount = formatUnits(amounts[i][0]._hex, 0);
-                let destAmount = formatUnits(amounts[i][1]._hex, 0);
+                let fromAmount = formatUnits(fromTokens[i]._hex, 0);
+                let destAmount = formatUnits(destTokens[i]._hex, 0);
                 let fromContract = new ethers.Contract(fromToken, erc20Abi, provider);
                 let destContract = new ethers.Contract(destToken, erc20Abi, provider);
                 let fromSymbol = await fromContract.symbol();
