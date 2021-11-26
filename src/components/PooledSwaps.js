@@ -117,10 +117,10 @@ function PooledSwaps(props) {
                     let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals]).toPrecision(6)),
+                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])).toPrecision(6),
                                                 destToken:  value[1][Order.destToken],
                                                 destSymbol: value[1][Order.destSymbol],
-                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals]).toPrecision(6)),
+                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])).toPrecision(6),
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
@@ -249,7 +249,7 @@ function PooledSwaps(props) {
                             return<tr key={transaction.fromAmount + transaction.fromToken}>
                                 <td > <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
-                                <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{((transaction.destAmount).toFixed(3))} {transaction.destSymbol}  </td>
+                                <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{(transaction.destAmount)} {transaction.destSymbol}  </td>
                                 <td> <ProgressBar width={transaction.percentGas}/> </td>
                             {/* TODO: pass in args for cancel function call */}
                             <td>
