@@ -48,7 +48,7 @@ function PooledSwaps(props) {
         const withdrawTxn = await signedContract.withdraw(
             e.target.dataset.destaddress,
             e.target.dataset.groupid,
-            utils.parseUnits( e.target.dataset.destamount, 18),
+            0,
         {
             gasPrice: signer.getGasPrice(),
             gasLimit: 400000
