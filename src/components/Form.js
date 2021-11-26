@@ -36,7 +36,7 @@ function Form() {
     
   let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
   let balance = etherBalance && formatEther(etherBalance)  
-  const predaDexAddress = "0x903d6Fee0564A56e0979808CEFa5F4De5FA89365"
+  const predaDexAddress = "0x98CbDE23451546A0BcCe363eD474DCd7c63A8AC7"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
@@ -162,7 +162,6 @@ function Form() {
 
 
   const confirmDeposit = async () => {
-    let {groups, amounts} = await signedContract.checkAssets(stateUserAddress);
      const depositTxn = await signedContract.deposit(
         firstToken.address,
         secondToken.address,
