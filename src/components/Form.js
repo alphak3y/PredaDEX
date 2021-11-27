@@ -42,8 +42,8 @@ function Form() {
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
 
-  const { Moralis, isInitialized } = useMoralis();
-  const Web3API = useMoralisWeb3Api();
+  // const { Moralis, isInitialized } = useMoralis();
+  // const Web3API = useMoralisWeb3Api();
 
 
   useEffect( async() => {
@@ -52,9 +52,9 @@ function Form() {
       
     }
     if(account){
-      const options = { chain: "kovan", address: predaDexAddress, order: "desc"}
-      const transactions = await Moralis.Web3API.account.getTransactions(options);
-      console.log(transactions);
+      // const options = { chain: "kovan", address: predaDexAddress, order: "desc"}
+      // const transactions = await Moralis.Web3API.account.getTransactions(options);
+      // console.log(transactions);
       connectingContract();
     }
   },[account]);

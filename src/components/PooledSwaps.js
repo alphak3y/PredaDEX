@@ -109,16 +109,17 @@ function PooledSwaps(props) {
                 
                 
             }
+            console.log(combinedAmounts);
             //let tempOpenTransaction = {fromAmount: value[1][Order.fromAmount], destAmount:value[1][Order.destAmount]}
             for (let value of Object.entries(combinedAmounts)) {
                 if(value[1][Order.fromAmount] != "0" && value[1][Order.destAmount] == "0" ) {
                     let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])).toPrecision(4),
+                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])).toPrecision(3),
                                                 destToken:  value[1][Order.destToken],
                                                 destSymbol: value[1][Order.destSymbol],
-                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])).toPrecision(4),
+                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])).toPrecision(3),
                                                 groupId:    value[1][Order.groupId],
                                                 currentGas: value[1][Order.currentGas], 
                                                 requiredGas:value[1][Order.requiredGas],
@@ -132,7 +133,7 @@ function PooledSwaps(props) {
                                                      fromAmount: 0.0,
                                                      destToken:  value[1][Order.destToken],
                                                      destSymbol: value[1][Order.destSymbol], 
-                                                     destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(4),
+                                                     destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(3),
                                                      groupId:    value[1][Order.groupId],
                                                      currentGas: value[1][Order.currentGas], 
                                                      requiredGas:value[1][Order.requiredGas],
@@ -159,7 +160,7 @@ function PooledSwaps(props) {
                         fromAmount: 0.0,
                         destToken:  value[1][Order.destToken],
                         destSymbol: value[1][Order.destSymbol], 
-                        destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(4),
+                        destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(3),
                         groupId:    value[1][Order.groupId],
                         currentGas: value[1][Order.currentGas], 
                         requiredGas:value[1][Order.requiredGas],
@@ -176,7 +177,7 @@ function PooledSwaps(props) {
         
         
         
-    },[filter]);
+    },[]);
 
     function findLogo(shortcut) {
         let coinLogo
@@ -257,7 +258,7 @@ function PooledSwaps(props) {
                     </thead>
                     <tbody>
                         {filter === "Open" ? openedTrans.map(transaction => {
-                            return<tr key={transaction.fromAmount + transaction.fromToken}>
+                            return<tr>
                                 <td > <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
                                 <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{(transaction.destAmount)} {transaction.destSymbol}  </td>
@@ -276,7 +277,7 @@ function PooledSwaps(props) {
                         </tr>
                     }):
                     completedTrans.map(transaction => {
-                        return<tr key={transaction.fromAmount + transaction.fromToken}>
+                        return<tr>
                            
                             <td> 
                                 <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
