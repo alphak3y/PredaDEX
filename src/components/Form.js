@@ -308,7 +308,7 @@ function Form() {
 <div className="form-row">
   { !isApproved ? <button className=" float-above allow-confirmation-buttons allow-button" onClick={approveToken}>
     <img src={firstToken == null ? BTC : firstToken.logo} alt="btc"></img>
-    Allow PredaDEX to use your {firstToken == null ? "BTC":firstToken.shortcut}
+    Allow PredaDex to use your {firstToken == null ? "BTC":firstToken.shortcut}
   </button>
   :
   <button disabled={!secondToken} type="submit" className="float-above allow-confirmation-buttons confirmation-button" onClick={confirmDeposit}>
