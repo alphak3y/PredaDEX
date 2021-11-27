@@ -259,17 +259,17 @@ function PooledSwaps(props) {
                     <tbody>
                         {filter === "Open" ? openedTrans.map(transaction => {
                             return<tr>
-                                <td > <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
+                                <td className="td-big"> <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
-                                <td><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{(transaction.destAmount)} {transaction.destSymbol}  </td>
-                                <td> <ProgressBar width={transaction.percentGas}/> </td>
+                                <td className="td-big"><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{(transaction.destAmount)} {transaction.destSymbol}  </td>
+                                <td className="td-sm"> <ProgressBar width={transaction.percentGas}/> </td>
                             {/* TODO: pass in args for cancel function call */}
-                            <td>
+                            <td className="td-sm">
                                 <button 
                                 data-fromaddress={transaction.fromToken} 
                                 data-groupid={transaction.groupId} 
                                 data-fromamount={transaction.fromAmount} 
-                                className="btns cancel p-1" 
+                                className="btns cancel p-1 align-left" 
                                 onClick={confirmCancel}>
                                     Cancel
                                 </button>
@@ -279,20 +279,20 @@ function PooledSwaps(props) {
                     completedTrans.map(transaction => {
                         return<tr>
                            
-                            <td> 
+                            <td className="td-big"> 
                                 <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                 {transaction.fromSymbol}
                             </td>
-                            <td>
+                            <td className="td-big">
                             <img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>
                             <span className="shiny"><span className="shiny-inner">{transaction.destAmount} {transaction.destSymbol}</span></span></td>
-                            <td> <ProgressBar width={transaction.percentGas}/> </td>
-                            <td><button                                 
+                            <td className="td-sm"> <ProgressBar width={transaction.percentGas}/> </td>
+                            <td className="td-sm"><button                                 
                                 data-destaddress={transaction.destToken} 
                                 data-groupid={transaction.groupId} 
                                 data-destamount={transaction.destAmount} 
                                 onClick={confirmWithdraw} 
-                                className="btns withdraw p-1">Withdraw</button></td>
+                                className="btns withdraw p-1 align-left">Withdraw</button></td>
                         </tr>
                     })
                 }

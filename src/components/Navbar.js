@@ -47,12 +47,12 @@ function Navigation() {
         setRotate("rotate")
         setTimeout(() => {
             setIsClosing("closing-animation")
-        }, 500);
+        }, 300);
         setTimeout(() => {
             setShowBalance(!showBalance)
             setIsClosing("")
             setRotate(" ")
-        }, 1200);
+        },500);
         
         
     }

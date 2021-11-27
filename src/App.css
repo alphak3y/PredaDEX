@@ -118,7 +118,7 @@ button[disabled]{
 }
 
 table {
-  width: 610px;
+  width:570px;
 }
 
 .table-wrapper-outside {
@@ -135,6 +135,10 @@ table {
   overflow-y: scroll;
   position: relative;
   z-index: 1;
+}
+
+.main-content-wrapper {
+  width: 600px;
 }
 
 td {
@@ -162,9 +166,17 @@ th {
 .left {
   text-align: left;
 }
-td {
-  width: 25%;
+
+
+.td-big {
+  width: 30%;
 }
+
+.td-sm {
+  width: 20%;
+}
+
+
 
 tr:nth-child(odd) {
   background: #0f1325;
@@ -1028,8 +1040,8 @@ top: 80px;
 
 .balance-animation {
   z-index: 0;
-	-webkit-animation: slide-in-right 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: slide-in-right 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	-webkit-animation: slide-in-right .4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-in-right .4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
 @-webkit-keyframes slide-in-right {
@@ -1058,8 +1070,8 @@ top: 80px;
 }
 
 .closing-animation {
-  -webkit-animation: closing-animation 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: closing-animation 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  -webkit-animation: closing-animation .4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: closing-animation .4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
 @-webkit-keyframes closing-animation {
