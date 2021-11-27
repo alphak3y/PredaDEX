@@ -230,7 +230,7 @@ function PooledSwaps(props) {
                         <path fillRule="evenodd" clipRule="evenodd" d="M84.694 133.895L83.899 144.403L85.8195 143.13H105.796L108.101 144.403L107.211 133.895L103.491 132.302L88.1245 132.621L84.694 133.895Z" fill="#393939"/>
                         <path d="M108 122.891L110.42 116.975L112.84 122.891L110.42 125.849L108 122.891Z" fill="#438CFB"/>
                     </svg>
-                    <h2 className="mt-5">No transactions history</h2>
+                    <h2 className="mt-5">No transaction history</h2>
                 </div>
                 
                 : <table >
