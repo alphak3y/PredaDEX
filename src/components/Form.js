@@ -13,6 +13,7 @@ import predaDexAbi from '../abi/PredaDex.json'
 import { ethers, Signer, utils, BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance, useConfig } from '@usedapp/core';
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
@@ -41,13 +42,21 @@ function Form() {
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
 
+  const { Moralis, isInitialized } = useMoralis();
+  const Web3API = useMoralisWeb3Api();
+
+
   useEffect( async() => {
     async function connectingContract() {
       await connectContract()
+      
     }
     if(account){
-    connectingContract()
-  }
+      const options = { chain: "kovan", address: predaDexAddress, order: "desc"}
+      const transactions = await Moralis.Web3API.account.getTransactions(options);
+      console.log(transactions);
+      connectingContract();
+    }
   },[account]);
   
   useEffect(() => {
@@ -150,6 +159,7 @@ function Form() {
   }
   
   const approveToken = () => {
+    const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
     sendApprove(predaDexAddress, MaxUint256)
   }
 
@@ -157,7 +167,7 @@ function Form() {
   
   let isApproved = allowance && allowance._hex != "0x00"
 
-  const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
+  
   
 
 

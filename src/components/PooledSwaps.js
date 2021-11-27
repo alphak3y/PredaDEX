@@ -141,19 +141,32 @@ function PooledSwaps(props) {
                     completedTransaction.push(tempCompletedTransaction)
                 // Both transactions
                 }else {
-                    let tempBothTransaction = { fromToken:  value[1][Order.fromToken],
-                                                fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: formatUnits(value[1][Order.fromAmount],18),
-                                                destToken:  value[1][Order.destToken],
-                                                destSymbol: value[1][Order.destSymbol], 
-                                                destAmount: value[1][Order.destAmount],
-                                                groupId:    value[1][Order.groupId],
-                                                currentGas: value[1][Order.currentGas], 
-                                                requiredGas:value[1][Order.requiredGas],
-                                                percentGas: value[1][Order.percentGas]
+                    let tempBothOpenTransaction = { 
+                        fromToken:  value[1][Order.fromToken],
+                        fromSymbol: value[1][Order.fromSymbol], 
+                        fromAmount: formatUnits(value[1][Order.fromAmount],18),
+                        destToken:  value[1][Order.destToken],
+                        destSymbol: value[1][Order.destSymbol], 
+                        destAmount: value[1][Order.destAmount],
+                        groupId:    value[1][Order.groupId],
+                        currentGas: value[1][Order.currentGas], 
+                        requiredGas:value[1][Order.requiredGas],
+                        percentGas: value[1][Order.percentGas]
                     }
-                    openTransaction.push(tempBothTransaction)
-                    completedTransaction.push(tempBothTransaction)
+                    let tempBothCompletedTransaction = { 
+                        fromToken:  value[1][Order.fromToken],
+                        fromSymbol: value[1][Order.fromSymbol], 
+                        fromAmount: 0.0,
+                        destToken:  value[1][Order.destToken],
+                        destSymbol: value[1][Order.destSymbol], 
+                        destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(4),
+                        groupId:    value[1][Order.groupId],
+                        currentGas: value[1][Order.currentGas], 
+                        requiredGas:value[1][Order.requiredGas],
+                        percentGas: 100.0
+                    }
+                    openTransaction.push(tempBothOpenTransaction)
+                    completedTransaction.push(tempBothCompletedTransaction)
                 }
             }
             setOpenedTrans(openTransaction)
@@ -282,17 +295,7 @@ function PooledSwaps(props) {
                         </tr>
                     })
                 }
-                {/* <tr >
-                    <td >0.4 BTC</td>
-                    <td><span className="shiny"><span className="shiny-inner">0.4 BTC</span></span></td>
-                    <td> <ProgressBar width={100}/> </td>
-                    <td>arrow</td>
-                    <td><button  className="btns withdraw p-1">Withdraw</button></td>
-                </tr> */}
-                
-                
-                
-                
+    
             </tbody>
         </table>
     }
