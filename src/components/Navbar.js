@@ -12,6 +12,7 @@ function Navigation() {
     const [isCopied, setIsCopied] = useState(false)
     const [showBalance, setShowBalance] = useState(false)
     const [isClosing, setIsClosing] = useState(false)
+    const [rotate, setRotate] = useState("")
     const { activateBrowserWallet, account, deactivate } = useEthers()
     const etherBalance = useEtherBalance(account)
     const {connectContract} = useContext(PredaDexContext);
@@ -31,15 +32,29 @@ function Navigation() {
         setIsCopied(true)
         setTimeout(() => {
             setIsCopied(false)
-        }, 1500);
+        }, 4000);
     }
 
+    const openBalance = () => {
+        setRotate("rotate")
+        setTimeout(() => {
+            setShowBalance(!showBalance)
+            setRotate(" ")
+        }, 500);
+    }
+ 
     const closeBalance = () => {
-        setIsClosing("closing-animation")
+        setRotate("rotate")
+        setTimeout(() => {
+            setIsClosing("closing-animation")
+        }, 500);
         setTimeout(() => {
             setShowBalance(!showBalance)
             setIsClosing("")
-        }, 400);
+            setRotate(" ")
+        }, 1200);
+        
+        
     }
 
     return (
@@ -58,10 +73,11 @@ function Navigation() {
             </Nav>
             {account && <div className="nav-info">
                 <div className={showBalance ? `nav-balance balance-animation ${isClosing}`: "nav-balance" }  >
-                   {!showBalance ? <svg className="clickable mar-5" onClick={()=> setShowBalance(!showBalance)} width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   {!showBalance ? 
+                   <svg className={`clickable mar-5 ${rotate}`} onClick={openBalance} width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7.74634 1.47661L6.57145 0.301722L1.86943e-05 6.87315L6.57145 13.4446L7.74634 12.2697L2.3498 6.87315L7.74634 1.47661Z" fill="white"/>
                     </svg>:
-                        <svg className="clickable mar-5" onClick={closeBalance}  width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg className={`clickable mar-5 ${rotate}`} onClick={closeBalance}  width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 12.2697L1.17489 13.4446L7.74632 6.87319L1.17489 0.301758L0 1.47665L5.39654 6.87319L0 12.2697Z" fill="white"/>
                         </svg>
                         

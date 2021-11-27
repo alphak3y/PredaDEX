@@ -118,7 +118,7 @@ button[disabled]{
 }
 
 table {
-  width: 610px;
+  width: 61yarn react-0px;
 }
 
 .table-wrapper-outside {
@@ -879,8 +879,8 @@ top: 80px;
   background: #232844;
   padding: 3px 10px;
   border-radius: 9px;
-	-webkit-animation: bounce-out-top 1.4s both;
-	        animation: bounce-out-top 1.4s both;
+	-webkit-animation: bounce-out-top 4s both;
+	        animation: bounce-out-top 4s both;
 }
 
 @-webkit-keyframes bounce-out-top {
@@ -1058,8 +1058,8 @@ top: 80px;
 }
 
 .closing-animation {
-  -webkit-animation: closing-animation 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: closing-animation 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  -webkit-animation: closing-animation 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: closing-animation 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
 @-webkit-keyframes closing-animation {
@@ -1085,4 +1085,10 @@ top: 80px;
             transform: translateX(120px);
 
   }
+}
+
+
+.rotate {
+  transform: rotate(180deg);
+  transition: all .5s;
 }
