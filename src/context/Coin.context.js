@@ -11,19 +11,26 @@ import { useMoralis, useMoralisWeb3Api  } from "react-moralis";
 
 export const CoinContext = createContext()
 export const CoinProvider = (props) => {
+    const [coinsMetaData, setCoinsMetaData] = useState(null)
     const { Moralis, isInitialized } = useMoralis();
-    Moralis.start
+    Moralis.start({serverUrl:"https://qynxi24ohr2y.usemoralis.com:2053/server", appId:"sStPxZSaPOooxLi4261bR9cChQWRDdzbjAJ3yf5S" })
 
 
     useEffect(() => {
-        if(isInitialized) {
+
           const geting = async () => {
-            const options = { chain: "eth", addresses: "0x6b175474e89094c44da98b954eedeac495271d0f" };
+            const options = { chain: "eth", addresses: [
+            "0x514910771af9ca656af840dff83e8264ecf986ca",
+            "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "0x6b175474e89094c44da98b954eedeac495271d0f"
+            ] 
+            };
             const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
-            console.log(tokenMetadata)
+            setCoinsMetaData(tokenMetadata)
         }
         geting()
-        }
+
         },[isInitialized]);
 
 
@@ -84,15 +91,24 @@ export const CoinProvider = (props) => {
         decimals: 18
     })
 
-
+console.log(coinsMetaData)
+const coinCopy = coins
+    if(coinsMetaData != null) {
+        coinCopy.map((coin, index)=> {
+            coin.decimals = parseInt(coinsMetaData[index].decimals)
+            coin.shortcut = coinsMetaData[index].symbol
+            coin.name = coinsMetaData[index].name
+            coin.logo = coinsMetaData[index].thumbnail
+        })
+    }
     
-   Moralis.start({serverUrl:"https://qynxi24ohr2y.usemoralis.com:2053/server", appId:"sStPxZSaPOooxLi4261bR9cChQWRDdzbjAJ3yf5S" })
+   
 
 
 
 
     return(
-        <CoinContext.Provider value={{coins, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, daiToken, setDaiToken, wethToken, setWethToken}}>
+        <CoinContext.Provider value={{coins:coinCopy, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, daiToken, setDaiToken, wethToken, setWethToken}}>
             {props.children}
         </CoinContext.Provider>
     )

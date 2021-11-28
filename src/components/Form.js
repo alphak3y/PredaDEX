@@ -198,7 +198,7 @@ function Form() {
           <div className="form-col form-col-sm clickable " onClick={openModalForFirstToken}>
             <div className="label label-dropdown">Deposit</div>
             <div className="deposit-row ">
-              <img src={firstToken == null ? BTC : firstToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
+              <img height="34px" src={firstToken == null ? BTC : firstToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
               <p>{firstToken == null ? "BTC":firstToken.shortcut}</p>
               <img src={Vector} alt="vector"></img>
             </div>
@@ -259,7 +259,7 @@ function Form() {
         (<div className="form-col form-col-sm click clickable" onClick={openModalForSecondToken} style={{marginRight:"20px"}}>
           <div className="label label-dropdown">Receive</div>
           <div className="deposit-row">
-            <img src={secondToken == null ? BTC : secondToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
+            <img  height="34px" src={secondToken == null ? BTC : secondToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
             <p>{secondToken.shortcut}</p>
             <img src={Vector} alt="vector"></img>
           </div>

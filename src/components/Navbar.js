@@ -7,7 +7,7 @@ import { formatEther } from '@ethersproject/units'
 import { ChainId, DAppProvider, useEtherBalance, useEthers } from '@usedapp/core'
 import { formatUnits } from '@ethersproject/units'
 import {PredaDexContext} from '../context/Predadex.context'
-
+import { ByMoralis } from "react-moralis";
 function Navigation() {
     const [isCopied, setIsCopied] = useState(false)
     const [showBalance, setShowBalance] = useState(false)
@@ -62,7 +62,7 @@ function Navigation() {
         <Container fluid>
             <Navbar.Brand href="#">
                 <img src={shark} alt="logo" />
-                
+                <ByMoralis width={120} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll" />
             <Navbar.Collapse id="navbarScroll">
