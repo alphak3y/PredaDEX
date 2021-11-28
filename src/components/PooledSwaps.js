@@ -84,6 +84,7 @@ function PooledSwaps(props) {
                 let destSymbol = await destContract.symbol();
                 let fromDecimals = await fromContract.decimals();
                 let destDecimals = await destContract.decimals();
+                console.log(destDecimals);
                 let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupId);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
@@ -112,8 +113,9 @@ function PooledSwaps(props) {
             console.log(combinedAmounts);
             //let tempOpenTransaction = {fromAmount: value[1][Order.fromAmount], destAmount:value[1][Order.destAmount]}
             for (let value of Object.entries(combinedAmounts)) {
+                let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                 if(value[1][Order.fromAmount] != "0" && value[1][Order.destAmount] == "0" ) {
-                    let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
+                    
                     let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
                                                 fromSymbol: value[1][Order.fromSymbol], 
                                                 fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])).toPrecision(3),
@@ -148,7 +150,7 @@ function PooledSwaps(props) {
                         fromAmount: formatUnits(value[1][Order.fromAmount],18),
                         destToken:  value[1][Order.destToken],
                         destSymbol: value[1][Order.destSymbol], 
-                        destAmount: value[1][Order.destAmount],
+                        destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])).toPrecision(3),
                         groupId:    value[1][Order.groupId],
                         currentGas: value[1][Order.currentGas], 
                         requiredGas:value[1][Order.requiredGas],
