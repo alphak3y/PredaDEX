@@ -62,7 +62,7 @@ function Navigation() {
         <Container fluid>
             <Navbar.Brand href="#">
                 <img src={shark} alt="logo" />
-                <ByMoralis width={120} />
+                <ByMoralis width={100} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll" />
             <Navbar.Collapse id="navbarScroll">
