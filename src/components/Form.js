@@ -13,11 +13,12 @@ import predaDexAbi from '../abi/PredaDex.json'
 import { ethers, Signer, utils, BigNumber } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance, useConfig } from '@usedapp/core';
-import { useMoralis, useMoralisWeb3Api } from "react-moralis";
+import { useMoralis, useMoralisWeb3Api  } from "react-moralis";
+
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
-  const {firstToken, secondToken, daiToken, wethToken} = useContext(CoinContext);
+  const {firstToken, secondToken, daiToken, wethToken, coins} = useContext(CoinContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
@@ -25,11 +26,7 @@ function Form() {
   const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
   const [secondTokenValue, setSecondTokenValue] = useState(0)
   const etherBalance = useEtherBalance(account)
-  const {
-    connectContract,
-    signedContract,
-    signer,
-    stateUserAddress} = useContext(PredaDexContext);
+  const {connectContract, signedContract, signer} = useContext(PredaDexContext);
   const [firstTokenToDAI, setFirstTokenToDAI] = useState(0)
   const [secondTokenToDAI, setSecondTokenToDAI] = useState(0)
   const [gweiToDAI, setGweiToDAI] = useState(0)
@@ -37,14 +34,14 @@ function Form() {
     
   let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
   let balance = etherBalance && formatEther(etherBalance)  
-  const predaDexAddress = "0xdfb12d720a764DeE08232cbF40C921eE97477D56"
+  const predaDexAddress = "0x92695493D4a7b10Dd37271AE46661cCD1698be0B"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
   let predaDexInterface = new utils.Interface(predaDexAbi)
 
-  // const { Moralis, isInitialized } = useMoralis();
-  // const Web3API = useMoralisWeb3Api();
-
+  const Web3API = useMoralisWeb3Api();
+  const { Moralis, isInitialized } = useMoralis();
+  Moralis.start
 
   useEffect( async() => {
     async function connectingContract() {
@@ -52,13 +49,15 @@ function Form() {
       
     }
     if(account){
-      // const options = { chain: "kovan", address: predaDexAddress, order: "desc"}
-      // const transactions = await Moralis.Web3API.account.getTransactions(options);
-      // console.log(transactions);
+      const options = { chain: "kovan", address: predaDexAddress, order: "desc"}
+      const transactions = await Moralis.Web3API.account.getTransactions(options);
+      console.log(transactions);
       connectingContract();
     }
   },[account]);
-  
+
+
+
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
@@ -158,8 +157,8 @@ function Form() {
     setIsOpen(true)
   }
   
+  const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
   const approveToken = () => {
-    const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
     sendApprove(predaDexAddress, MaxUint256)
   }
 
