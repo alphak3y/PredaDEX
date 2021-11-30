@@ -2,11 +2,11 @@ import { useState, useContext, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import { PredaDexContext } from "../context/Predadex.context";
 import { ethers, utils } from 'ethers'
-import { formatEther, formatUnits } from '@ethersproject/units'
+import { formatUnits } from '@ethersproject/units'
 import {CoinContext} from '../context/Coin.context'
 import erc20Abi from '../abi/ERC20.json'
 import CylinderBig from './Cylinder'
-import { TransactionsContext } from "@usedapp/core/dist/esm/src/providers/transactions/context";
+
 
 const Order  = {
     fromToken:    0, //0 - fromToken address
@@ -31,7 +31,6 @@ function PooledSwaps(props) {
     const [completedTrans, setCompletedTrans] = useState(null)
 
     const confirmCancel = async (e) => {
-        console.log(utils.parseUnits(e.target.dataset.fromamount, 18))
         const cancelTxn = await signedContract.withdraw(
         e.target.dataset.fromaddress,
         e.target.dataset.groupid,
@@ -62,7 +61,6 @@ function PooledSwaps(props) {
     useEffect(() => {
         let openTransaction = []
         let completedTransaction = []
-        let both = []
         let combinedAmounts = []
         
         const run = async () => {
@@ -84,8 +82,7 @@ function PooledSwaps(props) {
                 let destSymbol = await destContract.symbol();
                 let fromDecimals = await fromContract.decimals();
                 let destDecimals = await destContract.decimals();
-                console.log(destDecimals);
-                let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupId);
+                let {totalGas, gasRequired} = await signedContract.checkGroup(groupId);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
                 let percentGas =  parseInt((currentGas/requiredGas) * 100).toFixed(1);
@@ -110,36 +107,37 @@ function PooledSwaps(props) {
                 
                 
             }
-            console.log(combinedAmounts);
             //let tempOpenTransaction = {fromAmount: value[1][Order.fromAmount], destAmount:value[1][Order.destAmount]}
             for (let value of Object.entries(combinedAmounts)) {
-                let { returnAmount, distribution, gas } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
+                let { returnAmount } = await signedContract.quoteAndDistribute(value[1][Order.fromToken], value[1][Order.destToken], value[1][Order.fromAmount], 1, 0, 0);
                 if(value[1][Order.fromAmount] != "0" && value[1][Order.destAmount] == "0" ) {
                     
-                    let tempOpenTransaction = { fromToken:  value[1][Order.fromToken],
-                                                fromSymbol: value[1][Order.fromSymbol], 
-                                                fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])).toPrecision(3),
-                                                destToken:  value[1][Order.destToken],
-                                                destSymbol: value[1][Order.destSymbol],
-                                                destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])).toPrecision(3),
-                                                groupId:    value[1][Order.groupId],
-                                                currentGas: value[1][Order.currentGas], 
-                                                requiredGas:value[1][Order.requiredGas],
-                                                percentGas: value[1][Order.percentGas]
+                    let tempOpenTransaction = { 
+                        fromToken:  value[1][Order.fromToken],
+                        fromSymbol: value[1][Order.fromSymbol], 
+                        fromAmount: parseFloat(formatUnits(value[1][Order.fromAmount], value[1][Order.fromDecimals])).toPrecision(3),
+                        destToken:  value[1][Order.destToken],
+                        destSymbol: value[1][Order.destSymbol],
+                        destAmount: parseFloat(formatUnits(returnAmount, value[1][Order.destDecimals])).toPrecision(3),
+                        groupId:    value[1][Order.groupId],
+                        currentGas: value[1][Order.currentGas], 
+                        requiredGas:value[1][Order.requiredGas],
+                        percentGas: value[1][Order.percentGas]
                                               }
                     openTransaction.push(tempOpenTransaction)
                     // Completed transactions
                 }else if(value[1][Order.fromAmount] == "0" && value[1][Order.destAmount] != "0") {
-                    let tempCompletedTransaction = { fromToken:  value[1][Order.fromToken],
-                                                     fromSymbol: value[1][Order.fromSymbol], 
-                                                     fromAmount: 0.0,
-                                                     destToken:  value[1][Order.destToken],
-                                                     destSymbol: value[1][Order.destSymbol], 
-                                                     destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(3),
-                                                     groupId:    value[1][Order.groupId],
-                                                     currentGas: value[1][Order.currentGas], 
-                                                     requiredGas:value[1][Order.requiredGas],
-                                                     percentGas: 100.0
+                    let tempCompletedTransaction = { 
+                        fromToken:  value[1][Order.fromToken],
+                        fromSymbol: value[1][Order.fromSymbol], 
+                        fromAmount: 0.0,
+                        destToken:  value[1][Order.destToken],
+                        destSymbol: value[1][Order.destSymbol], 
+                        destAmount: parseFloat(formatUnits(value[1][Order.destAmount],value[1][Order.destDecimals])).toPrecision(3),
+                        groupId:    value[1][Order.groupId],
+                        currentGas: value[1][Order.currentGas], 
+                        requiredGas:value[1][Order.requiredGas],
+                        percentGas: 100.0
                                                    }
                     completedTransaction.push(tempCompletedTransaction)
                 // Both transactions
@@ -260,7 +258,7 @@ function PooledSwaps(props) {
                     </thead>
                     <tbody>
                         {filter === "Open" ? openedTrans.map(transaction => {
-                            return<tr>
+                            return<tr key={transaction.fromAmount + transaction.groupId}>
                                 <td className="td-big"> <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>
                                      <span className="shiny"><span className="shiny-inner">{transaction.fromAmount} {transaction.fromSymbol}</span></span></td>
                                 <td className="td-big"><img className="logo-coin" src={findLogo(transaction.destSymbol)}></img>{(transaction.destAmount)} {transaction.destSymbol}  </td>
@@ -279,7 +277,7 @@ function PooledSwaps(props) {
                         </tr>
                     }):
                     completedTrans.map(transaction => {
-                        return<tr>
+                        return<tr key={transaction.fromAmount + transaction.groupId}>
                            
                             <td className="td-big"> 
                                 <img className="logo-coin" src={findLogo(transaction.fromSymbol)}></img>

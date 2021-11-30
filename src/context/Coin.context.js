@@ -2,14 +2,13 @@
 import React, {useState, createContext, useEffect} from 'react'
 import usdc from '../images/usdc.png'
 import dai from '../images/dai.png'
-import usdt from '../images/usdt.png'
 import weth from '../images/weth.png'
 import link from '../images/link.png'
-import wbtc from '../images/wbtc.png'
-import { useMoralis, useMoralisWeb3Api  } from "react-moralis";
+import { useMoralis  } from "react-moralis";
 
 
 export const CoinContext = createContext()
+
 export const CoinProvider = (props) => {
     const [coinsMetaData, setCoinsMetaData] = useState(null)
     const { Moralis, isInitialized } = useMoralis();
@@ -17,7 +16,6 @@ export const CoinProvider = (props) => {
 
 
     useEffect(() => {
-
           const geting = async () => {
             const options = { chain: "eth", addresses: [
             "0x514910771af9ca656af840dff83e8264ecf986ca",
@@ -73,6 +71,7 @@ export const CoinProvider = (props) => {
         address: "0xa36085F69e2889c224210F603D836748e7dC0088",
         decimals: 18
     })
+
     const [secondToken, setSecondToken] = useState(null)
 
     const [daiToken, setDaiToken] = useState({
@@ -91,7 +90,6 @@ export const CoinProvider = (props) => {
         decimals: 18
     })
 
-console.log(coinsMetaData)
 const coinCopy = coins
     if(coinsMetaData != null) {
         coinCopy.map((coin, index)=> {
@@ -103,10 +101,6 @@ const coinCopy = coins
     }
     
    
-
-
-
-
     return(
         <CoinContext.Provider value={{coins:coinCopy, setCoins, firstToken, setFirstToken, secondToken, setSecondToken, daiToken, setDaiToken, wethToken, setWethToken}}>
             {props.children}

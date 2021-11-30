@@ -3,7 +3,7 @@ import {ModalContext} from '../../context/Modal.context'
 
 function Reject() {
     const { setIsOpen, closing, setClosing} = useContext(ModalContext)
-
+    
     const close = () => {
         setClosing(true)
         setTimeout(() => {
@@ -11,7 +11,7 @@ function Reject() {
             setIsOpen(false)
         }, 1000);
     }
-
+    
     return (
     <div className={closing?"modal-wrapper slit-out-vertical": "modal-wrapper"}>
         <div className={closing?"modal-contents pt-1 slit-out-vertical": "modal-contents pt-1"}>
@@ -32,7 +32,6 @@ function Reject() {
             <button className=" btns full-btn mt-3 ls" onClick={close}>Dismiss</button>
         </div>
     </div>
-    
     );
 }
 

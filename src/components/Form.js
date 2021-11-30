@@ -6,58 +6,55 @@ import arrow from "../images/Arrow.svg";
 import { PredaDexContext } from "../context/Predadex.context";
 import { ModalContext } from "../context/Modal.context";
 import { CoinContext } from "../context/Coin.context";
-import { formatUnits,formatEther, parseEther, parseUnits } from '@ethersproject/units'
+import { formatUnits } from '@ethersproject/units'
 import { Contract } from '@ethersproject/contracts'
 import erc20Abi from '../abi/ERC20.json'
-import predaDexAbi from '../abi/PredaDex.json'
-import { ethers, Signer, utils, BigNumber } from 'ethers'
+import { Signer, utils } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useContractFunction, useEtherBalance, useEthers, useTokenBalance, useTokenAllowance, useConfig } from '@usedapp/core';
+import { useContractFunction, useEthers, useTokenBalance, useTokenAllowance } from '@usedapp/core';
 import { useMoralis, useMoralisWeb3Api  } from "react-moralis";
 
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
-  const {firstToken, secondToken, daiToken, wethToken, coins} = useContext(CoinContext);
+  const { firstToken, secondToken, daiToken, wethToken } = useContext(CoinContext);
+  const {connectContract, signedContract, signer} = useContext(PredaDexContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
-  const firstTokenBalance = useTokenBalance(firstToken.address, account)
-  const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
   const [secondTokenValue, setSecondTokenValue] = useState(0)
-  const etherBalance = useEtherBalance(account)
-  const {connectContract, signedContract, signer} = useContext(PredaDexContext);
   const [firstTokenToDAI, setFirstTokenToDAI] = useState(0)
   const [secondTokenToDAI, setSecondTokenToDAI] = useState(0)
   const [gweiToDAI, setGweiToDAI] = useState(0)
   const [remainingGwei, setRemainingGwei] = useState(0)
+  const firstTokenBalance = useTokenBalance(firstToken.address, account)
+  const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
     
   let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
-  let balance = etherBalance && formatEther(etherBalance)  
   const predaDexAddress = "0xdfb12d720a764dee08232cbf40c921ee97477d56"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
-  let predaDexInterface = new utils.Interface(predaDexAbi)
 
   const Web3API = useMoralisWeb3Api();
   const { Moralis, isInitialized } = useMoralis();
   Moralis.start
 
+
+
   useEffect( async() => {
     async function connectingContract() {
       await connectContract()
-      
     }
+
     if(account){
       const options = { chain: "kovan", address: predaDexAddress, order: "desc"}
       const transactions = await Moralis.Web3API.account.getTransactions(options);
-      console.log(transactions);
       connectingContract();
     }
   },[account]);
 
 
-
+// Make new erc20 interface and contract for first token
   useEffect(() => {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
@@ -95,9 +92,7 @@ function Form() {
     const calculate = async () => {
     if(account && firstToken != null && firstToken.address!= null &&secondToken != null && secondToken.address != null && secondTokenBalance){
       let groupId = await signedContract.getGroup(firstToken.address, secondToken.address);
-      console.log(groupId);
-      let {totalAmount, totalGas, gasRequired} = await signedContract.checkGroup(groupId);
-      console.log(totalGas, gasRequired);
+      let {totalGas, gasRequired} = await signedContract.checkGroup(groupId);
       let value = parseInt(utils.formatUnits(gasRequired,"gwei")) - parseInt(utils.formatUnits(totalGas,"gwei"));
       setRemainingGwei(value);
     }
@@ -145,29 +140,16 @@ function Form() {
     calculate()
   },[firstTokenValue, firstToken && firstToken.address, secondToken && secondToken.address]);
   
-  const openModalForFirstToken = () => {
-    setWhichModalToOpen("SelectToken")
-    setIsFirstToken(true)
-    setIsOpen(true)
-  }
-  
-  const openModalForSecondToken = () => {
-    setWhichModalToOpen("SelectToken")
-    setIsFirstToken(false)
-    setIsOpen(true)
-  }
-  
+
   const { state: stateApprove, send: sendApprove } = useContractFunction(fromTokenContract, 'approve', { transactionName: 'Approve'}, Signer)
+  
+  
   const approveToken = () => {
     sendApprove(predaDexAddress, MaxUint256)
   }
 
   let allowance = useTokenAllowance(firstToken.address,account,predaDexAddress)
-  
   let isApproved = allowance && allowance._hex != "0x00"
-
-  
-  
 
 
   const confirmDeposit = async () => {
@@ -183,9 +165,23 @@ function Form() {
       .catch((e)=>window.alert(e.message))
   };
 
+
+
+  const openModalForFirstToken = () => {
+    setWhichModalToOpen("SelectToken")
+    setIsFirstToken(true)
+    setIsOpen(true)
+  }
+  
+  const openModalForSecondToken = () => {
+    setWhichModalToOpen("SelectToken")
+    setIsFirstToken(false)
+    setIsOpen(true)
+  }
+
+  
   return (
   <div>
-    
     {/*First  window*/}
     <div className="form-wrapper-outside ">
       <div className="form-wrapper">

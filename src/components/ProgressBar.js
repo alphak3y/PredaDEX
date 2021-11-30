@@ -1,6 +1,3 @@
-
-
-
 function ProgressBar({width}) {
   return (
   <div className="progress-bar-wrapper">

@@ -3,11 +3,12 @@ import {useState, useContext} from 'react'
 import {Container, Navbar, Nav} from 'react-bootstrap'
 import shark from '../images/shark.png'
 import fox from '../images/fox.svg'
-import { formatEther } from '@ethersproject/units'
-import { ChainId, DAppProvider, useEtherBalance, useEthers } from '@usedapp/core'
+import { useEtherBalance, useEthers } from '@usedapp/core'
 import { formatUnits } from '@ethersproject/units'
 import {PredaDexContext} from '../context/Predadex.context'
 import { ByMoralis } from "react-moralis";
+
+
 function Navigation() {
     const [isCopied, setIsCopied] = useState(false)
     const [showBalance, setShowBalance] = useState(false)
@@ -16,13 +17,14 @@ function Navigation() {
     const { activateBrowserWallet, account, deactivate } = useEthers()
     const etherBalance = useEtherBalance(account)
     const {connectContract} = useContext(PredaDexContext);
-      let balance = etherBalance && formatUnits(etherBalance)
+    
+    let balance = etherBalance && formatUnits(etherBalance)
     
     const activate = async () => {
         await activateBrowserWallet()
         await connectContract();
     }
-
+    
     const disconnect = async () => {
         deactivate()
     }
@@ -34,7 +36,7 @@ function Navigation() {
             setIsCopied(false)
         }, 4000);
     }
-
+    
     const openBalance = () => {
         setRotate("rotate")
         setTimeout(() => {
@@ -42,7 +44,7 @@ function Navigation() {
             setRotate(" ")
         }, 500);
     }
- 
+    
     const closeBalance = () => {
         setRotate("rotate")
         setTimeout(() => {
@@ -56,7 +58,7 @@ function Navigation() {
         
         
     }
-
+    
     return (
     <Navbar className="transparent navigation" expand="lg">
         <Container fluid>
@@ -73,17 +75,17 @@ function Navigation() {
             </Nav>
             {account && <div className="nav-info">
                 <div className={showBalance ? `nav-balance balance-animation ${isClosing}`: "nav-balance" }  >
-                   {!showBalance ? 
-                   <svg className={`clickable mar-5 ${rotate}`} onClick={openBalance} width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7.74634 1.47661L6.57145 0.301722L1.86943e-05 6.87315L6.57145 13.4446L7.74634 12.2697L2.3498 6.87315L7.74634 1.47661Z" fill="white"/>
-                    </svg>:
+                    {!showBalance ? 
+                        <svg className={`clickable mar-5 ${rotate}`} onClick={openBalance} width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.74634 1.47661L6.57145 0.301722L1.86943e-05 6.87315L6.57145 13.4446L7.74634 12.2697L2.3498 6.87315L7.74634 1.47661Z" fill="white"/>
+                        </svg>:
                         <svg className={`clickable mar-5 ${rotate}`} onClick={closeBalance}  width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 12.2697L1.17489 13.4446L7.74632 6.87319L1.17489 0.301758L0 1.47665L5.39654 6.87319L0 12.2697Z" fill="white"/>
+                            <path d="M0 12.2697L1.17489 13.4446L7.74632 6.87319L1.17489 0.301758L0 1.47665L5.39654 6.87319L0 12.2697Z" fill="white"/>
                         </svg>
-                        
                     }
                     
-                   {(showBalance && etherBalance) && `${parseFloat(balance).toFixed(5)} ETH` }
+                    {(showBalance && etherBalance) && `${parseFloat(balance).toFixed(5)} ETH` }
+
                 </div>
                 <div className="nav-account">
                     {`${account.substring(0,5)}...${account.substr(account.length - 3)}`}
@@ -93,14 +95,10 @@ function Navigation() {
                     {isCopied && <p className="tooltips-sm">Copied to clipboard</p>}
                 </div>
             </div>}
-            
-            
-            
+
             <button className="btn-nav" onClick={account? disconnect : activate}>{account?"Disconnect":"Connect Wallet"}</button>
             <img src={fox} alt="logo" />
-            
-        </Navbar.Collapse>
-        
+        </Navbar.Collapse> 
     </Container>
 </Navbar>
 

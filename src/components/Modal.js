@@ -10,7 +10,7 @@ import TransactionSubmittedAddCoinToMetaMask from "./modals/TransactionSubmitted
 
 
 function Modal() {
-  const {isOpen, setIsOpen, whichModalToOpen, closing, setClosing} = useContext(ModalContext)
+  const { setIsOpen, whichModalToOpen, closing, setClosing} = useContext(ModalContext)
 
 
   const close = () => {
@@ -27,7 +27,7 @@ function Modal() {
     <div className={closing? "modal-container slide-out-top ": "modal-container"} onClick={close}>
     </div>
       {whichModalToOpen === "WithdrawOrder" && <WithdrawOrder />}
-     {whichModalToOpen === "WaitingForConfirmation" && <WaitingForConfirmation />}
+      {whichModalToOpen === "WaitingForConfirmation" && <WaitingForConfirmation />}
       {whichModalToOpen === "ConfirmOrder" && <ConfirmOrder />}
       {whichModalToOpen === "SelectToken" && <SelectToken />}
       {whichModalToOpen === "CancelOrder" && <CancelOrder />}

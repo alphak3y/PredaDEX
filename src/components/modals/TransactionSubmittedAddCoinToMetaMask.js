@@ -4,7 +4,7 @@ import ArrowAnimation from '../ArrowAnimation';
 
 function TransactionSubmittedAddCoinToMetaMask() {
     const { setIsOpen, closing, setClosing} = useContext(ModalContext)
-
+    
     const close = () => {
         setClosing(true)
         setTimeout(() => {
@@ -24,12 +24,11 @@ function TransactionSubmittedAddCoinToMetaMask() {
             <p className="text-start ls negative-margin " style={{fontWeight:"bold", marginTop:"1px"}}>Transaction Submitted</p>
             <ArrowAnimation />
             <div className="btn-section mt-3">
-            <button className="btns outline sm-btn size-13" onClick={close}>View progress</button>
-            <button className=" btns full-btn mt-3 mid-btn" onClick={close} style ={{width:'214px'}}>Add COIN to MetaMask</button>
+                <button className="btns outline sm-btn size-13" onClick={close}>View progress</button>
+                <button className=" btns full-btn mt-3 mid-btn" onClick={close} style ={{width:'214px'}}>Add COIN to MetaMask</button>
             </div>
         </div>
     </div>
-    
     );
 }
 
