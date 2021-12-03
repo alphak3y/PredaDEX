@@ -3,7 +3,7 @@ name: My Skynet Homescreen
 on:
   pull_request:
   push:
-    branches: [kovan]
+    branches: [kovan rinkeby]
 
 jobs:
   build:
