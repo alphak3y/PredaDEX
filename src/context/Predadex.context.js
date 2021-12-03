@@ -2,15 +2,18 @@ import React, { createContext, useState } from "react";
 import { PredaDexAbi } from "../abi/PredaDex.json";
 import { ethers, BigNumber } from "ethers";
 import predaDexAbi from '../abi/PredaDex.json'
+import groupSwapAbi from '../abi/GroupSwap.json'
 
 export const PredaDexContext = createContext();
 
 export const PredaDexProvider = (props) => {
-  const contractAddress = "0xdfb12d720a764dee08232cbf40c921ee97477d56";
-  const ALCHEMY = "https://eth-kovan.alchemyapi.io/v2/2oNUyqV6GKtxyE05cDrbkphiAjkNiQZl";
+  const contractAddress = "0xB58C923813D1fE56945f15D0B7499A93EdeD6Fa1";
+  const groupSwapAddress = "0x67df0ca794467316ac8B951CAFa547B711E671Fc"
+  const ALCHEMY = "https://eth-rinkeby.alchemyapi.io/v2/UtS222NKanBSIOdJz3yMWWQjFeC3OtyV";
 
   const [stateUserAddress, setstateUserAddress] = useState('')
   const [signedContract, setSignedContract] = useState()
+  const [signedGroupSwapContract, setSignedGroupSwapContract] = useState()
   const [signer, setSigner] = useState()
   const [provider, setProvider] = useState()
   const [userAssets, setUserAssets] = useState()
@@ -33,9 +36,15 @@ export const PredaDexProvider = (props) => {
 
     let signedContract = contract.connect(signer);
 
+    const groupSwapContract = new ethers.Contract(groupSwapAddress, groupSwapAbi, provider);
+
+    let signedGroupSwapContract = groupSwapContract.connect(signer);
+
     userAddress = await signer.getAddress();
 
     setSignedContract(signedContract)
+
+    setSignedGroupSwapContract(signedGroupSwapContract)
 
     setstateUserAddress(userAddress)
 
@@ -48,7 +57,7 @@ export const PredaDexProvider = (props) => {
 
 
   return (
-    <PredaDexContext.Provider value={{connectContract, stateUserAddress, signedContract, signer, provider,contractAddress, userAssets, setUserAssets}}>
+    <PredaDexContext.Provider value={{connectContract, stateUserAddress, signedContract, signedGroupSwapContract, signer, provider,contractAddress, userAssets, setUserAssets}}>
       {props.children}
     </PredaDexContext.Provider>
   );

@@ -24,14 +24,14 @@ const Order  = {
 }
 
 function PooledSwaps(props) {
-    const {signedContract,stateUserAddress, provider, signer} = useContext(PredaDexContext);
+    const {signedContract, signedGroupSwapContract, stateUserAddress, provider, signer} = useContext(PredaDexContext);
     const {coins} = useContext(CoinContext)
     const [filter, setFilter] = useState("Open")
     const [openedTrans, setOpenedTrans] = useState(null)
     const [completedTrans, setCompletedTrans] = useState(null)
 
     const confirmCancel = async (e) => {
-        const cancelTxn = await signedContract.withdraw(
+        const cancelTxn = await signedGroupSwapContract.withdraw(
         e.target.dataset.fromaddress,
         e.target.dataset.groupid,
         utils.parseUnits( e.target.dataset.fromamount, 18),
@@ -44,7 +44,7 @@ function PooledSwaps(props) {
     };
     
     const confirmWithdraw = async (e) => {
-        const withdrawTxn = await signedContract.withdraw(
+        const withdrawTxn = await signedGroupSwapContract.withdraw(
             e.target.dataset.destaddress,
             e.target.dataset.groupid,
             0,
@@ -64,7 +64,7 @@ function PooledSwaps(props) {
         let combinedAmounts = []
         
         const run = async () => {
-            let {groups, pre, post} = await signedContract.checkAssets(stateUserAddress);
+            let {groups, pre, post} = await signedGroupSwapContract.checkAssets(stateUserAddress);
             let fromTokens = pre
             let destTokens = post
             let zeroHex = "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -73,7 +73,7 @@ function PooledSwaps(props) {
             for (let i = 0; i < fromTokens.length && groups[i] != zeroHex; i++) {
                 
                 let groupId = groups[i];
-                let {fromToken, destToken} = await signedContract.getTokens(groupId);
+                let {fromToken, destToken} = await signedGroupSwapContract.getTokens(groupId);
                 let fromAmount = formatUnits(fromTokens[i]._hex, 0);
                 let destAmount = formatUnits(destTokens[i]._hex, 0);
                 let fromContract = new ethers.Contract(fromToken, erc20Abi, provider);
@@ -82,7 +82,7 @@ function PooledSwaps(props) {
                 let destSymbol = await destContract.symbol();
                 let fromDecimals = await fromContract.decimals();
                 let destDecimals = await destContract.decimals();
-                let {totalGas, gasRequired} = await signedContract.checkGroup(groupId);
+                let {totalGas, gasRequired} = await signedGroupSwapContract.checkGroup(groupId);
                 let currentGas = utils.formatUnits(totalGas, "wei")/(10**9);
                 let requiredGas = utils.formatUnits(gasRequired, "wei")/(10**9);
                 let percentGas =  parseInt((currentGas/requiredGas) * 100).toFixed(1);

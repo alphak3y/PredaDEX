@@ -38,28 +38,28 @@ export const CoinProvider = (props) => {
             logo:link,
             shortcut:"LINK",
             name:"LINK",
-            address: "0xa36085F69e2889c224210F603D836748e7dC0088",
+            address: "0x01be23585060835e02b77ef475b0cc51aa1e0709",
             decimals: 18
         },
         {
             logo:weth,
             shortcut:"WETH",
             name:"WETH",
-            address: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+            address: "0xc778417e063141139fce010982780140aa0cd5ab",
             decimals: 18
         },
         {   
             logo:usdc,
             shortcut:"USDC",
             name:"USD Coin",
-            address: "0xe22da380ee6b445bb8273c81944adeb6e8450422",
+            address: "0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b",
             decimals: 6
         },
         {
             logo:dai,
             shortcut:"DAI",
             name:"DAI Stablecoin",
-            address: "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
+            address: "0xc7ad46e0b8a400bb3c915120d284aafba8fc4735",
             decimals: 18
         }
     ])
@@ -68,7 +68,7 @@ export const CoinProvider = (props) => {
         logo:link,
         shortcut:"LINK",
         name:"LINK",
-        address: "0xa36085F69e2889c224210F603D836748e7dC0088",
+        address: "0x01be23585060835e02b77ef475b0cc51aa1e0709",
         decimals: 18
     })
 
@@ -78,7 +78,7 @@ export const CoinProvider = (props) => {
         logo:dai,
         shortcut:"DAI",
         name:"DAI Stablecoin",
-        address: "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
+        address: "0xc7ad46e0b8a400bb3c915120d284aafba8fc4735",
         decimals: 18
     })
 
@@ -86,7 +86,7 @@ export const CoinProvider = (props) => {
         logo:weth,
         shortcut:"WETH",
         name:"WETH",
-        address: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+        address: "0xc778417e063141139fce010982780140aa0cd5ab",
         decimals: 18
     })
 

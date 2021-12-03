@@ -18,7 +18,7 @@ import { useMoralis, useMoralisWeb3Api  } from "react-moralis";
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
   const { firstToken, secondToken, daiToken, wethToken } = useContext(CoinContext);
-  const {connectContract, signedContract, signer} = useContext(PredaDexContext);
+  const {connectContract, signedContract, signedGroupSwapContract, signer} = useContext(PredaDexContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
   const [userGweiAmount, setUserGweiAmount] = useState(0)
@@ -31,7 +31,8 @@ function Form() {
   const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
     
   let secondTokenBalanceInt = secondTokenBalance && formatUnits(secondTokenBalance, secondToken.decimals)
-  const predaDexAddress = "0xdfb12d720a764dee08232cbf40c921ee97477d56"
+  const predaDexAddress = "0xB58C923813D1fE56945f15D0B7499A93EdeD6Fa1"
+  const groupSwapAddress = "0x67df0ca794467316ac8B951CAFa547B711E671Fc"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
 
@@ -39,15 +40,13 @@ function Form() {
   const { Moralis, isInitialized } = useMoralis();
   Moralis.start
 
-
-
   useEffect( async() => {
     async function connectingContract() {
       await connectContract()
     }
 
     if(account){
-      const options = { chain: "kovan", address: predaDexAddress, order: "desc"}
+      const options = { chain: "rinkeby", address: groupSwapAddress, order: "desc"}
       const transactions = await Moralis.Web3API.account.getTransactions(options);
       connectingContract();
     }
@@ -91,10 +90,10 @@ function Form() {
   useEffect(() => {
     const calculate = async () => {
     if(account && firstToken != null && firstToken.address!= null &&secondToken != null && secondToken.address != null && secondTokenBalance){
-      let groupId = await signedContract.getGroup(firstToken.address, secondToken.address);
-      let {totalGas, gasRequired} = await signedContract.checkGroup(groupId);
-      let value = parseInt(utils.formatUnits(gasRequired,"gwei")) - parseInt(utils.formatUnits(totalGas,"gwei"));
-      setRemainingGwei(value);
+      let groupId = await signedGroupSwapContract.getGroup(firstToken.address, secondToken.address);
+      //let {totalGas, gasRequired} = await signedGroupSwapContract.getGroup(groupId);
+      //let value = parseInt(utils.formatUnits(gasRequired,"gwei")) - parseInt(utils.formatUnits(totalGas,"gwei"));
+      //setRemainingGwei(value);
     }
   }
     calculate()
@@ -145,15 +144,15 @@ function Form() {
   
   
   const approveToken = () => {
-    sendApprove(predaDexAddress, MaxUint256)
+    sendApprove(groupSwapAddress, MaxUint256)
   }
 
-  let allowance = useTokenAllowance(firstToken.address,account,predaDexAddress)
+  let allowance = useTokenAllowance(firstToken.address,account,groupSwapAddress)
   let isApproved = allowance && allowance._hex != "0x00"
 
 
   const confirmDeposit = async () => {
-     const depositTxn = await signedContract.deposit(
+     const depositTxn = await signedGroupSwapContract.deposit(
         firstToken.address,
         secondToken.address,
         utils.parseUnits(firstTokenValue.toString(),firstToken.decimals),
