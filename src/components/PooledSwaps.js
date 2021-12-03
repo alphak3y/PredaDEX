@@ -6,7 +6,7 @@ import { formatUnits } from '@ethersproject/units'
 import {CoinContext} from '../context/Coin.context'
 import erc20Abi from '../abi/ERC20.json'
 import CylinderBig from './Cylinder'
-
+import question from '../images/question.svg'
 
 const Order  = {
     fromToken:    0, //0 - fromToken address
@@ -173,8 +173,7 @@ function PooledSwaps(props) {
             setOpenedTrans(openTransaction)
             setCompletedTrans(completedTransaction)
         }
-        if(signedContract != undefined) run();
-        
+        if(signedContract != undefined) {run()}
         
         
     },[]);

@@ -681,8 +681,8 @@ tr > th {
 .label {
   margin-bottom: 1px;
   margin-top: 15px;
-  color: #bac2eb;
-  font-size: 8px;
+  color: #e5e9fb;
+  font-size: 10px;
 }
 
 .label-inside-value {
@@ -765,6 +765,14 @@ tr > th {
   border-radius: 50%;
   margin-bottom: 1px;
   margin-left: -10px;
+}
+
+.question-sm {
+  height: 26px;
+  width: 26px;
+  padding: 5px 5px;
+  background-color: #c4c4c4;
+  border-radius: 50%;
 }
 
 .select-a-token-button {
@@ -1035,7 +1043,7 @@ top: 80px;
 .label-position {
   position: absolute;
   right: 10px;
-  top: -30px;
+  top: -32px;
 }
 
 .balance-animation {
@@ -1103,4 +1111,21 @@ top: 80px;
 .rotate {
   transform: rotate(180deg);
   transition: all .5s;
+}
+
+
+.form-wrapper {
+  position: relative;
+}
+
+.label-outside {
+  position: absolute;
+  top: -20px;
+  left: 26px;
+}
+
+.down {
+  position: absolute;
+  bottom: -20px;
+  right: 10px;
 }

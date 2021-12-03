@@ -55,7 +55,6 @@ export const PredaDexProvider = (props) => {
 
   };
 
-
   return (
     <PredaDexContext.Provider value={{connectContract, stateUserAddress, signedContract, signedGroupSwapContract, signer, provider,contractAddress, userAssets, setUserAssets}}>
       {props.children}

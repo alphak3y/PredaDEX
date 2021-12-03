@@ -13,7 +13,7 @@ import { Signer, utils } from 'ethers'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEthers, useTokenBalance, useTokenAllowance } from '@usedapp/core';
 import { useMoralis, useMoralisWeb3Api  } from "react-moralis";
-
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
@@ -35,6 +35,41 @@ function Form() {
   const groupSwapAddress = "0x67df0ca794467316ac8B951CAFa547B711E671Fc"
   let erc20Interface = new utils.Interface(erc20Abi)
   let fromTokenContract = new Contract(firstToken.address, erc20Interface)
+
+  const APIURL = 'https://api.thegraph.com/subgraphs/name/alphak3y/predadex'
+
+  const tokensQuery = `
+  {
+    exampleEntities(first: 5) {
+      id
+      count
+      groupId
+      user
+    }
+  }
+  `
+  
+
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  })
+  console.log(client)
+  client
+    .query({
+      query: gql(tokensQuery),
+    })
+    .then((data) => console.log('Subgraph data: ', data))
+    .catch((err) => {
+      console.log('Error fetching data: ', err)
+    })
+
+
+
+
+
+
+
 
   const Web3API = useMoralisWeb3Api();
   const { Moralis, isInitialized } = useMoralis();
@@ -191,9 +226,9 @@ function Form() {
         <div className="form-row ">
           {/* Deposit dropdown */}
           <div className="form-col form-col-sm clickable " onClick={openModalForFirstToken}>
-            <div className="label label-dropdown">Deposit</div>
-            <div className="deposit-row ">
-              <img height="34px" src={firstToken == null ? BTC : firstToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
+            <div className="label label-dropdown label-outside">From</div>
+            <div className="deposit-row mt-2">
+              <img className={firstToken.logo === undefined ? "question":""} height="34px" src={firstToken == null ? BTC : firstToken.logo || question} alt="btc" style={{ marginLeft: "-30px" }}></img>
               <p>{firstToken == null ? "BTC":firstToken.shortcut}</p>
               <img src={Vector} alt="vector"></img>
             </div>
@@ -237,13 +272,8 @@ function Form() {
             className="form-col form-col-sm clickable"
             style={{ marginRight: "16px" }}
             >
-            <div
-            className="label label-dropdown"
-            style={{ marginLeft: "-20px" }}
-            >
-            Receive
-          </div>
-          <div className="deposit-row" style={{ marginLeft: "7px" }}>
+            <div className="label label-dropdown label-outside"style={{ marginLeft: "-20px" }}>To</div>
+          <div className="deposit-row mt-2" style={{ marginLeft: "7px" }}>
             <img src={question} alt="btc" className="question"></img>
             <button className="select-a-token-button">
               <p>Select a token </p>
@@ -252,9 +282,10 @@ function Form() {
         </div>
         :
         (<div className="form-col form-col-sm click clickable" onClick={openModalForSecondToken} style={{marginRight:"20px"}}>
-          <div className="label label-dropdown">Receive</div>
-          <div className="deposit-row">
-            <img  height="34px" src={secondToken == null ? BTC : secondToken.logo} alt="btc" style={{ marginLeft: "-30px" }}></img>
+          <div className="label label-dropdown label-outside">To</div>
+          <div className="deposit-row mt-2">
+            {console.log(secondToken.logo)}
+            <img className={secondToken.logo === undefined ? "question":""}  height="34px" src={secondToken == null ? BTC : secondToken.logo|| question} alt="btc" style={{ marginLeft: "-30px" }}></img>
             <p>{secondToken.shortcut}</p>
             <img src={Vector} alt="vector"></img>
           </div>
@@ -266,9 +297,7 @@ function Form() {
       style={{ marginRight: "16px" }}
       >
       <div className="input-space">
-      <div className="label label-position">
-            Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
-          </div>
+
         <input
         type="text"
         placeholder="0.0"
@@ -287,7 +316,10 @@ function Form() {
       {/*Label inside input field*/}
       <p className="label label-inside-text">Gwei</p>
       <div className="input-space" style={{ paddingTop: "0px" }}>
-      <div className="label label-position">Next Swap: {remainingGwei != 0 && remainingGwei} {secondToken == null ? "" : " Gwei"} </div>
+      <div className="label label-position">
+            Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
+          </div>
+          <div className="label down">Next Swap: {remainingGwei != 0 && remainingGwei} {secondToken == null ? "" : " Gwei"} </div>
         <input
         type="text"
         placeholder="0"
@@ -305,6 +337,7 @@ function Form() {
         ≈ {gweiToDAI} USD
       </p>
     </div>
+      
   </div>
 </div>
 </div>
