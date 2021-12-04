@@ -185,7 +185,6 @@ function Form() {
   
   const approveToken = () => {
     sendApprove(groupSwapAddress, MaxUint256)
-    console.log(stateApprove)
   }
 
   let allowance = useTokenAllowance(firstToken.address,account,groupSwapAddress)
@@ -352,7 +351,6 @@ function Form() {
       <div className="label label-position">
             Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
           </div>
-          <div className="label down">Next Swap: {remainingGwei != 0 && remainingGwei} {secondToken == null ? "" : " Gwei"} </div>
         <input
         type="text"
         placeholder="0"

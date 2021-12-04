@@ -1164,13 +1164,24 @@ top: 80px;
   right: 10px;
 }
 
+.arrow-two {
+  opacity: 0;
+}
+
+.arrow-one {
+  transform: translateX(-5px);
+}
+
 .arrow-btn:hover {
   background: #232844;
   cursor: pointer;
 }
 
+.arrow-btn:hover .arrow-two{
+  opacity: 1;
+}
+
 .arrow-one, .arrow-two {
-  transform: translateY(0px);
   transition: all .4s ease;
 }
 
