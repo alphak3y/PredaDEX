@@ -237,7 +237,38 @@ tr > th {
 }
 
 
+/* small progress bar */
+.inner-progress-sm {
+  background: #27f09e;
+  height: 100%;
+}
 
+.progress-bar-wrapper-sm {
+  width: 70%;
+  margin-left: 10px;
+  margin-top: 3px;
+  overflow: hidden;
+}
+
+.outer-progress-sm {
+  border: 1px solid #27f09e;
+  height: 8px;
+  border-radius: 100px;
+  padding: 1px;
+  position: relative;
+
+}
+
+.inner-progress-line-sm {
+  width: 1px;
+  height: 10px;
+  background: #27f09e;
+  position: absolute;
+  top: 1px;
+}
+
+
+/* small progress bar END */
 
 
 .modal-container {
@@ -696,6 +727,8 @@ tr > th {
   padding-left: 10px;
   margin-top: 2px;
   margin-bottom: 0;
+  display: flex;
+  justify-content: start;
 }
 
 .label-dropdown {
@@ -798,7 +831,8 @@ tr > th {
 }
 
 .allow-confirmation-buttons {
-  background: #0071d9;
+  background: rgb(60,95,190);
+  background: linear-gradient(90deg, rgba(60,95,190,1) 0%, rgba(52,162,197,1) 35%, rgba(51,161,196,1) 63%, rgba(60,95,190,1) 100%);
   color: white;
   border-radius: 10px;
   border: #0071d9;
@@ -1128,4 +1162,59 @@ top: 80px;
   position: absolute;
   bottom: -20px;
   right: 10px;
+}
+
+.arrow-btn:hover {
+  background: #232844;
+  cursor: pointer;
+}
+
+.arrow-one, .arrow-two {
+  transform: translateY(0px);
+  transition: all .4s ease;
+}
+
+.arrow-btn:hover .arrow-one{
+  transform: translateY(3px);
+}
+
+.arrow-btn:hover .arrow-two {
+  transform: translateY(-3px);
+}
+
+
+.spin-animation {
+	-webkit-animation: flip-horizontal-bottom .4s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+	        animation: flip-horizontal-bottom .4s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}
+
+
+@-webkit-keyframes flip-horizontal-bottom {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+@keyframes flip-horizontal-bottom {
+  0% {
+    -webkit-transform:scale(1);
+            transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
 }

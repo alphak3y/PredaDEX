@@ -1,4 +1,11 @@
 function ProgressBar({width}) {
+
+
+// props:
+// width: number
+
+
+
   return (
   <div className="progress-bar-wrapper">
       <p className="progress-bar-label">{width}%</p>

@@ -14,10 +14,11 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { useContractFunction, useEthers, useTokenBalance, useTokenAllowance } from '@usedapp/core';
 import { useMoralis, useMoralisWeb3Api  } from "react-moralis";
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+import ProgressBarSmall from "./ProgressBarSmall";
 
 function Form() {
   const { setIsOpen, setWhichModalToOpen, setIsFirstToken } = useContext(ModalContext);
-  const { firstToken, secondToken, daiToken, wethToken } = useContext(CoinContext);
+  const { firstToken, setFirstToken, secondToken, setSecondToken, daiToken, wethToken } = useContext(CoinContext);
   const {connectContract, signedContract, signedGroupSwapContract, signer} = useContext(PredaDexContext);
   const { account } = useEthers()
   const [firstTokenValue, setFirstTokenValue] = useState(0)
@@ -27,6 +28,7 @@ function Form() {
   const [secondTokenToDAI, setSecondTokenToDAI] = useState(0)
   const [gweiToDAI, setGweiToDAI] = useState(0)
   const [remainingGwei, setRemainingGwei] = useState(0)
+  const [isChangingOrderInProgress, setIsChangingOrderInProgress] = useState(false)
   const firstTokenBalance = useTokenBalance(firstToken.address, account)
   const secondTokenBalance = useTokenBalance(secondToken && secondToken.address, account)
     
@@ -34,35 +36,34 @@ function Form() {
   const predaDexAddress = "0xB58C923813D1fE56945f15D0B7499A93EdeD6Fa1"
   const groupSwapAddress = "0x67df0ca794467316ac8B951CAFa547B711E671Fc"
   let erc20Interface = new utils.Interface(erc20Abi)
-  let fromTokenContract = new Contract(firstToken.address, erc20Interface)
-
+  let fromTokenContract
   const APIURL = 'https://api.thegraph.com/subgraphs/name/alphak3y/predadex'
 
-  const tokensQuery = `
-  {
-    exampleEntities(first: 5) {
-      id
-      count
-      groupId
-      user
-    }
-  }
-  `
+  // const tokensQuery = `
+  // {
+  //   exampleEntities(first: 5) {
+  //     id
+  //     count
+  //     groupId
+  //     user
+  //   }
+  // }
+  // `
   
 
-  const client = new ApolloClient({
-    uri: APIURL,
-    cache: new InMemoryCache(),
-  })
-  console.log(client)
-  client
-    .query({
-      query: gql(tokensQuery),
-    })
-    .then((data) => console.log('Subgraph data: ', data))
-    .catch((err) => {
-      console.log('Error fetching data: ', err)
-    })
+  // const client = new ApolloClient({
+  //   uri: APIURL,
+  //   cache: new InMemoryCache(),
+  // })
+  // console.log(client)
+  // client
+  //   .query({
+  //     query: gql(tokensQuery),
+  //   })
+  //   .then((data) => console.log('Subgraph data: ', data))
+  //   .catch((err) => {
+  //     console.log('Error fetching data: ', err)
+  //   })
 
 
 
@@ -88,10 +89,14 @@ function Form() {
   },[account]);
 
 
+
+
 // Make new erc20 interface and contract for first token
   useEffect(() => {
+    if(firstToken.address != null) {
     erc20Interface = new utils.Interface(erc20Abi)
     fromTokenContract = new Contract(firstToken.address, erc20Interface)
+  }
   },[firstToken.address]);
 
 
@@ -180,6 +185,7 @@ function Form() {
   
   const approveToken = () => {
     sendApprove(groupSwapAddress, MaxUint256)
+    console.log(stateApprove)
   }
 
   let allowance = useTokenAllowance(firstToken.address,account,groupSwapAddress)
@@ -211,6 +217,23 @@ function Form() {
     setWhichModalToOpen("SelectToken")
     setIsFirstToken(false)
     setIsOpen(true)
+  }
+
+  const changeOrder = () => {
+    setIsChangingOrderInProgress(true)
+    let first = firstToken
+    if(secondToken === null) {
+      setSecondToken(first)
+      setTimeout(() => {
+        setIsChangingOrderInProgress(false)
+      }, 400);
+    }else {
+    setFirstToken(secondToken)
+    setSecondToken(first)
+    setTimeout(() => {
+      setIsChangingOrderInProgress(false)
+    }, 400);
+  }
   }
 
   
@@ -255,7 +278,16 @@ function Form() {
     </div>
     {/*Middle arrow*/}
     <div className="form-row arrow">
-      <img src={arrow} alt="arrow"></img>
+    <svg onClick={changeOrder} className="arrow-btn " width="27" height="24" viewBox="0 0 27 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="26" height="23" rx="3.5" stroke="#BAC2EB"/>
+<path className={`arrow-one ${isChangingOrderInProgress? "spin-animation":""}`} d="M18 19V6" stroke="#BAC2EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path className={`arrow-two ${isChangingOrderInProgress? "spin-animation":""}`} d="M9 6L9 19" stroke="#BAC2EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path className={`arrow-one ${isChangingOrderInProgress? "spin-animation":""}`} d="M22 15L18 19L14 15" stroke="#BAC2EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path className={`arrow-two ${isChangingOrderInProgress? "spin-animation":""}`} d="M5 10L9 6L13 10" stroke="#BAC2EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+
+
     </div>
     {/*Second window*/}
     <div className="form-wrapper-outside">
@@ -284,7 +316,6 @@ function Form() {
         (<div className="form-col form-col-sm click clickable" onClick={openModalForSecondToken} style={{marginRight:"20px"}}>
           <div className="label label-dropdown label-outside">To</div>
           <div className="deposit-row mt-2">
-            {console.log(secondToken.logo)}
             <img className={secondToken.logo === undefined ? "question":""}  height="34px" src={secondToken == null ? BTC : secondToken.logo|| question} alt="btc" style={{ marginLeft: "-30px" }}></img>
             <p>{secondToken.shortcut}</p>
             <img src={Vector} alt="vector"></img>
@@ -314,7 +345,9 @@ function Form() {
     {/*Second input field in second window*/}
     <div className="form-col form-col-sm border-outline">
       {/*Label inside input field*/}
-      <p className="label label-inside-text">Gwei</p>
+      <p className="label label-inside-text">Gwei
+        <ProgressBarSmall width={120}/>
+      </p>
       <div className="input-space" style={{ paddingTop: "0px" }}>
       <div className="label label-position">
             Balance: {secondToken == null ? "0.00" : secondTokenBalance && parseFloat(secondTokenBalanceInt).toPrecision(6)} {secondToken == null ? "" : secondToken.shortcut}
