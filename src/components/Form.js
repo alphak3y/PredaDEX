@@ -185,6 +185,7 @@ function Form() {
   
   const approveToken = () => {
     sendApprove(groupSwapAddress, MaxUint256)
+    console.log(stateApprove)
   }
 
   let allowance = useTokenAllowance(firstToken.address,account,groupSwapAddress)
