@@ -780,6 +780,7 @@ tr > th {
   border: none;
   outline: none;
   color: #fff;
+  margin-top: 1px;
 }
 
 .receive-input-field {
@@ -791,12 +792,12 @@ tr > th {
 }
 
 .question {
-  height: 36px;
-  width: 36px;
+  height: 30px;
+  width: 30px;
   padding: 5px 5px;
   background-color: #c4c4c4;
   border-radius: 50%;
-  margin-bottom: 1px;
+  margin-top: 3px;
   margin-left: -10px;
 }
 
@@ -891,6 +892,7 @@ tr > th {
 .clickable {
   cursor: pointer;
 }
+
 
 .btn-nav {
   background: #232844;
@@ -1155,7 +1157,13 @@ top: 80px;
 .label-outside {
   position: absolute;
   top: -20px;
-  left: 26px;
+  left: 36px;
+}
+
+.label-outside-to {
+  position: absolute;
+  top: -20px;
+  left: 42px;
 }
 
 .down {
@@ -1228,4 +1236,48 @@ top: 80px;
     -webkit-transform: scale(1);
             transform: scale(1);
   }
+}
+
+
+.icon-padding {
+  padding-left: -30px;
+  padding-top: 4px;
+}
+
+.token-shortcut {
+  width: 60px;
+}
+
+.vector-arrow {
+  padding-top: 3px;
+}
+
+
+.select-token-btn {
+  margin-top: -16px;
+}
+
+.gwei-input {
+  height: 70%;
+  margin-left: -3px;
+}
+
+.gwei-bar {
+  margin-bottom: -4px;
+}
+
+.mt-null {
+  margin-top: -7px;
+}
+
+.relative {
+  position: relative;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.rad-15 {
+  border-radius: 15px;
 }

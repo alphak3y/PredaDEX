@@ -326,20 +326,22 @@ return (
         <div className="form-wrapper">
             {/*Balance label above input field*/}
             <div className="form-row form-row-label">
-                <div className="label">Balance: {firstToken == null ? "0.00" : firstTokenBalance && parseFloat(formatUnits(firstTokenBalance, firstToken.decimals)).toPrecision(6)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+            <div className="label opacity-0">a</div>
             </div>
-            <div className="form-row ">
+            <div className="form-row  mt-null ">
                 {/* Deposit dropdown */}
-                <div className="form-col form-col-sm clickable " onClick={openModalForFirstToken}>
+                <div className="form-col rad-15 form-col-sm clickable " onClick={openModalForFirstToken}>
                     <div className="label label-dropdown label-outside">From</div>
                     <div className="deposit-row mt-2">
-                        <img className={firstToken.logo === undefined ? "question":""} height="34px" src={firstToken == null ? BTC : firstToken.logo || question} alt="btc" style={{ marginLeft: "-30px" }}></img>
-                        <p>{firstToken == null ? "BTC":firstToken.shortcut}</p>
-                        <img src={Vector} alt="vector"></img>
+                        <img className={firstToken.logo === undefined ? "question icon-padding":"icon-padding"} height="34px" src={firstToken == null ? BTC : firstToken.logo || question} alt="?"  ></img>
+                        <p className="token-shortcut">{firstToken == null ? "BTC":firstToken.shortcut}</p>
+                        <img className="vector-arrow" src={Vector} alt="vector"></img>
                     </div>
                 </div>
                 {/*Input field*/}
-                <div className="form-col form-col-lg border-outline ">
+                <div className="form-col form-col-lg border-outline relative">
+                <div className="label label-position">Balance: {firstToken == null ? "0.00" : firstTokenBalance && parseFloat(formatUnits(firstTokenBalance, firstToken.decimals)).toPrecision(6)} {firstToken == null ? "BTC" : firstToken.shortcut}</div>
+
                     <div className="input-space">
                         <button className="max-button" onClick={setMaxBalanceToInput}> Max</button>
                         <input
@@ -383,31 +385,31 @@ return (
                 {/* Receive dropdown */}
                 {secondToken == null ? <div
                     onClick={openModalForSecondToken}
-                    className="form-col form-col-sm clickable"
-                    style={{ marginRight: "16px" }}
+                    className="form-col rad-15  form-col-sm clickable"
+                    style={{ marginLeft:"-8px", marginRight:"15px" }}
                     >
-                    <div className="label label-dropdown label-outside"style={{ marginLeft: "-20px" }}>To</div>
+                    <div className="label label-dropdown label-outside-to">To</div>
                     <div className="deposit-row mt-2" style={{ marginLeft: "7px" }}>
-                        <img src={question} alt="btc" className="question"></img>
-                        <button className="select-a-token-button">
+                        <img src={question} alt="btc" className="question "></img>
+                        <button className="select-a-token-button p-2 select-token-btn">
                             <p>Select a token </p>
                         </button>
                     </div>
                 </div>
                 :
-                (<div className="form-col form-col-sm click clickable" onClick={openModalForSecondToken} style={{marginRight:"20px"}}>
-                    <div className="label label-dropdown label-outside">To</div>
+                (<div className="form-col rad-15  form-col-sm click clickable" onClick={openModalForSecondToken} style={{ marginLeft:"-8px", marginRight:"15px" }}>
+                    <div className="label label-dropdown label-outside-to">To</div>
                     <div className="deposit-row mt-2">
-                        <img className={secondToken.logo === undefined ? "question":""}  height="34px" src={secondToken == null ? BTC : secondToken.logo|| question} alt="btc" style={{ marginLeft: "-30px" }}></img>
-                        <p>{secondToken.shortcut}</p>
-                        <img src={Vector} alt="vector"></img>
+                        <img className={secondToken.logo === undefined ? "question icon-padding":"icon-padding"}  height="34px" src={secondToken == null ? BTC : secondToken.logo|| question} alt="btc"></img>
+                        <p className="token-shortcut">{secondToken.shortcut}</p>
+                        <img className="vector-arrow"  src={Vector} alt="vector"></img>
                     </div>
                 </div>)
             }
             {/*First input field in second window*/}
             <div
             className="form-col form-col-sm border-outline"
-            style={{ marginRight: "16px" }}
+            style={{ marginRight: "15px", width:"182px" }}
             >
             <div className="input-space">
                 
@@ -425,9 +427,9 @@ return (
             </div>
         </div>
         {/*Second input field in second window*/}
-        <div className="form-col form-col-sm border-outline">
+        <div className="form-col form-col-sm border-outline" style={{marginRight:"-8px"}}>
             {/*Label inside input field*/}
-            <p className="label label-inside-text">Gwei
+            <p className="label label-inside-text gwei-bar">Gwei
                 <ProgressBarSmall width={120}/>
             </p>
             <div className="input-space" style={{ paddingTop: "0px" }}>
@@ -439,7 +441,7 @@ return (
                 placeholder="0"
                 onChange={e => setUserGweiAmount(e.target.value)}
                 value={userGweiAmount}
-                className="receive-input-field "
+                className="receive-input-field gwei-input"
                 />
             </div>
             {/*Label inside input field*/}
